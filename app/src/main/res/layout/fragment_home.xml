@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@android:color/white"
+    android:orientation="vertical"
+    tools:context=".ui.home.HomeFragment">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:scrollbars="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/spacing_large"
+            android:paddingRight="@dimen/spacing_large">
+
+            <!--top line-->
+
+            <LinearLayout
+                android:layout_width="@dimen/spacing_xlarge"
+                android:layout_height="@dimen/spacing_mlarge"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <View
+                    android:layout_width="2dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/teal_700" />
+
+            </LinearLayout>
+
+            <!--section title-->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:id="@+id/activity_steppers_step1"
+                        android:layout_width="@dimen/spacing_xlarge"
+                        android:layout_height="@dimen/spacing_xlarge"
+                        android:background="@drawable/shape_round_solid"
+                        android:gravity="center">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="1"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                            android:textColor="@android:color/white" />
+
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="2dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/teal_700"
+                        android:minHeight="?attr/actionBarSize" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="@dimen/spacing_large"
+                    android:layout_height="0dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="?attr/actionBarSize"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/activity_steppers_txt_label_step1"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/spacing_xlarge"
+                        android:gravity="center_vertical"
+                        android:onClick="clickLabel"
+                        android:paddingLeft="@dimen/spacing_small"
+                        android:paddingRight="@dimen/spacing_small"
+                        android:text="Step 1"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        android:textColor="@color/teal_700" />
+
+                    <LinearLayout
+                        android:id="@+id/activity_steppers_layout_step1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/spacing_large"
+                        android:orientation="vertical">
+
+                        <EditText
+                            android:id="@+id/activity_steppers_edt_step1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Details" />
+
+                        <Button
+                            android:id="@+id/activity_steppers_btn_step1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:minWidth="0dp"
+                            android:onClick="clickAction"
+                            android:text="CONTINUE" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!--step 2-->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:id="@+id/activity_steppers_step2"
+                        android:layout_width="@dimen/spacing_xlarge"
+                        android:layout_height="@dimen/spacing_xlarge"
+                        android:background="@drawable/shape_round_solid"
+                        android:gravity="center">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="2"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                            android:textColor="@android:color/white" />
+
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="2dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/teal_700" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="@dimen/spacing_large"
+                    android:layout_height="0dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="?attr/actionBarSize"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/activity_steppers_txt_label_step2"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/spacing_xlarge"
+                        android:gravity="center_vertical"
+                        android:onClick="clickLabel"
+                        android:paddingLeft="@dimen/spacing_small"
+                        android:paddingRight="@dimen/spacing_small"
+                        android:text="Step 2"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        android:textColor="@color/teal_700" />
+
+                    <LinearLayout
+                        android:id="@+id/activity_steppers_layout_step2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/spacing_large"
+                        android:orientation="vertical">
+
+                        <EditText
+                            android:id="@+id/activity_steppers_edt_step2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="top"
+                            android:hint="Details"
+                            android:lines="4" />
+
+                        <Button
+                            android:id="@+id/activity_steppers_btn_step2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:minWidth="0dp"
+                            android:onClick="clickAction"
+                            android:text="CONTINUE" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!--step 3-->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:id="@+id/activity_steppers_step3"
+                        android:layout_width="@dimen/spacing_xlarge"
+                        android:layout_height="@dimen/spacing_xlarge"
+                        android:background="@drawable/shape_round_solid"
+                        android:gravity="center">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="3"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                            android:textColor="@android:color/white" />
+
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="2dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/teal_700" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="@dimen/spacing_large"
+                    android:layout_height="0dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="?attr/actionBarSize"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/activity_steppers_txt_label_step3"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/spacing_xlarge"
+                        android:gravity="center_vertical"
+                        android:onClick="clickLabel"
+                        android:paddingLeft="@dimen/spacing_small"
+                        android:paddingRight="@dimen/spacing_small"
+                        android:text="Step 3"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        android:textColor="@color/teal_700" />
+
+                    <LinearLayout
+                        android:id="@+id/activity_steppers_layout_step3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/spacing_large"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/activity_steppers_txt_step3"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="?attr/selectableItemBackground"
+                            android:clickable="true"
+                            android:text="TIME"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                            android:textColor="@color/teal_700" />
+
+                        <Button
+                            android:id="@+id/activity_steppers_btn_step3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:minWidth="0dp"
+                            android:onClick="clickAction"
+                            android:text="CONTINUE" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!--bottom line-->
+
+            <LinearLayout
+                android:layout_width="@dimen/spacing_xlarge"
+                android:layout_height="match_parent"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <View
+                    android:layout_width="2dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/teal_700" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>
