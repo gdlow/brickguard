@@ -87,7 +87,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/spacing_xlarge"
                         android:gravity="center_vertical"
-                        android:onClick="clickLabel"
+                        android:onClick="onClick"
                         android:paddingLeft="@dimen/spacing_small"
                         android:paddingRight="@dimen/spacing_small"
                         android:text="Step 1"
@@ -113,7 +113,7 @@
                             android:layout_height="wrap_content"
                             android:gravity="center"
                             android:minWidth="0dp"
-                            android:onClick="clickAction"
+                            android:onClick="onClick"
                             android:text="CONTINUE" />
 
                     </LinearLayout>
@@ -173,7 +173,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/spacing_xlarge"
                         android:gravity="center_vertical"
-                        android:onClick="clickLabel"
+                        android:onClick="onClick"
                         android:paddingLeft="@dimen/spacing_small"
                         android:paddingRight="@dimen/spacing_small"
                         android:text="Step 2"
@@ -201,7 +201,7 @@
                             android:layout_height="wrap_content"
                             android:gravity="center"
                             android:minWidth="0dp"
-                            android:onClick="clickAction"
+                            android:onClick="onClick"
                             android:text="CONTINUE" />
 
                     </LinearLayout>
@@ -261,7 +261,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/spacing_xlarge"
                         android:gravity="center_vertical"
-                        android:onClick="clickLabel"
+                        android:onClick="onClick"
                         android:paddingLeft="@dimen/spacing_small"
                         android:paddingRight="@dimen/spacing_small"
                         android:text="Step 3"
@@ -291,7 +291,7 @@
                             android:layout_height="wrap_content"
                             android:gravity="center"
                             android:minWidth="0dp"
-                            android:onClick="clickAction"
+                            android:onClick="onClick"
                             android:text="CONTINUE" />
 
                     </LinearLayout>
