@@ -70,7 +70,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/spacing_large"
             android:textSize="14sp"
-            android:text="Adult domains blocked. Search engines set to safe mode" />
+            android:text="Adult domains blocked. Search engines set to safe mode. Malicious domains blocked." />
 
     </LinearLayout>
 

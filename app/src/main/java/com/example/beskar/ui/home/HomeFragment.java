@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.beskar.R;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.slider.Slider;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -118,6 +119,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             });
         }
 
+        // Set individual bottom sheet components
+
         // Set slider state in step 1
         List<String> sliderTexts = new ArrayList<>(Arrays.asList(
                 "No filter applied. System default settings used.",
@@ -131,6 +134,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         slider.addOnChangeListener((s, value, fromUser) -> {
             tv.setText(sliderTexts.get(Math.round(value)));
         });
+
+        // Set switches in step 2
+        SwitchMaterial adultSwitch = view.findViewById(R.id.activity_bottom_sheet_step2_adult_switch);
+        adultSwitch.setOnClickListener(this);
+        SwitchMaterial adsSwitch = view.findViewById(R.id.activity_bottom_sheet_step2_ads_switch);
+        adsSwitch.setOnClickListener(this);
 
         // Hide keyboard
         hideKeyboard();
@@ -158,6 +167,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             case R.id.activity_bottom_sheet_step3_next_button:
                 // Close all bottom sheets
                 onClickHelper(-1);
+                break;
+            case R.id.activity_bottom_sheet_step2_adult_switch:
+                // Add logic here
+                break;
+            case R.id.activity_bottom_sheet_step2_ads_switch:
+                // Add logic here
+                break;
         }
     }
 
