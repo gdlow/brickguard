@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.widget.TextViewCompat;
@@ -21,17 +20,17 @@ import java.util.List;
 public class HomeFragment extends Fragment implements View.OnClickListener {
 
     private HomeViewModel homeViewModel;
+    private View root;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         homeViewModel =
                 new ViewModelProvider(this).get(HomeViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_home, container, false);
+        root = inflater.inflate(R.layout.fragment_home, container, false);
         initComponent(root);
         return root;
     }
 
-    //initialize component
     private void initComponent(View view) {
         List<View> buttons = new ArrayList<>(Arrays.asList(
                 view.findViewById(R.id.activity_steppers_container_step1),
@@ -48,19 +47,57 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View view) {
         int id = view.getId();
-        TextView tv;
         switch (id) {
             case R.id.activity_steppers_container_step1:
-                tv = view.findViewById(R.id.activity_steppers_txt_label_step1);
-                TextViewCompat.setTextAppearance(tv, R.style.StepTextSelectedAppearance);
+                // Select step 1
+                TextViewCompat.setTextAppearance(
+                        view.findViewById(R.id.activity_steppers_txt_label_step1),
+                        R.style.StepTextSelectedAppearance
+                );
+
+                // Unselect other steps
+                TextViewCompat.setTextAppearance(
+                        root.findViewById(R.id.activity_steppers_txt_label_step2),
+                        R.style.StepTextUnselectedAppearance
+                );
+                TextViewCompat.setTextAppearance(
+                        root.findViewById(R.id.activity_steppers_txt_label_step3),
+                        R.style.StepTextUnselectedAppearance
+                );
                 break;
             case R.id.activity_steppers_container_step2:
-                tv = view.findViewById(R.id.activity_steppers_txt_label_step2);
-                TextViewCompat.setTextAppearance(tv, R.style.StepTextSelectedAppearance);
+                // Select step 2
+                TextViewCompat.setTextAppearance(
+                        view.findViewById(R.id.activity_steppers_txt_label_step2),
+                        R.style.StepTextSelectedAppearance
+                );
+
+                // Unselect other steps
+                TextViewCompat.setTextAppearance(
+                        root.findViewById(R.id.activity_steppers_txt_label_step1),
+                        R.style.StepTextUnselectedAppearance
+                );
+                TextViewCompat.setTextAppearance(
+                        root.findViewById(R.id.activity_steppers_txt_label_step3),
+                        R.style.StepTextUnselectedAppearance
+                );
                 break;
             case R.id.activity_steppers_container_step3:
-                tv = view.findViewById(R.id.activity_steppers_txt_label_step3);
-                TextViewCompat.setTextAppearance(tv, R.style.StepTextSelectedAppearance);
+                // Select step 3
+                TextViewCompat.setTextAppearance(
+                        view.findViewById(R.id.activity_steppers_txt_label_step3),
+                        R.style.StepTextSelectedAppearance
+                );
+
+                // Unselect other steps
+                TextViewCompat.setTextAppearance(
+                        root.findViewById(R.id.activity_steppers_txt_label_step2),
+                        R.style.StepTextUnselectedAppearance
+                );
+                TextViewCompat.setTextAppearance(
+                        root.findViewById(R.id.activity_steppers_txt_label_step1),
+                        R.style.StepTextUnselectedAppearance
+                );
                 break;
         }
     }
