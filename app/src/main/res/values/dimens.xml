@@ -15,5 +15,6 @@
     <dimen name="spacing_xmlarge">40dp</dimen>
     <dimen name="spacing_xxlarge">50dp</dimen>
     <dimen name="spacing_xxxlarge">55dp</dimen>
+    <dimen name="spacing_step">70dp</dimen>
     <dimen name="appbar_padding_top">8dp</dimen>
 </resources>

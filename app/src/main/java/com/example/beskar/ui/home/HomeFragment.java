@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -52,9 +51,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         //register buttons
         List<View> buttons = new ArrayList<>(Arrays.asList(
-                view.findViewById(R.id.activity_steppers_btn_step1),
-                view.findViewById(R.id.activity_steppers_btn_step2),
-                view.findViewById(R.id.activity_steppers_btn_step3),
                 view.findViewById(R.id.activity_steppers_txt_label_step1),
                 view.findViewById(R.id.activity_steppers_txt_label_step2),
                 view.findViewById(R.id.activity_steppers_txt_label_step3)
@@ -100,33 +96,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                             .start();
                 }
                 break;
-            case R.id.activity_steppers_btn_step1:
-                //Enter Validation
-                nextStep(0);
-                break;
-            case R.id.activity_steppers_btn_step2:
-                //Enter Validation
-                nextStep(1);
-                break;
-            case R.id.activity_steppers_btn_step3:
-                ///Complete step
-                Toast.makeText(getActivity(), "Done", Toast.LENGTH_SHORT).show();
-                break;
         }
-    }
-
-    private void nextStep(int index) {
-        AnimationHelper.slideUpOut(layoutList.get(index))
-                .interpolator(new LinearOutSlowInInterpolator())
-                .duration(50)
-                .start();
-        index++;
-        currentStep = index;
-        completeStep = Math.max(index, completeStep);
-        AnimationHelper.slideDownIn(layoutList.get(index))
-                .interpolator(new LinearOutSlowInInterpolator())
-                .duration(50)
-                .start();
     }
 
     private void closeStep() {

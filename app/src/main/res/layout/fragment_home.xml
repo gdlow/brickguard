@@ -24,7 +24,7 @@
 
             <LinearLayout
                 android:layout_width="@dimen/spacing_xlarge"
-                android:layout_height="@dimen/spacing_mlarge"
+                android:layout_height="@dimen/spacing_xlarge"
                 android:gravity="center_horizontal"
                 android:orientation="vertical">
 
@@ -59,7 +59,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="1"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                            android:textAppearance="@style/StepTextNumber"
                             android:textColor="@android:color/white" />
 
                     </RelativeLayout>
@@ -79,7 +79,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:minHeight="?attr/actionBarSize"
+                    android:minHeight="@dimen/spacing_step"
                     android:orientation="vertical">
 
                     <TextView
@@ -90,8 +90,8 @@
                         android:onClick="onClick"
                         android:paddingLeft="@dimen/spacing_small"
                         android:paddingRight="@dimen/spacing_small"
-                        android:text="Step 1"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        android:text="Select filter level"
+                        android:textAppearance="@style/StepTextUnselectedAppearance"
                         android:textColor="@color/black" />
 
                     <LinearLayout
@@ -100,21 +100,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/spacing_large"
                         android:orientation="vertical">
-
-                        <EditText
-                            android:id="@+id/activity_steppers_edt_step1"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="Details" />
-
-                        <Button
-                            android:id="@+id/activity_steppers_btn_step1"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:minWidth="0dp"
-                            android:onClick="onClick"
-                            android:text="CONTINUE" />
 
                     </LinearLayout>
 
@@ -146,7 +131,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="2"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                            android:textAppearance="@style/StepTextNumber"
                             android:textColor="@android:color/white" />
 
                     </RelativeLayout>
@@ -165,7 +150,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:minHeight="?attr/actionBarSize"
+                    android:minHeight="@dimen/spacing_step"
                     android:orientation="vertical">
 
                     <TextView
@@ -176,8 +161,8 @@
                         android:onClick="onClick"
                         android:paddingLeft="@dimen/spacing_small"
                         android:paddingRight="@dimen/spacing_small"
-                        android:text="Step 2"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        android:text="Select rule sets"
+                        android:textAppearance="@style/StepTextUnselectedAppearance"
                         android:textColor="@color/black" />
 
                     <LinearLayout
@@ -186,23 +171,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/spacing_large"
                         android:orientation="vertical">
-
-                        <EditText
-                            android:id="@+id/activity_steppers_edt_step2"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="top"
-                            android:hint="Details"
-                            android:lines="4" />
-
-                        <Button
-                            android:id="@+id/activity_steppers_btn_step2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:minWidth="0dp"
-                            android:onClick="onClick"
-                            android:text="CONTINUE" />
 
                     </LinearLayout>
 
@@ -234,7 +202,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="3"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                            android:textAppearance="@style/StepTextNumber"
                             android:textColor="@android:color/white" />
 
                     </RelativeLayout>
@@ -253,7 +221,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:minHeight="?attr/actionBarSize"
+                    android:minHeight="@dimen/spacing_step"
                     android:orientation="vertical">
 
                     <TextView
@@ -264,8 +232,8 @@
                         android:onClick="onClick"
                         android:paddingLeft="@dimen/spacing_small"
                         android:paddingRight="@dimen/spacing_small"
-                        android:text="Step 3"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        android:text="Blacklist additional domains"
+                        android:textAppearance="@style/StepTextUnselectedAppearance"
                         android:textColor="@color/black" />
 
                     <LinearLayout
@@ -274,21 +242,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/spacing_large"
                         android:orientation="vertical">
-
-                        <EditText
-                            android:id="@+id/activity_steppers_edt_step3"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="Details" />
-
-                        <Button
-                            android:id="@+id/activity_steppers_btn_step3"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:minWidth="0dp"
-                            android:onClick="onClick"
-                            android:text="CONTINUE" />
 
                     </LinearLayout>
 

@@ -20,6 +20,14 @@
         <item name="android:fontFamily" >@font/rabbid_highway</item>
         <item name="android:textSize">18sp</item>
     </style>
+    <style name="StepTextUnselectedAppearance">
+        <item name="android:fontFamily">@font/roboto_light</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+    <style name="StepTextNumber">
+        <item name="android:fontFamily">@font/roboto_light</item>
+        <item name="android:textSize">14sp</item>
+    </style>
     <style name="OverflowButtonStyle" parent="Widget.AppCompat.ActionButton.Overflow">
         <item name="android:tint">@color/white</item>
     </style>
