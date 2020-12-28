@@ -6,12 +6,10 @@
     android:background="@color/grey_a007"
     android:orientation="vertical"
     tools:context=".ui.home.HomeFragment">
-
-    <androidx.core.widget.NestedScrollView
+    
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true"
-        android:scrollbars="vertical">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -78,10 +76,10 @@
 
                 <LinearLayout
                     android:id="@+id/activity_steppers_container_step1"
-                    android:onClick="onClick"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:minHeight="@dimen/spacing_step"
+                    android:onClick="onClick"
                     android:orientation="horizontal">
 
                     <TextView
@@ -106,7 +104,7 @@
                             android:layout_width="@dimen/spacing_mlarge"
                             android:layout_height="@dimen/spacing_mlarge"
                             android:background="@drawable/baseline_expand_more_24"
-                            android:gravity="center"/>
+                            android:gravity="center" />
 
                         <View
                             android:layout_width="@dimen/spacing_mlarge"
@@ -160,10 +158,10 @@
 
                 <LinearLayout
                     android:id="@+id/activity_steppers_container_step2"
-                    android:onClick="onClick"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:minHeight="@dimen/spacing_step"
+                    android:onClick="onClick"
                     android:orientation="horizontal">
 
                     <TextView
@@ -188,7 +186,7 @@
                             android:layout_width="@dimen/spacing_mlarge"
                             android:layout_height="@dimen/spacing_mlarge"
                             android:background="@drawable/baseline_expand_more_24"
-                            android:gravity="center"/>
+                            android:gravity="center" />
 
                         <View
                             android:layout_width="@dimen/spacing_mlarge"
@@ -242,10 +240,10 @@
 
                 <LinearLayout
                     android:id="@+id/activity_steppers_container_step3"
-                    android:onClick="onClick"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:minHeight="@dimen/spacing_step"
+                    android:onClick="onClick"
                     android:orientation="horizontal">
 
                     <TextView
@@ -270,7 +268,7 @@
                             android:layout_width="@dimen/spacing_mlarge"
                             android:layout_height="@dimen/spacing_mlarge"
                             android:background="@drawable/baseline_expand_more_24"
-                            android:gravity="center"/>
+                            android:gravity="center" />
 
                         <View
                             android:layout_width="@dimen/spacing_mlarge"
@@ -299,5 +297,8 @@
 
         </LinearLayout>
 
-    </androidx.core.widget.NestedScrollView>
+        <include layout="@layout/bottom_sheet_persistent"/>
+    
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
