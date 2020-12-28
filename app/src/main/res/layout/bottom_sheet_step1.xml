@@ -75,6 +75,7 @@
     </LinearLayout>
 
     <Button
+        android:id="@+id/activity_bottom_sheet_step1_next_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/spacing_mxlarge"

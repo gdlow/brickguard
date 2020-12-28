@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -28,14 +29,17 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         public TextView label;
         public ImageView labelArrow;
         public ImageView bottomSheetArrow;
+        public Button nextButton;
         public BottomSheetBehavior bottomSheetBehavior;
         public boolean on;
         public StepState(View container, TextView label, ImageView labelArrow,
-                         ImageView bottomSheetArrow, BottomSheetBehavior bottomSheetBehavior) {
+                         ImageView bottomSheetArrow, Button nextButton,
+                         BottomSheetBehavior bottomSheetBehavior) {
             this.container = container;
             this.label = label;
             this.labelArrow = labelArrow;
             this.bottomSheetArrow = bottomSheetArrow;
+            this.nextButton = nextButton;
             this.bottomSheetBehavior = bottomSheetBehavior;
             this.on = false;
         }
@@ -62,6 +66,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                         (TextView) view.findViewById(R.id.activity_steppers_txt_label_step1),
                         (ImageView) view.findViewById(R.id.activity_steppers_expand_button_step1),
                         (ImageView) view.findViewById(R.id.activity_bottom_sheet_step1_expand_button),
+                        (Button) view.findViewById(R.id.activity_bottom_sheet_step1_next_button),
                         BottomSheetBehavior.from(
                                 view.findViewById(R.id.bottom_sheet_step1))
                 ),
@@ -70,6 +75,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                         (TextView) view.findViewById(R.id.activity_steppers_txt_label_step2),
                         (ImageView) view.findViewById(R.id.activity_steppers_expand_button_step2),
                         (ImageView) view.findViewById(R.id.activity_bottom_sheet_step2_expand_button),
+                        (Button) view.findViewById(R.id.activity_bottom_sheet_step2_next_button),
                         BottomSheetBehavior.from(
                                 view.findViewById(R.id.bottom_sheet_step2))
                 ),
@@ -78,6 +84,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                         (TextView) view.findViewById(R.id.activity_steppers_txt_label_step3),
                         (ImageView) view.findViewById(R.id.activity_steppers_expand_button_step3),
                         (ImageView) view.findViewById(R.id.activity_bottom_sheet_step3_expand_button),
+                        (Button) view.findViewById(R.id.activity_bottom_sheet_step3_next_button),
                         BottomSheetBehavior.from(
                                 view.findViewById(R.id.bottom_sheet_step3))
                 )
@@ -86,6 +93,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         // Set initial state
         for (StepState stepState : stepStates) {
             stepState.container.setOnClickListener(this);
+            stepState.nextButton.setOnClickListener(this);
             stepState.bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
             stepState.bottomSheetBehavior.addBottomSheetCallback(
                     new BottomSheetBehavior.BottomSheetCallback() {
@@ -141,6 +149,15 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             case R.id.activity_steppers_container_step3:
                 onClickHelper(2);
                 break;
+            case R.id.activity_bottom_sheet_step1_next_button:
+                onClickHelper(1);
+                break;
+            case R.id.activity_bottom_sheet_step2_next_button:
+                onClickHelper(2);
+                break;
+            case R.id.activity_bottom_sheet_step3_next_button:
+                // Close all bottom sheets
+                onClickHelper(-1);
         }
     }
 
