@@ -77,17 +77,18 @@
                     android:layout_height="0dp" />
 
                 <LinearLayout
+                    android:id="@+id/activity_steppers_container_step1"
+                    android:onClick="onClick"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:minHeight="@dimen/spacing_step"
-                    android:orientation="vertical">
+                    android:orientation="horizontal">
 
                     <TextView
                         android:id="@+id/activity_steppers_txt_label_step1"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="@dimen/spacing_xlarge"
                         android:gravity="center_vertical"
-                        android:onClick="onClick"
                         android:paddingLeft="@dimen/spacing_small"
                         android:paddingRight="@dimen/spacing_small"
                         android:text="Select filter level"
@@ -95,11 +96,21 @@
                         android:textColor="@color/black" />
 
                     <LinearLayout
-                        android:id="@+id/activity_steppers_layout_step1"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/spacing_large"
-                        android:orientation="vertical">
+                        android:layout_height="@dimen/spacing_xlarge"
+                        android:gravity="end|center_vertical"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/activity_steppers_expand_more_step1"
+                            android:layout_width="@dimen/spacing_mlarge"
+                            android:layout_height="@dimen/spacing_mlarge"
+                            android:src="@drawable/baseline_expand_more_24"
+                            android:gravity="center"/>
+
+                        <View
+                            android:layout_width="@dimen/spacing_mlarge"
+                            android:layout_height="0dp" />
 
                     </LinearLayout>
 
@@ -148,17 +159,18 @@
                     android:layout_height="0dp" />
 
                 <LinearLayout
+                    android:id="@+id/activity_steppers_container_step2"
+                    android:onClick="onClick"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:minHeight="@dimen/spacing_step"
-                    android:orientation="vertical">
+                    android:orientation="horizontal">
 
                     <TextView
                         android:id="@+id/activity_steppers_txt_label_step2"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="@dimen/spacing_xlarge"
                         android:gravity="center_vertical"
-                        android:onClick="onClick"
                         android:paddingLeft="@dimen/spacing_small"
                         android:paddingRight="@dimen/spacing_small"
                         android:text="Select rule sets"
@@ -166,11 +178,21 @@
                         android:textColor="@color/black" />
 
                     <LinearLayout
-                        android:id="@+id/activity_steppers_layout_step2"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/spacing_large"
-                        android:orientation="vertical">
+                        android:layout_height="@dimen/spacing_xlarge"
+                        android:gravity="end|center_vertical"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/activity_steppers_expand_more_step2"
+                            android:layout_width="@dimen/spacing_mlarge"
+                            android:layout_height="@dimen/spacing_mlarge"
+                            android:src="@drawable/baseline_expand_more_24"
+                            android:gravity="center"/>
+
+                        <View
+                            android:layout_width="@dimen/spacing_mlarge"
+                            android:layout_height="0dp" />
 
                     </LinearLayout>
 
@@ -219,17 +241,18 @@
                     android:layout_height="0dp" />
 
                 <LinearLayout
+                    android:id="@+id/activity_steppers_container_step3"
+                    android:onClick="onClick"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:minHeight="@dimen/spacing_step"
-                    android:orientation="vertical">
+                    android:orientation="horizontal">
 
                     <TextView
                         android:id="@+id/activity_steppers_txt_label_step3"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="@dimen/spacing_xlarge"
                         android:gravity="center_vertical"
-                        android:onClick="onClick"
                         android:paddingLeft="@dimen/spacing_small"
                         android:paddingRight="@dimen/spacing_small"
                         android:text="Blacklist additional domains"
@@ -237,11 +260,21 @@
                         android:textColor="@color/black" />
 
                     <LinearLayout
-                        android:id="@+id/activity_steppers_layout_step3"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/spacing_large"
-                        android:orientation="vertical">
+                        android:layout_height="@dimen/spacing_xlarge"
+                        android:gravity="end|center_vertical"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/activity_steppers_expand_more_step3"
+                            android:layout_width="@dimen/spacing_mlarge"
+                            android:layout_height="@dimen/spacing_mlarge"
+                            android:src="@drawable/baseline_expand_more_24"
+                            android:gravity="center"/>
+
+                        <View
+                            android:layout_width="@dimen/spacing_mlarge"
+                            android:layout_height="0dp" />
 
                     </LinearLayout>
 
