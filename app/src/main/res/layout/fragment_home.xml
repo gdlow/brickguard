@@ -297,7 +297,7 @@
 
         </LinearLayout>
 
-        <include layout="@layout/bottom_sheet_persistent"/>
+        <include layout="@layout/bottom_sheet_step_1"/>
     
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

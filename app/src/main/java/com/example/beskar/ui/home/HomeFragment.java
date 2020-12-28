@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.widget.TextViewCompat;
@@ -12,6 +13,8 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.beskar.R;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.slider.Slider;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,6 +24,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
     private HomeViewModel homeViewModel;
     private View root;
+    private BottomSheetBehavior bottomSheetBehavior;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -32,6 +36,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     }
 
     private void initComponent(View view) {
+        // Register buttons
         List<View> buttons = new ArrayList<>(Arrays.asList(
                 view.findViewById(R.id.activity_steppers_container_step1),
                 view.findViewById(R.id.activity_steppers_container_step2),
@@ -41,6 +46,27 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             b.setOnClickListener(this);
         }
 
+        // Set slider state
+        List<String> sliderTexts = new ArrayList<>(Arrays.asList(
+                "No filter applied. System default settings used.",
+                "Malicious domains (e.g. phishing, malware) blocked.",
+                "Adult domains blocked. Search engines set to safe mode. Malicious domains blocked.",
+                "Proxies, VPNs & Mixed adult content blocked. Youtube to safe mode. Adult domains" +
+                        " blocked. Search engines to safe mode. Malicious domains blocked."
+        ));
+        Slider slider = view.findViewById(R.id.activity_bottom_sheet_slider);
+        TextView tv = view.findViewById(R.id.activity_bottom_sheet_slider_txt_label);
+        slider.addOnChangeListener((s, value, fromUser) -> {
+            tv.setText(sliderTexts.get(Math.round(value)));
+        });
+
+        // Set bottom sheet behavior
+        bottomSheetBehavior = BottomSheetBehavior.from(
+                view.findViewById(R.id.bottom_sheet)
+        );
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+
+        // Hide keyboard
         hideKeyboard();
     }
 
@@ -93,6 +119,28 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 .setBackgroundResource(
                         on ? R.drawable.baseline_expand_less_24 : R.drawable.baseline_expand_more_24
                 );
+        bottomSheetBehavior.setState(on ? BottomSheetBehavior.STATE_EXPANDED :
+                BottomSheetBehavior.STATE_HIDDEN);
+
+        bottomSheetBehavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                int bottomSheetArrow = R.id.activity_bottom_sheet_expand_button;
+                switch (newState) {
+                    case BottomSheetBehavior.STATE_COLLAPSED:
+                        root.findViewById(bottomSheetArrow)
+                                .setBackgroundResource(R.drawable.baseline_expand_less_24);
+                        break;
+                    case BottomSheetBehavior.STATE_EXPANDED:
+                        root.findViewById(bottomSheetArrow)
+                                .setBackgroundResource(R.drawable.baseline_expand_more_24);
+                        break;
+                }
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {}
+        });
     }
 
     public void hideKeyboard() {
