@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/bottom_sheet"
+    android:id="@+id/bottom_sheet_step1"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="#fff"
@@ -37,7 +37,7 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/activity_bottom_sheet_expand_button"
+                android:id="@+id/activity_bottom_sheet_step1_expand_button"
                 android:layout_width="@dimen/spacing_mlarge"
                 android:layout_height="@dimen/spacing_mlarge"
                 android:background="@drawable/baseline_expand_less_24"
@@ -54,7 +54,7 @@
         android:padding="@dimen/spacing_middle" >
 
         <com.google.android.material.slider.Slider
-            android:id="@+id/activity_bottom_sheet_slider"
+            android:id="@+id/activity_bottom_sheet_step1_slider"
             style="@style/Widget.MaterialComponents.Slider"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -65,7 +65,7 @@
             app:labelBehavior="gone"/>
 
         <TextView
-            android:id="@+id/activity_bottom_sheet_slider_txt_label"
+            android:id="@+id/activity_bottom_sheet_step1_slider_txt_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/spacing_large"
