@@ -49,57 +49,50 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         int id = view.getId();
         switch (id) {
             case R.id.activity_steppers_container_step1:
-                // Select step 1
-                TextViewCompat.setTextAppearance(
-                        view.findViewById(R.id.activity_steppers_txt_label_step1),
-                        R.style.StepTextSelectedAppearance
-                );
+                // Select this step
+                toggle(R.id.activity_steppers_txt_label_step1,
+                        R.id.activity_steppers_expand_button_step1, true);
 
                 // Unselect other steps
-                TextViewCompat.setTextAppearance(
-                        root.findViewById(R.id.activity_steppers_txt_label_step2),
-                        R.style.StepTextUnselectedAppearance
-                );
-                TextViewCompat.setTextAppearance(
-                        root.findViewById(R.id.activity_steppers_txt_label_step3),
-                        R.style.StepTextUnselectedAppearance
-                );
+                toggle(R.id.activity_steppers_txt_label_step2,
+                        R.id.activity_steppers_expand_button_step2, false);
+                toggle(R.id.activity_steppers_txt_label_step3,
+                        R.id.activity_steppers_expand_button_step3, false);
                 break;
             case R.id.activity_steppers_container_step2:
-                // Select step 2
-                TextViewCompat.setTextAppearance(
-                        view.findViewById(R.id.activity_steppers_txt_label_step2),
-                        R.style.StepTextSelectedAppearance
-                );
+                // Select this step
+                toggle(R.id.activity_steppers_txt_label_step2,
+                        R.id.activity_steppers_expand_button_step2, true);
 
                 // Unselect other steps
-                TextViewCompat.setTextAppearance(
-                        root.findViewById(R.id.activity_steppers_txt_label_step1),
-                        R.style.StepTextUnselectedAppearance
-                );
-                TextViewCompat.setTextAppearance(
-                        root.findViewById(R.id.activity_steppers_txt_label_step3),
-                        R.style.StepTextUnselectedAppearance
-                );
+                toggle(R.id.activity_steppers_txt_label_step1,
+                        R.id.activity_steppers_expand_button_step1, false);
+                toggle(R.id.activity_steppers_txt_label_step3,
+                        R.id.activity_steppers_expand_button_step3, false);
                 break;
             case R.id.activity_steppers_container_step3:
-                // Select step 3
-                TextViewCompat.setTextAppearance(
-                        view.findViewById(R.id.activity_steppers_txt_label_step3),
-                        R.style.StepTextSelectedAppearance
-                );
+                // Select this step
+                toggle(R.id.activity_steppers_txt_label_step3,
+                        R.id.activity_steppers_expand_button_step3, true);
 
                 // Unselect other steps
-                TextViewCompat.setTextAppearance(
-                        root.findViewById(R.id.activity_steppers_txt_label_step2),
-                        R.style.StepTextUnselectedAppearance
-                );
-                TextViewCompat.setTextAppearance(
-                        root.findViewById(R.id.activity_steppers_txt_label_step1),
-                        R.style.StepTextUnselectedAppearance
-                );
+                toggle(R.id.activity_steppers_txt_label_step1,
+                        R.id.activity_steppers_expand_button_step1, false);
+                toggle(R.id.activity_steppers_txt_label_step2,
+                        R.id.activity_steppers_expand_button_step2, false);
                 break;
         }
+    }
+
+    private void toggle(int label, int button, boolean on) {
+        TextViewCompat.setTextAppearance(
+                root.findViewById(label),
+                on ? R.style.StepTextSelectedAppearance : R.style.StepTextUnselectedAppearance
+        );
+        root.findViewById(button)
+                .setBackgroundResource(
+                        on ? R.drawable.baseline_expand_less_24 : R.drawable.baseline_expand_more_24
+                );
     }
 
     public void hideKeyboard() {

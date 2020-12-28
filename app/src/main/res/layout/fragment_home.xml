@@ -102,10 +102,10 @@
                         android:orientation="horizontal">
 
                         <ImageView
-                            android:id="@+id/activity_steppers_expand_more_step1"
+                            android:id="@+id/activity_steppers_expand_button_step1"
                             android:layout_width="@dimen/spacing_mlarge"
                             android:layout_height="@dimen/spacing_mlarge"
-                            android:src="@drawable/baseline_expand_more_24"
+                            android:background="@drawable/baseline_expand_more_24"
                             android:gravity="center"/>
 
                         <View
@@ -184,10 +184,10 @@
                         android:orientation="horizontal">
 
                         <ImageView
-                            android:id="@+id/activity_steppers_expand_more_step2"
+                            android:id="@+id/activity_steppers_expand_button_step2"
                             android:layout_width="@dimen/spacing_mlarge"
                             android:layout_height="@dimen/spacing_mlarge"
-                            android:src="@drawable/baseline_expand_more_24"
+                            android:background="@drawable/baseline_expand_more_24"
                             android:gravity="center"/>
 
                         <View
@@ -266,10 +266,10 @@
                         android:orientation="horizontal">
 
                         <ImageView
-                            android:id="@+id/activity_steppers_expand_more_step3"
+                            android:id="@+id/activity_steppers_expand_button_step3"
                             android:layout_width="@dimen/spacing_mlarge"
                             android:layout_height="@dimen/spacing_mlarge"
-                            android:src="@drawable/baseline_expand_more_24"
+                            android:background="@drawable/baseline_expand_more_24"
                             android:gravity="center"/>
 
                         <View
