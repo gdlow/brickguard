@@ -20,7 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+            style="@style/ToolbarTextAppearance"
             android:id="@+id/toolbar_title" />
 
     </androidx.appcompat.widget.Toolbar>

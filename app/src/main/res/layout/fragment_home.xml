@@ -31,7 +31,7 @@
                 <View
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
-                    android:background="@color/black_a60" />
+                    android:background="@color/grey_a100" />
 
             </LinearLayout>
 
@@ -67,7 +67,7 @@
                     <View
                         android:layout_width="1dp"
                         android:layout_height="match_parent"
-                        android:background="@color/black_a60"
+                        android:background="@color/grey_a100"
                         android:minHeight="?attr/actionBarSize" />
 
                 </LinearLayout>
@@ -154,7 +154,7 @@
                     <View
                         android:layout_width="1dp"
                         android:layout_height="match_parent"
-                        android:background="@color/black_a60" />
+                        android:background="@color/grey_a100" />
 
                 </LinearLayout>
 
@@ -242,7 +242,7 @@
                     <View
                         android:layout_width="1dp"
                         android:layout_height="match_parent"
-                        android:background="@color/black_a60" />
+                        android:background="@color/grey_a100" />
 
                 </LinearLayout>
 
@@ -307,7 +307,7 @@
                 <View
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
-                    android:background="@color/black_a60" />
+                    android:background="@color/grey_a100" />
 
             </LinearLayout>
 
