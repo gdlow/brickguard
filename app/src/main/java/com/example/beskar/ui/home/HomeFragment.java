@@ -5,8 +5,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.widget.TextViewCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -46,15 +48,19 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View view) {
         int id = view.getId();
+        TextView tv;
         switch (id) {
             case R.id.activity_steppers_container_step1:
-                // do something here for step 1
+                tv = view.findViewById(R.id.activity_steppers_txt_label_step1);
+                TextViewCompat.setTextAppearance(tv, R.style.StepTextSelectedAppearance);
                 break;
             case R.id.activity_steppers_container_step2:
-                // do something here for step 2
+                tv = view.findViewById(R.id.activity_steppers_txt_label_step2);
+                TextViewCompat.setTextAppearance(tv, R.style.StepTextSelectedAppearance);
                 break;
             case R.id.activity_steppers_container_step3:
-                // do something here for step 3
+                tv = view.findViewById(R.id.activity_steppers_txt_label_step3);
+                TextViewCompat.setTextAppearance(tv, R.style.StepTextSelectedAppearance);
                 break;
         }
     }
