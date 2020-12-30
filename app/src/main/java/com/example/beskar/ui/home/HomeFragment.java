@@ -132,11 +132,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         // Set switches in step 2
         SwitchMaterial adultSwitch = view.findViewById(R.id.activity_bottom_sheet_step2_adult_switch);
-        adultSwitch.setOnClickListener(v -> {
+        adultSwitch.setOnClickListener(v -> {});
+        adultSwitch.setOnCheckedChangeListener((v, isChecked) -> {
             // Add logic here
         });
         SwitchMaterial adsSwitch = view.findViewById(R.id.activity_bottom_sheet_step2_ads_switch);
-        adsSwitch.setOnClickListener(v -> {
+        adsSwitch.setOnClickListener(v -> {});
+        adsSwitch.setOnCheckedChangeListener((v, isChecked) -> {
             // Add logic here
         });
 
@@ -171,6 +173,17 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 return true;
             }
             return false;
+        });
+
+        // Set main switch
+        SwitchMaterial mainSwitch = view.findViewById(R.id.activity_fragment_home_main_switch);
+        mainSwitch.setOnClickListener(v -> {});
+        mainSwitch.setOnCheckedChangeListener((v, isChecked) -> {
+            TextView mainSwitchText =
+                    view.findViewById(R.id.activity_fragment_home_main_switch_text);
+            mainSwitchText.setText(isChecked ? "D E A C T I V A T E" : "A C T I V A T E");
+            Toast.makeText(getActivity(), "Service " + (isChecked ? "activated" : "deactivated"),
+                    Toast.LENGTH_SHORT).show();
         });
 
         // Hide keyboard
