@@ -41,7 +41,7 @@
         <item name="android:textSize">15sp</item>
     </style>
     <style name="MainSwitchText">
-        <item name="android:fontFamily">@font/roboto_medium</item>
+        <item name="android:fontFamily">@font/roboto_regular</item>
         <item name="android:textSize">10sp</item>
     </style>
     <style name="OverflowButtonStyle" parent="Widget.AppCompat.ActionButton.Overflow">

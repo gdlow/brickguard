@@ -102,6 +102,15 @@
 
         </LinearLayout>
 
+        <TextView
+            android:id="@+id/activity_bottom_sheet_step2_more_info_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_large"
+            android:textSize="14sp"
+            android:visibility="gone"
+            android:text="The app looks up DNSMasq configurations that alias malicious websites (adult domains and advertisements) to 0.0.0.0. Whenever a connection to any of these websites is attempted, the app blocks the request and logs the requested domain." />
+
     </LinearLayout>
 
     <LinearLayout

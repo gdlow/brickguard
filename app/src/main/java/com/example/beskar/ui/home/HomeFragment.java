@@ -23,6 +23,8 @@ import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.slider.Slider;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -35,14 +37,19 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         public ImageView labelArrow;
         public Button nextButton;
         public BottomSheetBehavior bottomSheetBehavior;
+        public TextView showMoreText;
+        public Button showMoreButton;
         public boolean on;
         public StepState(View container, TextView label, ImageView labelArrow, Button nextButton,
-                         BottomSheetBehavior bottomSheetBehavior) {
+                         BottomSheetBehavior bottomSheetBehavior, TextView showMoreText,
+                         Button showMoreButton) {
             this.container = container;
             this.label = label;
             this.labelArrow = labelArrow;
             this.nextButton = nextButton;
             this.bottomSheetBehavior = bottomSheetBehavior;
+            this.showMoreText = showMoreText;
+            this.showMoreButton = showMoreButton;
             this.on = false;
         }
     }
@@ -69,7 +76,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                         (ImageView) view.findViewById(R.id.activity_steppers_expand_button_step1),
                         (Button) view.findViewById(R.id.activity_bottom_sheet_step1_next_button),
                         BottomSheetBehavior.from(
-                                view.findViewById(R.id.bottom_sheet_step1))
+                                view.findViewById(R.id.bottom_sheet_step1)),
+                        (TextView) view.findViewById(R.id.activity_bottom_sheet_step1_more_info_text),
+                        (Button) view.findViewById(R.id.activity_bottom_sheet_step1_more_info_button)
                 ),
                 new StepState(
                         view.findViewById(R.id.activity_steppers_container_step2),
@@ -77,7 +86,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                         (ImageView) view.findViewById(R.id.activity_steppers_expand_button_step2),
                         (Button) view.findViewById(R.id.activity_bottom_sheet_step2_next_button),
                         BottomSheetBehavior.from(
-                                view.findViewById(R.id.bottom_sheet_step2))
+                                view.findViewById(R.id.bottom_sheet_step2)),
+                        (TextView) view.findViewById(R.id.activity_bottom_sheet_step2_more_info_text),
+                        (Button) view.findViewById(R.id.activity_bottom_sheet_step2_more_info_button)
                 ),
                 new StepState(
                         view.findViewById(R.id.activity_steppers_container_step3),
@@ -85,7 +96,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                         (ImageView) view.findViewById(R.id.activity_steppers_expand_button_step3),
                         (Button) view.findViewById(R.id.activity_bottom_sheet_step3_next_button),
                         BottomSheetBehavior.from(
-                                view.findViewById(R.id.bottom_sheet_step3))
+                                view.findViewById(R.id.bottom_sheet_step3)),
+                        (TextView) view.findViewById(R.id.activity_bottom_sheet_step3_more_info_text),
+                        (Button) view.findViewById(R.id.activity_bottom_sheet_step3_more_info_button)
                 )
         ));
 
@@ -93,6 +106,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         for (StepState stepState : stepStates) {
             stepState.container.setOnClickListener(this);
             stepState.nextButton.setOnClickListener(this);
+            stepState.showMoreButton.setOnClickListener(this);
             stepState.bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
             stepState.bottomSheetBehavior.addBottomSheetCallback(
                     new BottomSheetBehavior.BottomSheetCallback() {
@@ -106,6 +120,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                             TextView tv =
                                     (TextView) root.findViewById(R.id.activity_bottom_sheet_step3_edit_text);
                             tv.setError(null);
+                            
+                            // Toggle show more info
+                            showMoreToggle(stepState, false);
                     }
                 }
 
@@ -227,7 +244,27 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 // Close all bottom sheets
                 onClickHelper(-1);
                 break;
+            case R.id.activity_bottom_sheet_step1_more_info_button:
+                showMoreTextHelper(0);
+                break;
+            case R.id.activity_bottom_sheet_step2_more_info_button:
+                showMoreTextHelper(1);
+                break;
+            case R.id.activity_bottom_sheet_step3_more_info_button:
+                showMoreTextHelper(2);
+                break;
         }
+    }
+
+    private void showMoreTextHelper(int chosen) {
+        StepState chosenStepState = stepStates.get(chosen);
+        boolean turn_on = chosenStepState.showMoreText.getVisibility() != View.VISIBLE;
+        showMoreToggle(chosenStepState, turn_on);
+    }
+
+    private void showMoreToggle(StepState stepState, boolean turn_on) {
+        stepState.showMoreText.setVisibility(turn_on ? View.VISIBLE : View.GONE);
+        stepState.showMoreButton.setText(turn_on ? "LESS INFO" : "MORE INFO");
     }
 
     private void onClickHelper(int chosen) {

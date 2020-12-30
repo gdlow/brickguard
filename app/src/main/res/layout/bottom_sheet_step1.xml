@@ -72,6 +72,15 @@
             android:textSize="14sp"
             android:text="Adult domains blocked. Search engines set to safe mode. Malicious domains blocked." />
 
+        <TextView
+            android:id="@+id/activity_bottom_sheet_step1_more_info_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_large"
+            android:textSize="14sp"
+            android:visibility="gone"
+            android:text="Behind the scenes, the device connects to CleanBrowsing's or OpenDNS's DNS servers for web filtering. Toggling the filter level connects the device to the appropriate upstream server." />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

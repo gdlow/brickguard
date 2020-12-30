@@ -52,7 +52,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="@dimen/spacing_middle" >
+        android:padding="@dimen/spacing_medium" >
 
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/activity_bottom_sheet_step3_chip_group"
@@ -84,6 +84,15 @@
             android:layout_marginTop="@dimen/spacing_large"
             android:textSize="14sp"
             android:text="Strip the protocol scheme and subdirectories. For example, use example.com, not https://example.com/index.html" />
+
+        <TextView
+            android:id="@+id/activity_bottom_sheet_step3_more_info_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_large"
+            android:textSize="14sp"
+            android:visibility="gone"
+            android:text="These domains are appended to the DNSMasq configurations used by the app. DNS requests are intercepted and aliased to 0.0.0.0." />
 
     </LinearLayout>
 
