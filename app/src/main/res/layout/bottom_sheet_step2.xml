@@ -11,6 +11,7 @@
     android:paddingBottom="@dimen/spacing_smlarge"
     android:paddingTop="17dp"
     app:behavior_hideable="true"
+    app:behavior_skipCollapsed="true"
     app:behavior_peekHeight="@dimen/spacing_xxxlarge"
     app:layout_behavior="@string/bottom_sheet_behavior">
 
@@ -19,12 +20,12 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:orientation="horizontal"
+        android:layout_marginBottom="@dimen/spacing_middle"
         android:weightSum="3">
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/spacing_large"
             android:layout_weight="2"
             android:text="Select rule sets"
             android:textAppearance="@style/BottomSheetTitle"/>

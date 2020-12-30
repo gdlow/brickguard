@@ -29,17 +29,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         public View container;
         public TextView label;
         public ImageView labelArrow;
-        public ImageView bottomSheetArrow;
         public Button nextButton;
         public BottomSheetBehavior bottomSheetBehavior;
         public boolean on;
-        public StepState(View container, TextView label, ImageView labelArrow,
-                         ImageView bottomSheetArrow, Button nextButton,
+        public StepState(View container, TextView label, ImageView labelArrow, Button nextButton,
                          BottomSheetBehavior bottomSheetBehavior) {
             this.container = container;
             this.label = label;
             this.labelArrow = labelArrow;
-            this.bottomSheetArrow = bottomSheetArrow;
             this.nextButton = nextButton;
             this.bottomSheetBehavior = bottomSheetBehavior;
             this.on = false;
@@ -66,7 +63,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                         view.findViewById(R.id.activity_steppers_container_step1),
                         (TextView) view.findViewById(R.id.activity_steppers_txt_label_step1),
                         (ImageView) view.findViewById(R.id.activity_steppers_expand_button_step1),
-                        (ImageView) view.findViewById(R.id.activity_bottom_sheet_step1_expand_button),
                         (Button) view.findViewById(R.id.activity_bottom_sheet_step1_next_button),
                         BottomSheetBehavior.from(
                                 view.findViewById(R.id.bottom_sheet_step1))
@@ -75,7 +71,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                         view.findViewById(R.id.activity_steppers_container_step2),
                         (TextView) view.findViewById(R.id.activity_steppers_txt_label_step2),
                         (ImageView) view.findViewById(R.id.activity_steppers_expand_button_step2),
-                        (ImageView) view.findViewById(R.id.activity_bottom_sheet_step2_expand_button),
                         (Button) view.findViewById(R.id.activity_bottom_sheet_step2_next_button),
                         BottomSheetBehavior.from(
                                 view.findViewById(R.id.bottom_sheet_step2))
@@ -84,7 +79,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                         view.findViewById(R.id.activity_steppers_container_step3),
                         (TextView) view.findViewById(R.id.activity_steppers_txt_label_step3),
                         (ImageView) view.findViewById(R.id.activity_steppers_expand_button_step3),
-                        (ImageView) view.findViewById(R.id.activity_bottom_sheet_step3_expand_button),
                         (Button) view.findViewById(R.id.activity_bottom_sheet_step3_next_button),
                         BottomSheetBehavior.from(
                                 view.findViewById(R.id.bottom_sheet_step3))
@@ -101,14 +95,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 @Override
                 public void onStateChanged(@NonNull View bottomSheet, int newState) {
                     switch (newState) {
-                        case BottomSheetBehavior.STATE_COLLAPSED:
-                            stepState.bottomSheetArrow
-                                    .setBackgroundResource(R.drawable.baseline_expand_less_24);
-                            break;
-                        case BottomSheetBehavior.STATE_EXPANDED:
-                            stepState.bottomSheetArrow
-                                    .setBackgroundResource(R.drawable.baseline_expand_more_24);
-                            break;
                         case BottomSheetBehavior.STATE_HIDDEN:
                             toggle(stepState, false);
                     }

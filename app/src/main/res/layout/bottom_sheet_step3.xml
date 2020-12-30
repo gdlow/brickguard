@@ -11,6 +11,7 @@
     android:paddingBottom="@dimen/spacing_smlarge"
     android:paddingTop="17dp"
     app:behavior_hideable="true"
+    app:behavior_skipCollapsed="true"
     app:behavior_peekHeight="@dimen/spacing_xxxlarge"
     app:layout_behavior="@string/bottom_sheet_behavior">
 
@@ -19,12 +20,12 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:orientation="horizontal"
+        android:layout_marginBottom="@dimen/spacing_middle"
         android:weightSum="3">
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/spacing_large"
             android:layout_weight="2"
             android:text="Blacklist additional domains"
             android:textAppearance="@style/BottomSheetTitle"/>
@@ -53,9 +54,37 @@
         android:orientation="vertical"
         android:padding="@dimen/spacing_middle" >
 
+        <com.google.android.material.chip.ChipGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.chip.Chip
+                style="@style/Widget.MaterialComponents.Chip.Entry"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checkable="false"
+                android:text="foo.com"/>
+
+            <com.google.android.material.chip.Chip
+                style="@style/Widget.MaterialComponents.Chip.Entry"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checkable="false"
+                android:text="bar.com"/>
+
+<!--            <com.google.android.material.chip.Chip-->
+<!--                style="@style/Widget.MaterialComponents.Chip.Entry"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:checkable="false"-->
+<!--            android:text="caz.com"/>-->
+
+        </com.google.android.material.chip.ChipGroup>
+
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_middle"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
             <com.google.android.material.textfield.TextInputEditText

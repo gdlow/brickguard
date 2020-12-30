@@ -11,6 +11,7 @@
     android:paddingBottom="@dimen/spacing_smlarge"
     android:paddingTop="17dp"
     app:behavior_hideable="true"
+    app:behavior_skipCollapsed="true"
     app:behavior_peekHeight="@dimen/spacing_xxxlarge"
     app:layout_behavior="@string/bottom_sheet_behavior">
 
