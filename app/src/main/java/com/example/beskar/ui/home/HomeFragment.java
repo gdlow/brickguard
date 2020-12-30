@@ -5,9 +5,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.widget.TextViewCompat;
@@ -16,6 +18,8 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.beskar.R;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.slider.Slider;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
@@ -126,6 +130,39 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         adultSwitch.setOnClickListener(this);
         SwitchMaterial adsSwitch = view.findViewById(R.id.activity_bottom_sheet_step2_ads_switch);
         adsSwitch.setOnClickListener(this);
+
+        // Set text input in step 3
+        TextView editText = view.findViewById(R.id.activity_bottom_sheet_step3_edit_text);
+        editText.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                // Validate text
+                CharSequence text = editText.getText();
+                String textStr = text.toString();
+
+                // Invalid URI
+                if (!textStr.contains(".") || textStr.startsWith(".") || textStr.endsWith(".") ||
+                        textStr.length() < 4) {
+                    editText.setError("Invalid domain");
+                    return false;
+                }
+
+                // Add new chip to chip group
+                ChipGroup cg = view.findViewById(R.id.activity_bottom_sheet_step3_chip_group);
+                Chip chip = new Chip(getActivity());
+                chip.setText(text);
+                chip.setCloseIconVisible(true);
+                chip.setCheckable(false);
+                chip.setOnCloseIconClickListener(chipView -> {
+                    cg.removeView(chip);
+                });
+                cg.addView(chip);
+
+                // Clear text
+                editText.setText("");
+                return true;
+            }
+            return false;
+        });
 
         // Hide keyboard
         hideKeyboard();
