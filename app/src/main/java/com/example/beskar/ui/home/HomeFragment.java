@@ -129,6 +129,20 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         slider.addOnChangeListener((s, value, fromUser) -> {
             tv.setText(sliderTexts.get(Math.round(value)));
         });
+        slider.setLabelFormatter((float value) -> {
+            switch (Math.round(value)) {
+                case 0:
+                    return "None";
+                case 1:
+                    return "Low";
+                case 2:
+                    return "Medium";
+                case 3:
+                    return "High";
+                default:
+                    return "Value: " + value;
+            }
+        });
 
         // Set switches in step 2
         SwitchMaterial adultSwitch = view.findViewById(R.id.activity_bottom_sheet_step2_adult_switch);
