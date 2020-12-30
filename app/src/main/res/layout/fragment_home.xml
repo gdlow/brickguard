@@ -314,8 +314,7 @@
                         android:layout_height="wrap_content"
                         android:scaleX="2.25"
                         android:scaleY="2.25"
-                        android:onClick="onClick"
-                        style="@style/Widget.App.Switch"/>
+                        android:onClick="onClick"/>
 
                     <TextView
                         android:id="@+id/activity_fragment_home_main_switch_text"

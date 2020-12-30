@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.settings.GlobalConfigFragment">
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        android:key="accountability"
+        android:title="Accountability">
+
+        <SwitchPreference
+            android:key="settings_usage_reports"
+            android:title="Send weekly usage reports"
+            android:summary="Set an accountability email"
+            android:defaultValue="false"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        android:key="system"
+        android:title="System">
+
+        <SwitchPreference
+            android:key="settings_boot"
+            android:title="Activate on Boot"
+            android:defaultValue="false"/>
+        <SwitchPreference
+            android:key="settings_notification"
+            android:title="Show Notifications"
+            android:defaultValue="true"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        android:key="debug"
+        android:title="Debug">
+        <ListPreference
+            android:key="settings_logs"
+            android:title="View Logs"/>
+        <ListPreference
+            android:key="settings_test"
+            android:title="Test DNS and VPN Servers"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        android:key="settings_about"
+        android:title="About">
+        <ListPreference
+            android:key="settings_privacy_policy"
+            android:title="Privacy Policy"/>
+        <ListPreference
+            android:key="settings_donate"
+            android:title="Donate"/>
+    </PreferenceCategory>
+
+</androidx.preference.PreferenceScreen>

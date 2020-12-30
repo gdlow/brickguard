@@ -3,4 +3,7 @@
     <item
         android:id="@+id/privacy_policy"
         android:title="@string/privacy_policy_title" />
+    <item
+        android:id="@+id/donate"
+        android:title="@string/donate_title" />
 </menu>

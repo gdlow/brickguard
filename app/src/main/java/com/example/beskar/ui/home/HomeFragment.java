@@ -120,7 +120,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                             TextView tv =
                                     (TextView) root.findViewById(R.id.activity_bottom_sheet_step3_edit_text);
                             tv.setError(null);
-                            
+
                             // Toggle show more info
                             showMoreToggle(stepState, false);
                     }
