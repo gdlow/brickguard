@@ -101,6 +101,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     switch (newState) {
                         case BottomSheetBehavior.STATE_HIDDEN:
                             toggle(stepState, false);
+
+                            // Clear error message
+                            TextView tv =
+                                    (TextView) root.findViewById(R.id.activity_bottom_sheet_step3_edit_text);
+                            tv.setError(null);
                     }
                 }
 
@@ -127,9 +132,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         // Set switches in step 2
         SwitchMaterial adultSwitch = view.findViewById(R.id.activity_bottom_sheet_step2_adult_switch);
-        adultSwitch.setOnClickListener(this);
+        adultSwitch.setOnClickListener(v -> {
+            // Add logic here
+        });
         SwitchMaterial adsSwitch = view.findViewById(R.id.activity_bottom_sheet_step2_ads_switch);
-        adsSwitch.setOnClickListener(this);
+        adsSwitch.setOnClickListener(v -> {
+            // Add logic here
+        });
 
         // Set text input in step 3
         TextView editText = view.findViewById(R.id.activity_bottom_sheet_step3_edit_text);
@@ -141,7 +150,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
                 // Invalid URI
                 if (!textStr.contains(".") || textStr.startsWith(".") || textStr.endsWith(".") ||
-                        textStr.length() < 4) {
+                        textStr.contains(" ") || textStr.length() < 4) {
                     editText.setError("Invalid domain");
                     return false;
                 }
@@ -190,12 +199,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             case R.id.activity_bottom_sheet_step3_next_button:
                 // Close all bottom sheets
                 onClickHelper(-1);
-                break;
-            case R.id.activity_bottom_sheet_step2_adult_switch:
-                // Add logic here
-                break;
-            case R.id.activity_bottom_sheet_step2_ads_switch:
-                // Add logic here
                 break;
         }
     }
