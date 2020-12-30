@@ -104,14 +104,46 @@
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/activity_bottom_sheet_step2_next_button"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/spacing_large"
-        android:layout_gravity="end"
-        android:background="#000"
-        android:text="NEXT"
-        android:textColor="#fff" />
+        android:layout_marginTop="@dimen/spacing_mxlarge"
+        android:weightSum="2"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/activity_bottom_sheet_step2_more_info_button"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:text="MORE INFO" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/activity_bottom_sheet_step2_next_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:background="#000"
+                android:text="NEXT"
+                android:textColor="#fff" />
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 </LinearLayout>
