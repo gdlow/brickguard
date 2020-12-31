@@ -16,6 +16,15 @@
         app:layout_constraintBottom_toTopOf="@id/nav_host_fragment"
         app:layout_constraintTop_toTopOf="parent">
 
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:scaleX="1.2"
+            android:scaleY="1.2"
+            android:rotation="-15"
+            android:src="@drawable/ic_brick_toolbar"/>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
