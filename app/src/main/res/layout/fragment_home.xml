@@ -308,6 +308,62 @@
                     android:gravity="center_horizontal|bottom"
                     android:orientation="vertical">
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/spacing_medium"
+                        android:gravity="center">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/baseline_bolt" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="CURRENT STREAK: "
+                            android:textAppearance="@style/HomeStreakText" />
+
+                        <TextView
+                            android:id="@+id/activity_fragment_home_current_streak"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="5D"
+                            android:textAppearance="@style/HomeStreakNumberText" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/spacing_medium"
+                        android:layout_marginBottom="@dimen/spacing_large"
+                        android:gravity="center">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/baseline_directions_run" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="@dimen/spacing_small"
+                            android:text="LONGEST STREAK: "
+                            android:textAppearance="@style/HomeStreakText" />
+
+                        <TextView
+                            android:id="@+id/activity_fragment_home_longest_streak"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="15D"
+                            android:textAppearance="@style/HomeStreakNumberText" />
+
+                    </LinearLayout>
+
                     <com.google.android.material.switchmaterial.SwitchMaterial
                         android:id="@+id/activity_fragment_home_main_switch"
                         android:layout_width="wrap_content"

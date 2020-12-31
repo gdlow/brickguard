@@ -40,8 +40,17 @@
         <item name="android:fontFamily">@font/roboto_light</item>
         <item name="android:textSize">15sp</item>
     </style>
+    <style name="HomeStreakText">
+        <item name="android:fontFamily">@font/roboto_italic</item>
+        <item name="android:textSize">10sp</item>
+    </style>
+    <style name="HomeStreakNumberText">
+        <item name="android:fontFamily">@font/roboto_black_italic</item>
+        <item name="android:textSize">10sp</item>
+    </style>
     <style name="MainSwitchText">
         <item name="android:fontFamily">@font/roboto_regular</item>
+        <item name="android:textColor">@color/black_a60</item>
         <item name="android:textSize">10sp</item>
     </style>
     <style name="OverflowButtonStyle" parent="Widget.AppCompat.ActionButton.Overflow">
