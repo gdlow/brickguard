@@ -52,6 +52,7 @@
         <item name="android:fontFamily">@font/roboto_regular</item>
         <item name="android:textColor">@color/black_a60</item>
         <item name="android:textSize">10sp</item>
+        <item name="android:letterSpacing">.2</item>
     </style>
     <style name="OverflowButtonStyle" parent="Widget.AppCompat.ActionButton.Overflow">
         <item name="android:tint">@color/white</item>

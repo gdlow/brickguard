@@ -1,8 +1,17 @@
 <resources>
     <string name="app_name">Brick</string>
+    <string name="quick_toggle">Toggle</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_settings">Settings</string>
     <string name="privacy_policy_title">Privacy Policy</string>
     <string name="donate_title">Donate</string>
+    <string name="button_text_deactivate">DEACTIVATE</string>
+    <string name="button_text_activate">ACTIVATE</string>
+    <string name="notification_text_deactivate">Deactivate</string>
+
+    <string name="notice_activated">Brick is activated.</string>
+    <string name="action_settings">Settings</string>
+    <string name="error_occurred">An error occurred at startup</string>
+    <string name="notice_queries">DNS query times:</string>
 </resources>

@@ -5,15 +5,18 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 public class HomeViewModel extends ViewModel {
-
-    private MutableLiveData<String> mText;
+    private MutableLiveData<Boolean> isMainButtonChecked;
 
     public HomeViewModel() {
-        mText = new MutableLiveData<>();
-        mText.setValue("This is home fragment");
+        isMainButtonChecked = new MutableLiveData<>();
+        isMainButtonChecked.setValue(false);
     }
 
-    public LiveData<String> getText() {
-        return mText;
+    public LiveData<Boolean> getIsMainButtonChecked() {
+        return isMainButtonChecked;
+    }
+
+    public void setIsMainButtonChecked(boolean isChecked) {
+        isMainButtonChecked.setValue(isChecked);
     }
 }

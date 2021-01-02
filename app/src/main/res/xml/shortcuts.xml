@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+            android:enabled="true"
+            android:icon="@drawable/ic_settings"
+            android:shortcutDisabledMessage="@string/action_settings"
+            android:shortcutId="settings"
+            android:shortcutLongLabel="@string/action_settings"
+            android:shortcutShortLabel="@string/action_settings">
+        <intent
+                android:action="android.intent.action.VIEW"
+                android:targetClass="com.example.beskar.MainActivity"
+                android:targetPackage="com.example.beskar">
+            <extra
+                    android:name="com.example.beskar.MainActivity.LAUNCH_FRAGMENT"
+                    android:value="2"/>
+        </intent>
+    </shortcut>
+</shortcuts>

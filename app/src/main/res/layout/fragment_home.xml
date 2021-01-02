@@ -378,7 +378,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/spacing_xxxlarge"
                         android:layout_marginTop="@dimen/spacing_large"
-                        android:text="A C T I V A T E"
+                        android:text="ACTIVATE"
                         android:textAppearance="@style/MainSwitchText" />
 
                 </LinearLayout>

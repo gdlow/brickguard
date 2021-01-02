@@ -1,5 +1,6 @@
 package com.example.beskar.ui.home;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,21 +10,21 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.widget.TextViewCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.beskar.Beskar;
+import com.example.beskar.MainActivity;
 import com.example.beskar.R;
+import com.example.beskar.service.BeskarVpnService;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.slider.Slider;
 import com.google.android.material.switchmaterial.SwitchMaterial;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -60,11 +61,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        homeViewModel =
-                new ViewModelProvider(this).get(HomeViewModel.class);
         root = inflater.inflate(R.layout.fragment_home, container, false);
-        initComponent(root);
         return root;
+    }
+
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        initComponent(root);
     }
 
     private void initComponent(View view) {
@@ -210,11 +213,25 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         SwitchMaterial mainSwitch = view.findViewById(R.id.activity_fragment_home_main_switch);
         mainSwitch.setOnClickListener(v -> {});
         mainSwitch.setOnCheckedChangeListener((v, isChecked) -> {
+            if (isChecked) {
+                if (!BeskarVpnService.isActivated()) {
+                    startActivity(new Intent(getActivity(), MainActivity.class)
+                            .putExtra(MainActivity.LAUNCH_ACTION,
+                                    MainActivity.LAUNCH_ACTION_ACTIVATE));
+                }
+            } else {
+                if (BeskarVpnService.isActivated()) {
+                    Beskar.deactivateService(getActivity().getApplicationContext());
+                }
+            }
+        });
+
+        homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
+        homeViewModel.getIsMainButtonChecked().observe(getViewLifecycleOwner(), isChecked -> {
             TextView mainSwitchText =
                     view.findViewById(R.id.activity_fragment_home_main_switch_text);
-            mainSwitchText.setText(isChecked ? "D E A C T I V A T E" : "A C T I V A T E");
-            Toast.makeText(getActivity(), "Service " + (isChecked ? "activated" : "deactivated"),
-                    Toast.LENGTH_SHORT).show();
+            mainSwitchText.setText(isChecked ? "DEACTIVATE" : "ACTIVATE");
+            mainSwitch.setChecked(isChecked);
         });
 
         // Hide keyboard
