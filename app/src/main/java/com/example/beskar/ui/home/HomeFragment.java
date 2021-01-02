@@ -1,7 +1,10 @@
 package com.example.beskar.ui.home;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,20 +18,34 @@ import androidx.annotation.NonNull;
 import androidx.core.widget.TextViewCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.preference.EditTextPreference;
+import androidx.preference.ListPreference;
 
 import com.example.beskar.Beskar;
 import com.example.beskar.MainActivity;
 import com.example.beskar.R;
 import com.example.beskar.service.BeskarVpnService;
+import com.example.beskar.util.Logger;
+import com.example.beskar.util.Rule;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.slider.Slider;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class HomeFragment extends Fragment implements View.OnClickListener {
 
@@ -58,10 +75,18 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private HomeViewModel homeViewModel;
     private View root;
     private List<StepState> stepStates;
+    private Thread mThread = null;
+    private RuleConfigHandler mHandler = null;
+    private static final OkHttpClient HTTP_CLIENT = new OkHttpClient.Builder()
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
+            .writeTimeout(30, TimeUnit.SECONDS)
+            .build();
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.fragment_home, container, false);
+        mHandler = new RuleConfigHandler().setView(root);
         return root;
     }
 
@@ -168,12 +193,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         SwitchMaterial adultSwitch = view.findViewById(R.id.activity_bottom_sheet_step2_adult_switch);
         adultSwitch.setOnClickListener(v -> {});
         adultSwitch.setOnCheckedChangeListener((v, isChecked) -> {
-            // Add logic here
+            selectRule(Beskar.RULES.get(0), isChecked);
         });
         SwitchMaterial adsSwitch = view.findViewById(R.id.activity_bottom_sheet_step2_ads_switch);
         adsSwitch.setOnClickListener(v -> {});
         adsSwitch.setOnCheckedChangeListener((v, isChecked) -> {
-            // Add logic here
+            selectRule(Beskar.RULES.get(1), isChecked);
         });
 
         // Set text input in step 3
@@ -319,5 +344,138 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     public void hideKeyboard() {
         getActivity().getWindow()
                 .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+    }
+
+    private void selectRule(Rule rule, boolean isUsing) {
+        if (isUsing && !rule.getDownloaded()) {
+            ruleSync(rule);
+            rule.setDownloaded(true);
+        }
+        rule.setUsing(isUsing);
+        Beskar.setRulesChanged();
+    }
+
+    private boolean ruleSync(Rule rule) {
+        String ruleFilename = rule.getFileName();
+        String ruleDownloadUrl = rule.getDownloadUrl();
+
+        if (mThread == null) {
+            Snackbar.make(getView(), R.string.notice_start_download, Snackbar.LENGTH_SHORT).show();
+            if (ruleDownloadUrl.startsWith("content:/")) {
+                mThread = new Thread(() -> {
+                    try {
+                        InputStream inputStream = getActivity().getContentResolver().openInputStream(Uri.parse(ruleDownloadUrl));
+                        int readLen;
+                        byte[] data = new byte[1024];
+                        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+                        while ((readLen = inputStream.read(data)) != -1) {
+                            buffer.write(data, 0, readLen);
+                        }
+                        inputStream.close();
+                        buffer.flush();
+                        mHandler.obtainMessage(RuleConfigHandler.MSG_RULE_DOWNLOADED,
+                                new RuleData(ruleFilename, buffer.toByteArray())).sendToTarget();
+                    } catch (Exception e) {
+                        Logger.logException(e);
+                    } finally {
+                        stopThread();
+                    }
+                });
+            } else {
+                mThread = new Thread(() -> {
+                    try {
+                        Request request = new Request.Builder()
+                                .url(ruleDownloadUrl).get().build();
+                        Response response = HTTP_CLIENT.newCall(request).execute();
+                        Logger.info("Downloaded " + ruleDownloadUrl);
+                        if (response.isSuccessful() && mHandler != null) {
+                            mHandler.obtainMessage(RuleConfigHandler.MSG_RULE_DOWNLOADED,
+                                    new RuleData(ruleFilename, response.body().bytes())).sendToTarget();
+                        }
+                    } catch (Exception e) {
+                        Logger.logException(e);
+                        if (mHandler != null) {
+                            mHandler.obtainMessage(RuleConfigHandler.MSG_RULE_DOWNLOADED,
+                                    new RuleData(ruleFilename, new byte[0])).sendToTarget();
+                        }
+                    } finally {
+                        stopThread();
+                    }
+                });
+            }
+            mThread.start();
+        } else {
+            Snackbar.make(getView(), R.string.notice_now_downloading, Snackbar.LENGTH_LONG).show();
+        }
+        return false;
+    }
+
+    private void stopThread() {
+        if (mThread != null) {
+            mThread.interrupt();
+            mThread = null;
+        }
+    }
+
+    private class RuleData {
+        private byte[] data;
+        private String filename;
+
+        RuleData(String filename, byte[] data) {
+            this.data = data;
+            this.filename = filename;
+        }
+
+        byte[] getData() {
+            return data;
+        }
+
+        String getFilename() {
+            return filename;
+        }
+    }
+
+    private static class RuleConfigHandler extends Handler {
+        static final int MSG_RULE_DOWNLOADED = 0;
+
+        private View view = null;
+
+        RuleConfigHandler setView(View view) {
+            this.view = view;
+            return this;
+        }
+
+        void shutdown() {
+            view = null;
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+
+            switch (msg.what) {
+                case MSG_RULE_DOWNLOADED:
+                    RuleData ruleData = (RuleData) msg.obj;
+                    if (ruleData.data.length == 0) {
+                        if (view != null) {
+                            Snackbar.make(view, R.string.notice_download_failed, Snackbar.LENGTH_SHORT).show();
+                        }
+                        break;
+                    }
+                    try {
+                        File file = new File(Beskar.rulePath + ruleData.getFilename());
+                        FileOutputStream stream = new FileOutputStream(file);
+                        stream.write(ruleData.getData());
+                        stream.close();
+                    } catch (Exception e) {
+                        Logger.logException(e);
+                    }
+
+                    if (view != null) {
+                        Snackbar.make(view, R.string.notice_downloaded, Snackbar.LENGTH_SHORT).show();
+                    }
+                    break;
+            }
+        }
     }
 }

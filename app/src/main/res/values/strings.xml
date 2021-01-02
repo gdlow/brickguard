@@ -14,4 +14,9 @@
     <string name="action_settings">Settings</string>
     <string name="error_occurred">An error occurred at startup</string>
     <string name="notice_queries">DNS query times:</string>
+    <string name="notice_downloaded">Rule has been downloaded.</string>
+    <string name="notice_download_failed">Download failed.</string>
+    <string name="notice_fill_in_all">Please fill in all configuration items.</string>
+    <string name="notice_now_downloading">Beskar is currently downloading rule, please wait.</string>
+    <string name="notice_start_download">Downloading rule, please wait...</string>
 </resources>

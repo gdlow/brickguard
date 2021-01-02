@@ -14,6 +14,7 @@ public class Rule {
     private int type;
     private String downloadUrl;
     private boolean using;
+    private boolean downloaded;
     private String id;
 
     public Rule(String name, String fileName, int type, String downloadUrl, boolean withId) {
@@ -22,6 +23,7 @@ public class Rule {
         this.type = type;
         this.downloadUrl = downloadUrl;
         this.using = false;
+        this.downloaded = false;
         if (withId) {
             this.id = String.valueOf(Beskar.configurations.getNextRuleId());
         }
@@ -74,6 +76,8 @@ public class Rule {
         return downloadUrl;
     }
 
+    public boolean getDownloaded() { return downloaded; }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -91,6 +95,8 @@ public class Rule {
     public void setDownloadUrl(String downloadUrl) {
         this.downloadUrl = downloadUrl;
     }
+
+    public void setDownloaded(boolean downloaded) { this.downloaded = downloaded; }
 
     public void addToConfig() {
         if (getType() == Rule.TYPE_HOSTS) {

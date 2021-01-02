@@ -18,7 +18,7 @@ public class Configurations {
     private ArrayList<String> appObjects;
 
     private ArrayList<Rule> hostsRules;
-    private ArrayList<Rule> dnsmasqRules;
+    private ArrayList<Rule> dnsmasqRules = Beskar.RULES;
 
     private int totalDnsId;
     private int totalRuleId;
@@ -62,28 +62,19 @@ public class Configurations {
     }
 
     public ArrayList<Rule> getDnsmasqRules() {
-        if (dnsmasqRules == null) {
-            dnsmasqRules = new ArrayList<>();
-        }
         return dnsmasqRules;
     }
 
     public ArrayList<Rule> getUsingRules() {
-        if (hostsRules != null && hostsRules.size() > 0) {
-            for (Rule rule : hostsRules) {
-                if (rule.isUsing()) {
-                    return hostsRules;
-                }
-            }
-        }
+        ArrayList<Rule> usingRules = new ArrayList<>();
         if (dnsmasqRules != null && dnsmasqRules.size() > 0) {
             for (Rule rule : dnsmasqRules) {
                 if (rule.isUsing()) {
-                    return dnsmasqRules;
+                    usingRules.add(rule);
                 }
             }
         }
-        return hostsRules;
+        return usingRules;
     }
 
     public int getUsingRuleType() {

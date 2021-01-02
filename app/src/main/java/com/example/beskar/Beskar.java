@@ -42,16 +42,12 @@ public class Beskar extends Application {
     }};
 
     public static final ArrayList<Rule> RULES = new ArrayList<Rule>() {{
-        add(new Rule("googlehosts/hosts", "googlehosts.hosts", Rule.TYPE_HOSTS,
-                "https://raw.githubusercontent.com/googlehosts/hosts/master/hosts-files/hosts", false));
-        //Build-in DNSMasq rule providers
-        add(new Rule("vokins/yhosts/union", "union.dnsmasq", Rule.TYPE_DNSMASQ,
-                "https://raw.githubusercontent.com/vokins/yhosts/master/dnsmasq/union.conf", false));
-        add(new Rule("notracking/hosts-blacklists", "notracking.dnsmasq", Rule.TYPE_DNSMASQ,
-                "https://raw.githubusercontent.com/notracking/hosts-blocklists/master/dnsmasq/dnsmasq.blacklist.txt",
-                false));
         add(new Rule("chadmayfield/porn-top1m", "chadmayfield.dnsmasq", Rule.TYPE_DNSMASQ,
                 "https://raw.githubusercontent.com/chadmayfield/my-pihole-blocklists/master/lists/pi_blocklist_porn_top1m.list",
+                false));
+
+        add(new Rule("notracking/hosts-blacklists", "notracking.dnsmasq", Rule.TYPE_DNSMASQ,
+                "https://raw.githubusercontent.com/notracking/hosts-blocklists/master/dnsmasq/dnsmasq.blacklist.txt",
                 false));
     }};
 
