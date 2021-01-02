@@ -157,10 +157,6 @@ public class Beskar extends Application {
         return getInstance().prefs;
     }
 
-    public static boolean isDarkTheme() {
-        return getInstance().prefs.getBoolean("settings_dark_theme", false);
-    }
-
     @Override
     public void onTerminate() {
         super.onTerminate();

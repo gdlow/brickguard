@@ -211,6 +211,15 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         // Set main switch
         SwitchMaterial mainSwitch = view.findViewById(R.id.activity_fragment_home_main_switch);
+
+        homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
+        homeViewModel.getIsMainButtonChecked().observe(getViewLifecycleOwner(), isChecked -> {
+            TextView mainSwitchText =
+                    view.findViewById(R.id.activity_fragment_home_main_switch_text);
+            mainSwitchText.setText(isChecked ? "DEACTIVATE" : "ACTIVATE");
+            mainSwitch.setChecked(isChecked);
+        });
+
         mainSwitch.setOnClickListener(v -> {});
         mainSwitch.setOnCheckedChangeListener((v, isChecked) -> {
             if (isChecked) {
@@ -219,19 +228,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                             .putExtra(MainActivity.LAUNCH_ACTION,
                                     MainActivity.LAUNCH_ACTION_ACTIVATE));
                 }
+                homeViewModel.setIsMainButtonChecked(true);
             } else {
                 if (BeskarVpnService.isActivated()) {
                     Beskar.deactivateService(getActivity().getApplicationContext());
                 }
+                homeViewModel.setIsMainButtonChecked(false);
             }
-        });
-
-        homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
-        homeViewModel.getIsMainButtonChecked().observe(getViewLifecycleOwner(), isChecked -> {
-            TextView mainSwitchText =
-                    view.findViewById(R.id.activity_fragment_home_main_switch_text);
-            mainSwitchText.setText(isChecked ? "DEACTIVATE" : "ACTIVATE");
-            mainSwitch.setChecked(isChecked);
         });
 
         // Hide keyboard

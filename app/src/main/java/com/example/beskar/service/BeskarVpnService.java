@@ -8,7 +8,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.VpnService;
 import android.os.Build;
@@ -36,7 +35,6 @@ import java.net.Inet4Address;
 import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 
@@ -56,9 +54,6 @@ public class BeskarVpnService extends VpnService implements Runnable {
     private static InetAddress aliasSecondary;
 
     private NotificationCompat.Builder notification = null;
-    private boolean running = false;
-    private long lastUpdate = 0;
-    private boolean statisticQuery;
     private Provider provider;
     private ParcelFileDescriptor descriptor;
     private Thread mThread = null;
@@ -179,7 +174,6 @@ public class BeskarVpnService extends VpnService implements Runnable {
     private void startThread() {
         if (this.mThread == null) {
             this.mThread = new Thread(this, "BeskarVpn");
-            this.running = true;
             this.mThread.start();
         }
     }
@@ -203,7 +197,6 @@ public class BeskarVpnService extends VpnService implements Runnable {
                 this.descriptor = null;
             }
             if (mThread != null) {
-                running = false;
                 shouldRefresh = true;
                 if (provider != null) {
                     provider.shutdown();
@@ -283,25 +276,6 @@ public class BeskarVpnService extends VpnService implements Runnable {
                             new Intent(this, MainActivity.class).putExtra(MainActivity.LAUNCH_FRAGMENT, MainActivity.FRAGMENT_SETTINGS),
                             PendingIntent.FLAG_ONE_SHOT));
 
-            if (Beskar.getPrefs().getBoolean("settings_app_filter_switch", false)) {
-                ArrayList<String> apps = Beskar.configurations.getAppObjects();
-                if (apps.size() > 0) {
-                    boolean mode = Beskar.getPrefs().getBoolean("settings_app_filter_mode_switch", false);
-                    for (String app : apps) {
-                        try {
-                            if (mode) {
-                                builder.addDisallowedApplication(app);
-                            } else {
-                                builder.addAllowedApplication(app);
-                            }
-                            Logger.debug("Added app to list: " + app);
-                        } catch (PackageManager.NameNotFoundException e) {
-                            Logger.error("Package Not Found:" + app);
-                        }
-                    }
-                }
-            }
-
             String format = null;
 
             for (String prefix : new String[]{"10.0.0", "192.0.2", "198.51.100", "203.0.113", "192.168.50"}) {
@@ -316,8 +290,6 @@ public class BeskarVpnService extends VpnService implements Runnable {
             }
 
             // turn on advanced - turns on local VPN tunnel by default
-            boolean advanced = Beskar.getPrefs().getBoolean("settings_advanced_switch", true);
-            statisticQuery = Beskar.getPrefs().getBoolean("settings_count_query_times", false);
             byte[] ipv6Template = new byte[]{32, 1, 13, (byte) (184 & 0xFF), 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
             try {
@@ -330,38 +302,25 @@ public class BeskarVpnService extends VpnService implements Runnable {
                 ipv6Template = null;
             }
 
-            if (advanced) {
-                dnsServers = new HashMap<>();
-                aliasPrimary = addDnsServer(builder, format, ipv6Template, primaryServer);
-                aliasSecondary = addDnsServer(builder, format, ipv6Template, secondaryServer);
-            } else {
-                aliasPrimary = InetAddress.getByName(primaryServer.getAddress());
-                aliasSecondary = InetAddress.getByName(secondaryServer.getAddress());
-            }
+            dnsServers = new HashMap<>();
+            aliasPrimary = addDnsServer(builder, format, ipv6Template, primaryServer);
+            aliasSecondary = addDnsServer(builder, format, ipv6Template, secondaryServer);
 
             Logger.info("Beskar VPN service is listening on " + primaryServer.getAddress() + " as " + aliasPrimary.getHostAddress());
             Logger.info("Beskar VPN service is listening on " + secondaryServer.getAddress() + " as " + aliasSecondary.getHostAddress());
             builder.addDnsServer(aliasPrimary).addDnsServer(aliasSecondary);
 
-            if (advanced) {
-                builder.setBlocking(true);
-                builder.allowFamily(OsConstants.AF_INET);
-                builder.allowFamily(OsConstants.AF_INET6);
-            }
+            builder.setBlocking(true);
+            builder.allowFamily(OsConstants.AF_INET);
+            builder.allowFamily(OsConstants.AF_INET6);
 
             descriptor = builder.establish();
             Logger.info("Beskar VPN service is started");
 
-            if (advanced) {
-                provider = ProviderPicker.getProvider(descriptor, this);
-                provider.start();
-                provider.process();
-            } else {
-                while (running) {
-                    Thread.sleep(1000);
-                }
-            }
-        } catch (InterruptedException ignored) {
+            provider = ProviderPicker.getProvider(descriptor, this);
+            provider.start();
+            provider.process();
+
         } catch (Exception e) {
             MainActivity.getInstance().runOnUiThread(() ->
                     new AlertDialog.Builder(MainActivity.getInstance())
@@ -373,24 +332,6 @@ public class BeskarVpnService extends VpnService implements Runnable {
             Logger.logException(e);
         } finally {
             stopThread();
-        }
-    }
-
-    public void providerLoopCallback() {
-        if (statisticQuery) {
-            updateUserInterface();
-        }
-    }
-
-    private void updateUserInterface() {
-        long time = System.currentTimeMillis();
-        if (time - lastUpdate >= 1000) {
-            lastUpdate = time;
-            if (notification != null) {
-                notification.setContentTitle(getResources().getString(R.string.notice_queries) + " " + provider.getDnsQueryTimes());
-                NotificationManager manager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
-                manager.notify(NOTIFICATION_ACTIVATED, notification.build());
-            }
         }
     }
 

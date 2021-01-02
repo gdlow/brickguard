@@ -114,7 +114,6 @@ public class UdpProvider extends Provider {
                     Log.d(TAG, "Read from device");
                     readPacketFromDevice(inputStream, packet);
                 }
-                service.providerLoopCallback();
             }
         } catch (Exception e) {
             Logger.logException(e);
