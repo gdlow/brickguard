@@ -18,8 +18,6 @@ import androidx.annotation.NonNull;
 import androidx.core.widget.TextViewCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.preference.EditTextPreference;
-import androidx.preference.ListPreference;
 
 import com.example.beskar.Beskar;
 import com.example.beskar.MainActivity;
@@ -96,6 +94,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     }
 
     private void initComponent(View view) {
+        // Initialise home view model
+        homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
+
         // Build list of stepStates
         stepStates = new ArrayList<>(Arrays.asList(
                 new StepState(
@@ -194,12 +195,17 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         adultSwitch.setOnClickListener(v -> {});
         adultSwitch.setOnCheckedChangeListener((v, isChecked) -> {
             selectRule(Beskar.RULES.get(0), isChecked);
+            homeViewModel.setIsAdultSwitchChecked(isChecked);
         });
+        homeViewModel.getIsAdultSwitchChecked().observe(getViewLifecycleOwner(), adultSwitch::setChecked);
+
         SwitchMaterial adsSwitch = view.findViewById(R.id.activity_bottom_sheet_step2_ads_switch);
         adsSwitch.setOnClickListener(v -> {});
         adsSwitch.setOnCheckedChangeListener((v, isChecked) -> {
             selectRule(Beskar.RULES.get(1), isChecked);
+            homeViewModel.setIsAdsSwitchChecked(isChecked);
         });
+        homeViewModel.getIsAdsSwitchChecked().observe(getViewLifecycleOwner(), adsSwitch::setChecked);
 
         // Set text input in step 3
         TextView editText = view.findViewById(R.id.activity_bottom_sheet_step3_edit_text);
@@ -236,8 +242,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         // Set main switch
         SwitchMaterial mainSwitch = view.findViewById(R.id.activity_fragment_home_main_switch);
-
-        homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
         homeViewModel.getIsMainButtonChecked().observe(getViewLifecycleOwner(), isChecked -> {
             TextView mainSwitchText =
                     view.findViewById(R.id.activity_fragment_home_main_switch_text);
@@ -253,13 +257,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                             .putExtra(MainActivity.LAUNCH_ACTION,
                                     MainActivity.LAUNCH_ACTION_ACTIVATE));
                 }
-                homeViewModel.setIsMainButtonChecked(true);
             } else {
                 if (BeskarVpnService.isActivated()) {
                     Beskar.deactivateService(getActivity().getApplicationContext());
                 }
-                homeViewModel.setIsMainButtonChecked(false);
             }
+            homeViewModel.setIsMainButtonChecked(isChecked);
         });
 
         // Hide keyboard
