@@ -173,7 +173,17 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         Slider slider = view.findViewById(R.id.activity_bottom_sheet_step1_slider);
         TextView tv = view.findViewById(R.id.activity_bottom_sheet_step1_slider_txt_label);
         slider.addOnChangeListener((s, value, fromUser) -> {
-            tv.setText(sliderTexts.get(Math.round(value)));
+            int index = Math.round(value);
+            tv.setText(sliderTexts.get(index));
+            homeViewModel.setPrimaryDNSIndex(index);
+
+            if (index > 0) {
+                Beskar.getPrefs().edit().putString("primary_server", String.valueOf(index)).apply();
+                Beskar.updateUpstreamServers();
+            } else {
+                Beskar.getPrefs().edit().putBoolean("settings_use_system_dns", true).apply();
+                BeskarVpnService.updateUpstreamToSystemDNS(getContext());
+            }
         });
         slider.setLabelFormatter((float value) -> {
             switch (Math.round(value)) {
@@ -188,6 +198,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 default:
                     return "Value: " + value;
             }
+        });
+        homeViewModel.getPrimaryDNSIndex().observe(getViewLifecycleOwner(), index -> {
+            slider.setValue((float) index);
         });
 
         // Set switches in step 2

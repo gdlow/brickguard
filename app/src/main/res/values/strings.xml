@@ -19,4 +19,10 @@
     <string name="notice_fill_in_all">Please fill in all configuration items.</string>
     <string name="notice_now_downloading">Beskar is currently downloading rule, please wait.</string>
     <string name="notice_start_download">Downloading rule, please wait...</string>
+    <string name="filter_none">Google DNS</string>
+    <string name="filter_low">Cleanbrowsing security filter</string>
+    <string name="filter_medium">Cleanbrowsing adult filter</string>
+    <string name="filter_high">Cleanbrowsing family filter</string>
+    <string name="filter_backup_primary">OpenDNS primary filter</string>
+    <string name="filter_backup_secondary">OpenDNS secondary filter</string>
 </resources>

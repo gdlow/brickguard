@@ -4,10 +4,13 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.beskar.Beskar;
+
 public class HomeViewModel extends ViewModel {
     private MutableLiveData<Boolean> isMainButtonChecked;
     private MutableLiveData<Boolean> isAdultSwitchChecked;
     private MutableLiveData<Boolean> isAdsSwitchChecked;
+    private MutableLiveData<Integer> primaryDNSIndex;
 
     public HomeViewModel() {
         isMainButtonChecked = new MutableLiveData<>();
@@ -18,6 +21,9 @@ public class HomeViewModel extends ViewModel {
 
         isAdsSwitchChecked = new MutableLiveData<>();
         isAdsSwitchChecked.setValue(false);
+
+        primaryDNSIndex = new MutableLiveData<>();
+        primaryDNSIndex.setValue(2); // default value in slider
     }
 
     public LiveData<Boolean> getIsMainButtonChecked() {
@@ -32,6 +38,8 @@ public class HomeViewModel extends ViewModel {
         return isAdsSwitchChecked;
     }
 
+    public LiveData<Integer> getPrimaryDNSIndex() { return primaryDNSIndex; }
+
     public void setIsMainButtonChecked(boolean isChecked) {
         isMainButtonChecked.setValue(isChecked);
     }
@@ -42,5 +50,9 @@ public class HomeViewModel extends ViewModel {
 
     public void setIsAdsSwitchChecked(boolean isChecked) {
         isAdsSwitchChecked.setValue(isChecked);
+    }
+
+    public void setPrimaryDNSIndex(int index) {
+        primaryDNSIndex.setValue(index);
     }
 }

@@ -72,13 +72,13 @@ public class BeskarVpnService extends VpnService implements Runnable {
             registerReceiver(receiver = new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
-                    updateUpstreamServers(context);
+                    updateUpstreamToSystemDNS(context);
                 }
             }, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
         }
     }
 
-    private static void updateUpstreamServers(Context context) {
+    public static void updateUpstreamToSystemDNS(Context context) {
         String[] servers = DnsServersDetector.getServers(context);
         if (servers != null) {
             if (servers.length >= 2 && (aliasPrimary == null || !aliasPrimary.getHostAddress().equals(servers[0])) &&
@@ -101,11 +101,20 @@ public class BeskarVpnService extends VpnService implements Runnable {
                     buf.append(server).append(" ");
                 }
                 Logger.error("Invalid upstream DNS " + buf);
+                updateUpstreamToGoogleDns();
             }
-            Logger.info("Upstream DNS updated: " + primaryServer.getAddress() + " " + secondaryServer.getAddress());
+            Logger.info("Upstream DNS updated to system default: " + primaryServer.getAddress() + " " + secondaryServer.getAddress());
         } else {
             Logger.error("Cannot obtain upstream DNS server!");
+            updateUpstreamToGoogleDns();
         }
+    }
+
+    private static void updateUpstreamToGoogleDns() {
+        primaryServer =
+                (AbstractDnsServer) DnsServerHelper.getServerById(DnsServerHelper.getGoogle()).clone();
+        secondaryServer =
+                (AbstractDnsServer) DnsServerHelper.getServerById(DnsServerHelper.getGoogle()).clone();
     }
 
     @Override

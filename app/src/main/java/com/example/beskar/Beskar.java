@@ -36,9 +36,12 @@ public class Beskar extends Application {
     private static final String SHORTCUT_ID_ACTIVATE = "shortcut_activate";
 
     public static final List<DnsServer> DNS_SERVERS = new ArrayList<DnsServer>() {{
-        add(new DnsServer("208.67.222.123", R.string.app_name));
-        add(new DnsServer("208.67.220.123", R.string.app_name));
-        add(new DnsServer("185.228.168.168", R.string.app_name));
+        add(new DnsServer("8.8.8.8", R.string.filter_none));
+        add(new DnsServer("185.228.168.9", R.string.filter_low));
+        add(new DnsServer("185.228.168.10", R.string.filter_medium));
+        add(new DnsServer("185.228.168.168", R.string.filter_high));
+        add(new DnsServer("208.67.222.123", R.string.filter_backup_primary));
+        add(new DnsServer("208.67.220.123", R.string.filter_backup_secondary));
     }};
 
     public static final ArrayList<Rule> RULES = new ArrayList<Rule>() {{
@@ -195,8 +198,7 @@ public class Beskar extends Application {
     }
 
     public static void activateService(Context context, boolean forceForeground) {
-        BeskarVpnService.primaryServer = (AbstractDnsServer) DnsServerHelper.getServerById(DnsServerHelper.getPrimary()).clone();
-        BeskarVpnService.secondaryServer = (AbstractDnsServer) DnsServerHelper.getServerById(DnsServerHelper.getSecondary()).clone();
+        updateUpstreamServers();
         if ((getInstance().prefs.getBoolean("settings_foreground", false) || forceForeground)
                 && Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
             Logger.info("Starting foreground service");
@@ -205,6 +207,14 @@ public class Beskar extends Application {
             Logger.info("Starting background service");
             context.startService(Beskar.getServiceIntent(context).setAction(BeskarVpnService.ACTION_ACTIVATE));
         }
+    }
+
+    public static void updateUpstreamServers() {
+        BeskarVpnService.primaryServer =
+                (AbstractDnsServer) DnsServerHelper.getServerById(DnsServerHelper.getPrimary()).clone();
+        BeskarVpnService.secondaryServer =
+                (AbstractDnsServer) DnsServerHelper.getServerById(DnsServerHelper.getSecondary()).clone();
+        Logger.info("Upstream DNS set to: " + BeskarVpnService.primaryServer.getAddress() + " " + BeskarVpnService.secondaryServer.getAddress());
     }
 
     public static void deactivateService(Context context) {

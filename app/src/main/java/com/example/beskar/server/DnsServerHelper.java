@@ -4,7 +4,6 @@ import android.content.Context;
 import android.net.Uri;
 
 import com.example.beskar.Beskar;
-import com.example.beskar.provider.ProviderPicker;
 import com.example.beskar.util.Logger;
 
 import java.net.InetAddress;
@@ -51,11 +50,15 @@ public class DnsServerHelper {
     }
 
     public static String getPrimary() {
-        return String.valueOf(DnsServerHelper.checkServerId(Integer.parseInt(Beskar.getPrefs().getString("primary_server", "0"))));
+        return String.valueOf(DnsServerHelper.checkServerId(Integer.parseInt(Beskar.getPrefs().getString("primary_server", "2"))));
     }
 
     public static String getSecondary() {
-        return String.valueOf(DnsServerHelper.checkServerId(Integer.parseInt(Beskar.getPrefs().getString("secondary_server", "1"))));
+        return String.valueOf(DnsServerHelper.checkServerId(Integer.parseInt(Beskar.getPrefs().getString("secondary_server", "4"))));
+    }
+
+    public static String getGoogle() {
+        return String.valueOf(0);
     }
 
     private static int checkServerId(int id) {
