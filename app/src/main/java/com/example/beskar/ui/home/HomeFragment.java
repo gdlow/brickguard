@@ -178,6 +178,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             homeViewModel.setPrimaryDNSIndex(index);
 
             if (index > 0) {
+                Beskar.getPrefs().edit().putBoolean("settings_use_system_dns", false).apply();
                 Beskar.getPrefs().edit().putString("primary_server", String.valueOf(index)).apply();
                 Beskar.updateUpstreamServers();
             } else {

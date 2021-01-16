@@ -79,6 +79,9 @@ public class BeskarVpnService extends VpnService implements Runnable {
     }
 
     public static void updateUpstreamToSystemDNS(Context context) {
+        // Only trigger if service is on
+        if (!isActivated()) return;
+
         String[] servers = DnsServersDetector.getServers(context);
         if (servers != null) {
             if (servers.length >= 2 && (aliasPrimary == null || !aliasPrimary.getHostAddress().equals(servers[0])) &&
