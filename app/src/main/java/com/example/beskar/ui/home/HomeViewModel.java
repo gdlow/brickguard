@@ -7,11 +7,14 @@ import androidx.lifecycle.ViewModel;
 import com.example.beskar.Beskar;
 import com.example.beskar.service.BeskarVpnService;
 
+import java.util.HashMap;
+
 public class HomeViewModel extends ViewModel {
     private MutableLiveData<Boolean> isMainButtonChecked;
     private MutableLiveData<Boolean> isAdultSwitchChecked;
     private MutableLiveData<Boolean> isAdsSwitchChecked;
     private MutableLiveData<Integer> primaryDNSIndex;
+    private MutableLiveData<HashMap<String, String>> customDomainModel;
 
     public HomeViewModel() {
         isMainButtonChecked = new MutableLiveData<>();
@@ -25,6 +28,9 @@ public class HomeViewModel extends ViewModel {
 
         primaryDNSIndex = new MutableLiveData<>();
         primaryDNSIndex.setValue(2); // default value in slider
+
+        customDomainModel = new MutableLiveData<>();
+        customDomainModel.setValue(Beskar.customDomains);
     }
 
     public LiveData<Boolean> getIsMainButtonChecked() {
@@ -51,6 +57,11 @@ public class HomeViewModel extends ViewModel {
                 Integer.parseInt(Beskar.getPrefs().getString("primary_server", "2"));
         primaryDNSIndex.setValue(index);
         return primaryDNSIndex;
+    }
+
+    public LiveData<HashMap<String, String>> getCustomDomainModel() {
+        customDomainModel.setValue(Beskar.customDomains);
+        return customDomainModel;
     }
 
     public void setIsMainButtonChecked(boolean isChecked) {

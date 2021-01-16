@@ -29,7 +29,9 @@ import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class HomeFragment extends Fragment implements View.OnClickListener {
 
@@ -216,16 +218,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
                 // Add new chip to chip group
                 ChipGroup cg = view.findViewById(R.id.activity_bottom_sheet_step3_chip_group);
-                Chip chip = new Chip(getActivity());
-                chip.setText(text);
-                chip.setCloseIconVisible(true);
-                chip.setCheckable(false);
-                chip.setOnCloseIconClickListener(chipView -> {
-                    cg.removeView(chip);
-                    // Remove domain from blacklist
-                    Beskar.removeCustomDomain(chip.getText().toString());
-                });
-                cg.addView(chip);
+                Chip chip = addChip(cg, text);
 
                 // Add domain to blacklist
                 Beskar.addCustomDomain(chip.getText().toString());
@@ -235,6 +228,19 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 return true;
             }
             return false;
+        });
+
+        homeViewModel.getCustomDomainModel().observe(getViewLifecycleOwner(), map -> {
+            ChipGroup cg = view.findViewById(R.id.activity_bottom_sheet_step3_chip_group);
+            Set<String> chips = new HashSet<>();
+            for (int i = 0; i < cg.getChildCount(); i++) {
+                chips.add(((Chip) cg.getChildAt(i)).getText().toString());
+            }
+            for (String key: map.keySet()) {
+                if (!chips.contains(key)) {
+                    addChip(cg, key);
+                }
+            }
         });
 
         // Set main switch
@@ -264,6 +270,20 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         // Hide keyboard
         hideKeyboard();
+    }
+
+    private Chip addChip(ChipGroup cg, CharSequence text) {
+        Chip chip = new Chip(getActivity());
+        chip.setText(text);
+        chip.setCloseIconVisible(true);
+        chip.setCheckable(false);
+        chip.setOnCloseIconClickListener(chipView -> {
+            cg.removeView(chip);
+            // Remove domain from blacklist
+            Beskar.removeCustomDomain(chip.getText().toString());
+        });
+        cg.addView(chip);
+        return chip;
     }
 
     @Override
