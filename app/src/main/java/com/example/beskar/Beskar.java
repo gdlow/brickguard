@@ -10,6 +10,9 @@ import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.net.VpnService;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Message;
+import android.view.View;
 
 import androidx.preference.PreferenceManager;
 
@@ -17,20 +20,30 @@ import com.example.beskar.server.AbstractDnsServer;
 import com.example.beskar.server.DnsServer;
 import com.example.beskar.server.DnsServerHelper;
 import com.example.beskar.service.BeskarVpnService;
+import com.example.beskar.ui.home.HomeFragment;
 import com.example.beskar.util.Configurations;
 import com.example.beskar.util.Logger;
 import com.example.beskar.util.Rule;
 import com.example.beskar.util.RuleResolver;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParseException;
 import com.google.gson.stream.JsonReader;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class Beskar extends Application {
 
@@ -73,6 +86,15 @@ public class Beskar extends Application {
     private static Beskar instance;
     private SharedPreferences prefs;
     private Thread mResolver;
+
+    // Stuff required for rule syncing
+    private Thread mThread = null;
+    private RuleConfigHandler mHandler = null;
+    private static final OkHttpClient HTTP_CLIENT = new OkHttpClient.Builder()
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
+            .writeTimeout(30, TimeUnit.SECONDS)
+            .build();
 
     @Override
     public void onCreate() {
@@ -266,6 +288,127 @@ public class Beskar extends Application {
                     .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
         } catch (Exception e) {
             Logger.logException(e);
+        }
+    }
+
+    public boolean ruleSync(Rule rule) {
+        String ruleFilename = rule.getFileName();
+        String ruleDownloadUrl = rule.getDownloadUrl();
+
+        if (mThread == null) {
+            if (ruleDownloadUrl.startsWith("content://")) {
+                mThread = new Thread(() -> {
+                    try {
+                        InputStream inputStream = getContentResolver().openInputStream(Uri.parse(ruleDownloadUrl));
+                        int readLen;
+                        byte[] data = new byte[1024];
+                        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+                        while ((readLen = inputStream.read(data)) != -1) {
+                            buffer.write(data, 0, readLen);
+                        }
+                        inputStream.close();
+                        buffer.flush();
+                        mHandler.obtainMessage(RuleConfigHandler.MSG_RULE_DOWNLOADED,
+                                new RuleData(ruleFilename, buffer.toByteArray())).sendToTarget();
+                    } catch (Exception e) {
+                        Logger.logException(e);
+                    } finally {
+                        stopThread();
+                    }
+                });
+            } else {
+                mThread = new Thread(() -> {
+                    try {
+                        Request request = new Request.Builder()
+                                .url(ruleDownloadUrl).get().build();
+                        Response response = HTTP_CLIENT.newCall(request).execute();
+                        Logger.info("Downloaded " + ruleDownloadUrl);
+                        if (response.isSuccessful() && mHandler != null) {
+                            mHandler.obtainMessage(RuleConfigHandler.MSG_RULE_DOWNLOADED,
+                                    new RuleData(ruleFilename, response.body().bytes())).sendToTarget();
+                        }
+                    } catch (Exception e) {
+                        Logger.logException(e);
+                        if (mHandler != null) {
+                            mHandler.obtainMessage(RuleConfigHandler.MSG_RULE_DOWNLOADED,
+                                    new RuleData(ruleFilename, new byte[0])).sendToTarget();
+                        }
+                    } finally {
+                        stopThread();
+                    }
+                });
+            }
+            mThread.start();
+        }
+        return false;
+    }
+
+    private void stopThread() {
+        if (mThread != null) {
+            mThread.interrupt();
+            mThread = null;
+        }
+    }
+
+    private class RuleData {
+        private byte[] data;
+        private String filename;
+
+        RuleData(String filename, byte[] data) {
+            this.data = data;
+            this.filename = filename;
+        }
+
+        byte[] getData() {
+            return data;
+        }
+
+        String getFilename() {
+            return filename;
+        }
+    }
+
+    private static class RuleConfigHandler extends Handler {
+        static final int MSG_RULE_DOWNLOADED = 0;
+
+        private View view = null;
+
+        RuleConfigHandler setView(View view) {
+            this.view = view;
+            return this;
+        }
+
+        void shutdown() {
+            view = null;
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+
+            switch (msg.what) {
+                case MSG_RULE_DOWNLOADED:
+                    RuleData ruleData = (RuleData) msg.obj;
+                    if (ruleData.data.length == 0) {
+                        if (view != null) {
+                            Snackbar.make(view, R.string.notice_download_failed, Snackbar.LENGTH_SHORT).show();
+                        }
+                        break;
+                    }
+                    try {
+                        File file = new File(Beskar.rulePath + ruleData.getFilename());
+                        FileOutputStream stream = new FileOutputStream(file);
+                        stream.write(ruleData.getData());
+                        stream.close();
+                    } catch (Exception e) {
+                        Logger.logException(e);
+                    }
+
+                    if (view != null) {
+                        Snackbar.make(view, R.string.notice_downloaded, Snackbar.LENGTH_SHORT).show();
+                    }
+                    break;
+            }
         }
     }
 
