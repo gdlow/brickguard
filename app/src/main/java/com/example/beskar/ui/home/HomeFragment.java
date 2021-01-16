@@ -244,8 +244,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 chip.setCheckable(false);
                 chip.setOnCloseIconClickListener(chipView -> {
                     cg.removeView(chip);
+                    // Remove domain from blacklist
+                    Beskar.removeCustomDomain(chip.getText().toString());
                 });
                 cg.addView(chip);
+
+                // Add domain to blacklist
+                Beskar.addCustomDomain(chip.getText().toString());
 
                 // Clear text
                 editText.setText("");
@@ -378,7 +383,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         if (mThread == null) {
             Snackbar.make(getView(), R.string.notice_start_download, Snackbar.LENGTH_SHORT).show();
-            if (ruleDownloadUrl.startsWith("content:/")) {
+            if (ruleDownloadUrl.startsWith("content://")) {
                 mThread = new Thread(() -> {
                     try {
                         InputStream inputStream = getActivity().getContentResolver().openInputStream(Uri.parse(ruleDownloadUrl));

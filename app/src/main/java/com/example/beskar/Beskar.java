@@ -29,6 +29,7 @@ import com.google.gson.stream.JsonReader;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 public class Beskar extends Application {
@@ -61,6 +62,8 @@ public class Beskar extends Application {
             "facebook.com",
             "wikipedia.org"
     };
+
+    public static HashMap<String, String> customDomains = new HashMap<>();
 
     public static Configurations configurations;
     public static String rulePath;
@@ -144,6 +147,20 @@ public class Beskar extends Application {
         } else {
             RuleResolver.clear();
         }
+
+        if (!customDomains.isEmpty()) {
+            RuleResolver.startLoadCustom();
+        }
+    }
+
+    public static void addCustomDomain(String key) {
+        customDomains.put(key, "0.0.0.0");
+        RuleResolver.addCustom(key);
+    }
+
+    public static void removeCustomDomain(String key) {
+        customDomains.remove(key);
+        RuleResolver.removeCustom(key);
     }
 
     public static void setRulesChanged() {

@@ -1,5 +1,7 @@
 package com.example.beskar.util;
 
+import com.example.beskar.Beskar;
+
 import org.minidns.record.Record;
 
 import java.io.BufferedReader;
@@ -17,6 +19,7 @@ public class RuleResolver implements Runnable {
 
     public static final int MODE_HOSTS = 0;
     public static final int MODE_DNSMASQ = 1;
+    public static final int MODE_CUSTOM = 2;
 
     private static int status = STATUS_NOT_LOADED;
     private static int mode = MODE_HOSTS;
@@ -47,6 +50,23 @@ public class RuleResolver implements Runnable {
         dnsmasqFiles = loadPath;
         mode = MODE_DNSMASQ;
         status = STATUS_PENDING_LOAD;
+    }
+
+    public static void startLoadCustom() {
+        mode = MODE_CUSTOM;
+        status = STATUS_PENDING_LOAD;
+    }
+
+    public static void removeCustom(String key) {
+        // Remove key
+        rulesA.remove(key);
+        Logger.info("Loaded " + rulesA.size() + " total rules");
+    }
+
+    public static void addCustom(String key) {
+        // Add key
+        rulesA.put(key, "0.0.0.0");
+        Logger.info("Loaded " + rulesA.size() + " total rules");
     }
 
     public static void clear() {
@@ -165,6 +185,10 @@ public class RuleResolver implements Runnable {
                         Logger.info("Loaded " + count + " rules");
                     }
                 }
+            } else if (mode == MODE_CUSTOM) {
+                rulesA.putAll(Beskar.customDomains);
+                Logger.info("Loaded " + Beskar.customDomains.size() + " custom rules");
+                Logger.info("Loaded " + rulesA.size() + " total rules");
             }
             status = STATUS_LOADED;
         } catch (Exception e) {
