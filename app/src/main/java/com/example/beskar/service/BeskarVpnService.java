@@ -17,6 +17,7 @@ import android.util.Log;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.NotificationCompat;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.beskar.Beskar;
 import com.example.beskar.MainActivity;
@@ -27,6 +28,7 @@ import com.example.beskar.receiver.StatusBarBroadcastReceiver;
 import com.example.beskar.server.AbstractDnsServer;
 import com.example.beskar.server.DnsServer;
 import com.example.beskar.server.DnsServerHelper;
+import com.example.beskar.ui.home.HomeViewModel;
 import com.example.beskar.util.DnsServersDetector;
 import com.example.beskar.util.Logger;
 import com.example.beskar.util.RuleResolver;
@@ -58,12 +60,16 @@ public class BeskarVpnService extends VpnService implements Runnable {
     private ParcelFileDescriptor descriptor;
     private Thread mThread = null;
     public HashMap<String, AbstractDnsServer> dnsServers;
+    private HomeViewModel mHomeViewModel;
     private static boolean activated = false;
+    private static long startTime = 0;
     private static BroadcastReceiver receiver;
 
     public static boolean isActivated() {
         return activated;
     }
+
+    public static long getStartTime() { return startTime; }
 
     @Override
     public void onCreate() {
@@ -76,6 +82,7 @@ public class BeskarVpnService extends VpnService implements Runnable {
                 }
             }, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
         }
+        mHomeViewModel = new ViewModelProvider(MainActivity.getInstance()).get(HomeViewModel.class);
     }
 
     public static void updateUpstreamToSystemDNS(Context context) {
@@ -123,9 +130,12 @@ public class BeskarVpnService extends VpnService implements Runnable {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent != null) {
+            // Start periodic worker
+            mHomeViewModel.schedulePeriodicUpdateStreak();
             switch (intent.getAction()) {
                 case ACTION_ACTIVATE:
                     activated = true;
+                    startTime = System.currentTimeMillis();
                     if (Beskar.getPrefs().getBoolean("settings_notification", true)) {
                         NotificationManager manager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -176,6 +186,7 @@ public class BeskarVpnService extends VpnService implements Runnable {
                     }
                     return START_STICKY;
                 case ACTION_DEACTIVATE:
+                    Beskar.getPrefs().edit().putLong("beskar_current_time_delta", 0).apply();
                     stopThread();
                     return START_NOT_STICKY;
             }

@@ -273,8 +273,22 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             }
         });
 
+        // Update streaks
+        TextView currentStreak = view.findViewById(R.id.activity_fragment_home_current_streak);
+        long currentStreakDays = Beskar.getPrefs().getLong("beskar_current_time_delta", 0);
+        setStreak(currentStreak, currentStreakDays);
+
+        TextView longestStreak = view.findViewById(R.id.activity_fragment_home_longest_streak);
+        long longestStreakDays = Beskar.getPrefs().getLong("beskar_longest_time_delta", 0);
+        setStreak(longestStreak, longestStreakDays);
+
         // Hide keyboard
         hideKeyboard();
+    }
+
+    private void setStreak(TextView streak, long days) {
+        String text = days + "D";
+        streak.setText(text);
     }
 
     private void saveChipMapInSharedPreferences(Map<String,Boolean> inputMap){
