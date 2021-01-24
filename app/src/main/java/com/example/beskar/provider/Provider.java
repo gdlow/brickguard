@@ -6,6 +6,9 @@ import android.system.Os;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.beskar.Beskar;
+import com.example.beskar.MainActivity;
+import com.example.beskar.data.LocalResolve;
+import com.example.beskar.data.LocalResolveViewModel;
 import com.example.beskar.service.BeskarVpnService;
 import com.example.beskar.util.Logger;
 import com.example.beskar.util.RuleResolver;
@@ -38,15 +41,15 @@ public abstract class Provider {
 
     protected FileDescriptor mBlockFd = null;
     protected FileDescriptor mInterruptFd = null;
-    // protected LocalResolveViewModel mLocalResolveViewModel;
+     protected LocalResolveViewModel mLocalResolveViewModel;
     protected final Queue<byte[]> deviceWrites = new LinkedList<>();
 
     Provider(ParcelFileDescriptor descriptor, BeskarVpnService service) {
         this.descriptor = descriptor;
         this.service = service;
         dnsQueryTimes = 0;
-        // mLocalResolveViewModel =
-        //         new ViewModelProvider(MainActivity.getInstance()).get(LocalResolveViewModel.class);
+         mLocalResolveViewModel =
+                 new ViewModelProvider(MainActivity.getInstance()).get(LocalResolveViewModel.class);
     }
 
     public final long getDnsQueryTimes() {
@@ -91,7 +94,7 @@ public abstract class Provider {
             String response = RuleResolver.resolve(dnsQueryName, dnsMsg.getQuestion().type);
             if (response != null && dnsMsg.getQuestion().type == Record.TYPE.A) {
                 long timestamp = System.currentTimeMillis() / 1000L;
-                // mLocalResolveViewModel.insert(new LocalResolve(timestamp, dnsQueryName, response));
+                mLocalResolveViewModel.insert(new LocalResolve(timestamp, dnsQueryName, response));
                 Logger.info("Provider: Resolved " + dnsQueryName + "  Local resolver response: " + response);
                 Logger.debug("Inserted local resolve { " + dnsQueryName + ": " + response + " } " +
                         "into database.");
