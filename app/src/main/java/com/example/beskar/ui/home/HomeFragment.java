@@ -1,6 +1,7 @@
 package com.example.beskar.ui.home;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +15,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.core.widget.TextViewCompat;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.example.beskar.Beskar;
 import com.example.beskar.MainActivity;
@@ -27,10 +27,15 @@ import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.slider.Slider;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class HomeFragment extends Fragment implements View.OnClickListener {
@@ -58,7 +63,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    private HomeViewModel homeViewModel;
     private View root;
     private List<StepState> stepStates;
 
@@ -74,9 +78,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     }
 
     private void initComponent(View view) {
-        // Initialise home view model
-        homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
-
         // Build list of stepStates
         stepStates = new ArrayList<>(Arrays.asList(
                 new StepState(
@@ -155,7 +156,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         slider.addOnChangeListener((s, value, fromUser) -> {
             int index = Math.round(value);
             tv.setText(sliderTexts.get(index));
-            homeViewModel.setPrimaryDNSIndex(index);
+            Beskar.getPrefs().edit().putInt("home_slider_index", index).apply();
 
             if (index > 0) {
                 Beskar.getPrefs().edit().putBoolean("settings_use_system_dns", false).apply();
@@ -180,26 +181,28 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     return "Value: " + value;
             }
         });
-        homeViewModel.getPrimaryDNSIndex().observe(getViewLifecycleOwner(), index -> {
-            slider.setValue((float) index);
-        });
+        int sliderIdx = Beskar.getPrefs().getInt("home_slider_index", 3);
+        slider.setValue((float) sliderIdx);
 
         // Set switches in step 2
         SwitchMaterial adultSwitch = view.findViewById(R.id.activity_bottom_sheet_step2_adult_switch);
         adultSwitch.setOnClickListener(v -> {});
         adultSwitch.setOnCheckedChangeListener((v, isChecked) -> {
             selectRule(Beskar.RULES.get(0), isChecked);
-            homeViewModel.setIsAdultSwitchChecked(isChecked);
+            Beskar.getPrefs().edit().putBoolean("home_adult_switch_checked", isChecked).apply();
         });
-        homeViewModel.getIsAdultSwitchChecked().observe(getViewLifecycleOwner(), adultSwitch::setChecked);
+        boolean isAdultSwitchChecked = Beskar.getPrefs().getBoolean("home_adult_switch_checked",
+                false);
+        adultSwitch.setChecked(isAdultSwitchChecked);
 
         SwitchMaterial adsSwitch = view.findViewById(R.id.activity_bottom_sheet_step2_ads_switch);
         adsSwitch.setOnClickListener(v -> {});
         adsSwitch.setOnCheckedChangeListener((v, isChecked) -> {
             selectRule(Beskar.RULES.get(1), isChecked);
-            homeViewModel.setIsAdsSwitchChecked(isChecked);
+            Beskar.getPrefs().edit().putBoolean("home_ads_switch_checked", isChecked).apply();
         });
-        homeViewModel.getIsAdsSwitchChecked().observe(getViewLifecycleOwner(), adsSwitch::setChecked);
+        boolean isAdsSwitchChecked = Beskar.getPrefs().getBoolean("home_ads_switch_checked", false);
+        adsSwitch.setChecked(isAdsSwitchChecked);
 
         // Set text input in step 3
         TextView editText = view.findViewById(R.id.activity_bottom_sheet_step3_edit_text);
@@ -220,6 +223,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 ChipGroup cg = view.findViewById(R.id.activity_bottom_sheet_step3_chip_group);
                 Chip chip = addChip(cg, text);
 
+                // Load and save into SharedPreferences
+                Map<String, Boolean> chipMap = loadChipMapFromSharedPreferences();
+                chipMap.put(textStr, true);
+                saveChipMapInSharedPreferences(chipMap);
+
                 // Add domain to blacklist
                 Beskar.addCustomDomain(chip.getText().toString());
 
@@ -230,27 +238,25 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             return false;
         });
 
-        homeViewModel.getCustomDomainModel().observe(getViewLifecycleOwner(), map -> {
-            ChipGroup cg = view.findViewById(R.id.activity_bottom_sheet_step3_chip_group);
-            Set<String> chips = new HashSet<>();
-            for (int i = 0; i < cg.getChildCount(); i++) {
-                chips.add(((Chip) cg.getChildAt(i)).getText().toString());
+        // Set chip group state from SharedPreferences
+        Map<String, Boolean> chipMap = loadChipMapFromSharedPreferences();
+        ChipGroup cg = view.findViewById(R.id.activity_bottom_sheet_step3_chip_group);
+        Set<String> chips = new HashSet<>();
+        for (int i = 0; i < cg.getChildCount(); i++) {
+            chips.add(((Chip) cg.getChildAt(i)).getText().toString());
+        }
+        for (String key : chipMap.keySet()) {
+            if (!chips.contains(key)) {
+                addChip(cg, key);
             }
-            for (String key: map.keySet()) {
-                if (!chips.contains(key)) {
-                    addChip(cg, key);
-                }
-            }
-        });
+        }
 
-        // Set main switch
+        // Set main switch state from SharedPreferences
+        boolean isMainSwitchOn = Beskar.getPrefs().getBoolean("home_main_switch_on", false);
         SwitchMaterial mainSwitch = view.findViewById(R.id.activity_fragment_home_main_switch);
-        homeViewModel.getIsMainButtonChecked().observe(getViewLifecycleOwner(), isChecked -> {
-            TextView mainSwitchText =
-                    view.findViewById(R.id.activity_fragment_home_main_switch_text);
-            mainSwitchText.setText(isChecked ? "DEACTIVATE" : "ACTIVATE");
-            mainSwitch.setChecked(isChecked);
-        });
+        TextView mainSwitchText = view.findViewById(R.id.activity_fragment_home_main_switch_text);
+        mainSwitch.setChecked(isMainSwitchOn);
+        mainSwitchText.setText(isMainSwitchOn ? "DEACTIVATE" : "ACTIVATE");
 
         mainSwitch.setOnClickListener(v -> {});
         mainSwitch.setOnCheckedChangeListener((v, isChecked) -> {
@@ -265,11 +271,35 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     Beskar.deactivateService(getActivity().getApplicationContext());
                 }
             }
-            homeViewModel.setIsMainButtonChecked(isChecked);
+            Beskar.getPrefs().edit().putBoolean("home_main_switch_on", isChecked).apply();
         });
 
         // Hide keyboard
         hideKeyboard();
+    }
+
+    private void saveChipMapInSharedPreferences(Map<String,Boolean> inputMap){
+        JSONObject jsonObject = new JSONObject(inputMap);
+        String jsonString = jsonObject.toString();
+        SharedPreferences.Editor editor = Beskar.getPrefs().edit();
+        editor.remove("home_chip_map").putString("home_chip_map", jsonString).apply();
+    }
+
+    private Map<String,Boolean> loadChipMapFromSharedPreferences(){
+        Map<String,Boolean> outputMap = new HashMap<String,Boolean>();
+        try{
+            String jsonString = Beskar.getPrefs().getString("home_chip_map", (new JSONObject()).toString());
+            JSONObject jsonObject = new JSONObject(jsonString);
+            Iterator<String> keysItr = jsonObject.keys();
+            while(keysItr.hasNext()) {
+                String key = keysItr.next();
+                Boolean value = (Boolean) jsonObject.get(key);
+                outputMap.put(key, value);
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return outputMap;
     }
 
     private Chip addChip(ChipGroup cg, CharSequence text) {
@@ -279,8 +309,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         chip.setCheckable(false);
         chip.setOnCloseIconClickListener(chipView -> {
             cg.removeView(chip);
+            String textStr = chip.getText().toString();
             // Remove domain from blacklist
-            Beskar.removeCustomDomain(chip.getText().toString());
+            Beskar.removeCustomDomain(textStr);
+            // Remove from SharedPreferences
+            Map<String, Boolean> chipMap = loadChipMapFromSharedPreferences();
+            chipMap.remove(textStr);
+            saveChipMapInSharedPreferences(chipMap);
         });
         cg.addView(chip);
         return chip;

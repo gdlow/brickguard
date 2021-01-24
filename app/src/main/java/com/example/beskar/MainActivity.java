@@ -107,11 +107,9 @@ public class MainActivity extends AppCompatActivity {
             Beskar.deactivateService(getApplicationContext());
         } else if (launchAction == LAUNCH_ACTION_SERVICE_DONE) {
             Beskar.updateShortcut(getApplicationContext());
-            if (BeskarVpnService.isActivated()) {
-                updateMainButton(true);
-            } else {
-                updateMainButton(false);
-            }
+            Toast.makeText(getApplicationContext(), "Service " + (BeskarVpnService.isActivated()
+                    ? "activated" :
+                    "deactivated"), Toast.LENGTH_SHORT).show();
         }
 
         // Update fragments
@@ -160,11 +158,5 @@ public class MainActivity extends AppCompatActivity {
                     .setNegativeButton("取消", null)
                     .show();
         }
-    }
-
-    private void updateMainButton(boolean turn_on) {
-        homeViewModel.setIsMainButtonChecked(turn_on);
-        Toast.makeText(getApplicationContext(), "Service " + (turn_on ? "activated" :
-                "deactivated"), Toast.LENGTH_SHORT).show();
     }
 }
