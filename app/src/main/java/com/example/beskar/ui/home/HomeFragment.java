@@ -251,8 +251,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             }
         }
 
-        // Set main switch state from SharedPreferences
-        boolean isMainSwitchOn = Beskar.getPrefs().getBoolean("home_main_switch_on", false);
+        // Set main switch state from BeskarVpnService
+        boolean isMainSwitchOn = BeskarVpnService.isActivated();
         SwitchMaterial mainSwitch = view.findViewById(R.id.activity_fragment_home_main_switch);
         TextView mainSwitchText = view.findViewById(R.id.activity_fragment_home_main_switch_text);
         mainSwitch.setChecked(isMainSwitchOn);
@@ -271,7 +271,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     Beskar.deactivateService(getActivity().getApplicationContext());
                 }
             }
-            Beskar.getPrefs().edit().putBoolean("home_main_switch_on", isChecked).apply();
         });
 
         // Hide keyboard
