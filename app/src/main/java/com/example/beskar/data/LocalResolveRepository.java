@@ -14,6 +14,7 @@ public class LocalResolveRepository {
     private LiveData<List<LocalResolve>> mLocalResolvesFrom1dAgoWithNullRes;
     private LiveData<List<LocalResolve>> mLocalResolvesFrom7dAgoWithNullRes;
     private LiveData<List<DateAndCount>> mDateAndCountFrom7dAgoWithNullRes;
+    private LiveData<List<DateAndCount>> mDateAndCountFrom7dAgoWithOneRes;
 
     LocalResolveRepository(Application application) {
         AppDatabase db = AppDatabase.getDatabase(application);
@@ -27,6 +28,8 @@ public class LocalResolveRepository {
                 .getAllWithResolutionFrom7dAgo("0.0.0.0");
         mDateAndCountFrom7dAgoWithNullRes = mLocalResolveDao
                 .getCountWithResolutionFrom7dAgo("0.0.0.0");
+        mDateAndCountFrom7dAgoWithOneRes = mLocalResolveDao
+                .getCountWithResolutionFrom7dAgo("0.0.0.1");
     }
 
     LiveData<List<LocalResolve>> getAll() {
@@ -51,6 +54,10 @@ public class LocalResolveRepository {
 
     LiveData<List<DateAndCount>> getDateAndCountFrom7dAgoWithNullRes() {
         return mDateAndCountFrom7dAgoWithNullRes;
+    }
+
+    LiveData<List<DateAndCount>> getDateAndCountFrom7dAgoWithOneRes() {
+        return mDateAndCountFrom7dAgoWithOneRes;
     }
 
     // You must call this on a non-UI thread or your app will throw an exception. Room ensures

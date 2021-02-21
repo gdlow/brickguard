@@ -163,6 +163,7 @@ public class RuleResolver implements Runnable {
                                     if (strLine.contains(":")) {//IPv6
                                         rulesAAAA.put(data[1], data[2]);
                                     } else if (strLine.contains(".")) {//IPv4
+                                        // ad blacklist goes down this code path
                                         data[2] = data[2].equals("#") ? "0.0.0.0" : data[2];
                                         rulesA.put(data[1], data[2]);
                                     }
@@ -170,9 +171,10 @@ public class RuleResolver implements Runnable {
                                 }
 
                                 // only websites listed - equivalent to blacklisting
+                                // porn blacklist goes down this code path
                                 else if (data.length == 1) {
                                     if (strLine.contains(".")) {//IPv4
-                                        rulesA.put(data[0], "0.0.0.0");
+                                        rulesA.put(data[0], "0.0.0.1");
                                     }
                                     count++;
                                 }

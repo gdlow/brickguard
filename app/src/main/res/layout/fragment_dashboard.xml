@@ -129,7 +129,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:padding="@dimen/spacing_middle"
-                        android:text="Blocked sites over the past week"
+                        android:text="Blocked adult sites over the past week"
                         android:textAppearance="@style/BottomSheetBody"/>
 
                     <LinearLayout
@@ -138,7 +138,43 @@
                         android:padding="@dimen/spacing_small">
 
                         <com.github.mikephil.charting.charts.BarChart
-                            android:id="@+id/chart"
+                            android:id="@+id/adult_sites_chart"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_medium"
+                android:layout_marginBottom="@dimen/spacing_medium"
+                android:layout_marginLeft="@dimen/spacing_middle"
+                android:layout_marginRight="@dimen/spacing_middle">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/spacing_middle"
+                        android:text="Blocked ad sites over the past week"
+                        android:textAppearance="@style/BottomSheetBody"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/spacing_chart"
+                        android:padding="@dimen/spacing_small">
+
+                        <com.github.mikephil.charting.charts.BarChart
+                            android:id="@+id/ad_sites_chart"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent" />
 
@@ -242,26 +278,6 @@
                     </LinearLayout>
 
                 </com.google.android.material.card.MaterialCardView>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/text_dashboard"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:textAlignment="center"
-                    android:textSize="20sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
 
             </LinearLayout>
 

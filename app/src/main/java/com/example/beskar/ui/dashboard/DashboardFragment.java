@@ -4,10 +4,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.beskar.R;
@@ -27,23 +27,31 @@ import java.util.List;
 
 public class DashboardFragment extends Fragment {
 
-    private DashboardViewModel dashboardViewModel;
     private LocalResolveViewModel localResolveViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        dashboardViewModel =
-                new ViewModelProvider(this).get(DashboardViewModel.class);
+
         localResolveViewModel =
                 new ViewModelProvider(this).get(LocalResolveViewModel.class);
         View root = inflater.inflate(R.layout.fragment_dashboard, container, false);
-        final TextView textView = root.findViewById(R.id.text_dashboard);
 
-        BarChart chart = root.findViewById(R.id.chart);
+        BarChart adChart = root.findViewById(R.id.ad_sites_chart);
+        populateChart(adChart, localResolveViewModel.getDateAndCountFrom7dAgoWithNullRes(),
+                "Blocked ad sites");
+
+        BarChart adultChart = root.findViewById(R.id.adult_sites_chart);
+        populateChart(adultChart, localResolveViewModel.getDateAndCountFrom7dAgoWithOneRes(),
+                "Blocked adult sites");
+
+        return root;
+    }
+
+    private void populateChart(BarChart chart, LiveData<List<DateAndCount>> data, String label) {
         List<BarEntry> entries = new ArrayList<>();
-        populateChartTemplate(chart, entries, "Blocked sites");
+        populateChartTemplate(chart, entries, label);
         refreshChart(chart);
-        localResolveViewModel.getDateAndCountFrom7dAgoWithNullRes().observe(getViewLifecycleOwner(),res -> {
+        data.observe(getViewLifecycleOwner(),res -> {
             int i = 0;
             for (DateAndCount item : res) {
                 entries.add(new BarEntry(i++, item.getCount()));
@@ -57,13 +65,10 @@ public class DashboardFragment extends Fragment {
                 }
             }
 
-            populateChartTemplate(chart, entries, "Blocked sites");
+            populateChartTemplate(chart, entries, label);
             chart.getXAxis().setValueFormatter(new InternalFormatter());
             refreshChart(chart);
         });
-
-        dashboardViewModel.getText().observe(getViewLifecycleOwner(), s -> textView.setText(s));
-        return root;
     }
 
     private void populateChartTemplate(BarChart chart, List<BarEntry> entries, String label) {
@@ -86,7 +91,7 @@ public class DashboardFragment extends Fragment {
     }
 
     private void refreshChart(BarChart chart) {
-        chart.invalidate();
         chart.notifyDataSetChanged();
+        chart.invalidate();
     }
 }

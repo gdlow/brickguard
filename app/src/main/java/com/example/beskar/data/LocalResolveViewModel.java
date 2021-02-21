@@ -13,6 +13,7 @@ public class LocalResolveViewModel extends AndroidViewModel {
     private final LiveData<List<LocalResolve>> mAllLocalResolvesWithNullRes;
     private final LiveData<List<LocalResolve>> mAllLocalResolvesFrom1dAgoWithNullRes;
     private final LiveData<List<DateAndCount>> mDateAndCountFrom7dAgoWithNullRes;
+    private final LiveData<List<DateAndCount>> mDateAndCountFrom7dAgoWithOneRes;
 
     public LocalResolveViewModel(Application application) {
         super(application);
@@ -20,6 +21,7 @@ public class LocalResolveViewModel extends AndroidViewModel {
         mAllLocalResolvesWithNullRes = mRepository.getAllWithNullRes();
         mAllLocalResolvesFrom1dAgoWithNullRes = mRepository.getAllFrom1dAgoWithNullRes();
         mDateAndCountFrom7dAgoWithNullRes = mRepository.getDateAndCountFrom7dAgoWithNullRes();
+        mDateAndCountFrom7dAgoWithOneRes = mRepository.getDateAndCountFrom7dAgoWithOneRes();
     }
 
     public LiveData<List<LocalResolve>> getAllLocalResolvesWithNullRes() {
@@ -32,6 +34,10 @@ public class LocalResolveViewModel extends AndroidViewModel {
 
     public LiveData<List<DateAndCount>> getDateAndCountFrom7dAgoWithNullRes() {
         return mDateAndCountFrom7dAgoWithNullRes;
+    }
+
+    public LiveData<List<DateAndCount>> getDateAndCountFrom7dAgoWithOneRes() {
+        return mDateAndCountFrom7dAgoWithOneRes;
     }
 
     public void insert(LocalResolve localResolve) { mRepository.insert(localResolve); }
