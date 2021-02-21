@@ -24,6 +24,7 @@ import com.example.beskar.data.Interactions;
 import com.example.beskar.data.InteractionsViewModel;
 import com.example.beskar.data.LocalResolveViewModel;
 import com.example.beskar.service.BeskarVpnService;
+import com.example.beskar.util.Logger;
 import com.example.beskar.util.Rule;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.chip.Chip;
@@ -438,5 +439,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private void insertInteraction(String interaction) {
         long timestamp = System.currentTimeMillis() / 1000L;
         interactionsViewModel.insert(new Interactions(timestamp, interaction));
+        Logger.debug("Inserted: " + interaction + " interaction into database.");
     }
 }

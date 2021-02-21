@@ -41,7 +41,7 @@ public abstract class Provider {
 
     protected FileDescriptor mBlockFd = null;
     protected FileDescriptor mInterruptFd = null;
-     protected LocalResolveViewModel mLocalResolveViewModel;
+    protected LocalResolveViewModel mLocalResolveViewModel;
     protected final Queue<byte[]> deviceWrites = new LinkedList<>();
 
     Provider(ParcelFileDescriptor descriptor, BeskarVpnService service) {
