@@ -19,18 +19,11 @@ import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
-import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
-import com.github.mikephil.charting.utils.ViewPortHandler;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 public class DashboardFragment extends Fragment {
 
@@ -48,6 +41,8 @@ public class DashboardFragment extends Fragment {
 
         BarChart chart = root.findViewById(R.id.chart);
         List<BarEntry> entries = new ArrayList<>();
+        populateChartTemplate(chart, entries, "Blocked sites");
+        refreshChart(chart);
         localResolveViewModel.getDateAndCountFrom7dAgoWithNullRes().observe(getViewLifecycleOwner(),res -> {
             int i = 0;
             for (DateAndCount item : res) {
@@ -62,29 +57,18 @@ public class DashboardFragment extends Fragment {
                 }
             }
 
-            BarDataSet dataSet = new BarDataSet(entries, "Blocked sites");
-            dataSet.setColors(ColorTemplate.MATERIAL_COLORS);
-            BarData barData = new BarData(dataSet);
-            chart.setData(barData);
-            chart.setDrawGridBackground(false);
-            chart.setNoDataText("No data found");
-            Description desc = new Description();
-            desc.setText("");
-            chart.setDescription(desc);
-            XAxis xAxis = chart.getXAxis();
-            xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-            xAxis.setDrawGridLines(false);
-            xAxis.setValueFormatter(new InternalFormatter());
-            xAxis.setLabelCount(0);
-
-            chart.getAxisRight().setEnabled(false);
-            chart.getAxisLeft().setEnabled(false);
-
-            chart.invalidate(); // refresh
-            chart.notifyDataSetChanged();
+            populateChartTemplate(chart, entries, "Blocked sites");
+            chart.getXAxis().setValueFormatter(new InternalFormatter());
+            refreshChart(chart);
         });
-        BarDataSet dataSet = new BarDataSet(entries, "Blocked sites");
-        dataSet.setColor(R.color.black_a60);
+
+        dashboardViewModel.getText().observe(getViewLifecycleOwner(), s -> textView.setText(s));
+        return root;
+    }
+
+    private void populateChartTemplate(BarChart chart, List<BarEntry> entries, String label) {
+        BarDataSet dataSet = new BarDataSet(entries, label);
+        dataSet.setColors(ColorTemplate.MATERIAL_COLORS);
         BarData barData = new BarData(dataSet);
         chart.setData(barData);
         chart.setDrawGridBackground(false);
@@ -92,17 +76,17 @@ public class DashboardFragment extends Fragment {
         Description desc = new Description();
         desc.setText("");
         chart.setDescription(desc);
+        chart.getAxisRight().setEnabled(false);
+        chart.getAxisLeft().setEnabled(false);
+
         XAxis xAxis = chart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setLabelCount(0);
         xAxis.setDrawGridLines(false);
-        chart.getAxisRight().setEnabled(false);
-        chart.getAxisLeft().setEnabled(false);
+    }
 
-        chart.invalidate(); // refresh
+    private void refreshChart(BarChart chart) {
+        chart.invalidate();
         chart.notifyDataSetChanged();
-
-        dashboardViewModel.getText().observe(getViewLifecycleOwner(), s -> textView.setText(s));
-        return root;
     }
 }
