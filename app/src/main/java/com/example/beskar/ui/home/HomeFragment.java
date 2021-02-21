@@ -226,6 +226,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         // Set text input in step 3
         TextView editText = view.findViewById(R.id.activity_bottom_sheet_step3_edit_text);
         editText.setOnEditorActionListener((v, actionId, event) -> {
+            // Hide keyboard
+            hideKeyboard();
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 // Validate text
                 CharSequence text = editText.getText();
