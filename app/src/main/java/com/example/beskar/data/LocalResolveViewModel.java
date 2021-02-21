@@ -12,6 +12,8 @@ public class LocalResolveViewModel extends AndroidViewModel {
     private LocalResolveRepository mRepository;
     private final LiveData<List<LocalResolve>> mAllLocalResolvesWithNullRes;
     private final LiveData<List<LocalResolve>> mAllLocalResolvesFrom1dAgoWithNullRes;
+    private final LiveData<Count> mAllLocalResolvesCountWithNullRes;
+    private final LiveData<Count> mAllLocalResolvesCountWithOneRes;
     private final LiveData<List<DateAndCount>> mDateAndCountFrom7dAgoWithNullRes;
     private final LiveData<List<DateAndCount>> mDateAndCountFrom7dAgoWithOneRes;
 
@@ -20,6 +22,8 @@ public class LocalResolveViewModel extends AndroidViewModel {
         mRepository = new LocalResolveRepository(application);
         mAllLocalResolvesWithNullRes = mRepository.getAllWithNullRes();
         mAllLocalResolvesFrom1dAgoWithNullRes = mRepository.getAllFrom1dAgoWithNullRes();
+        mAllLocalResolvesCountWithNullRes = mRepository.getAllLocalResolvesCountWithNullRes();
+        mAllLocalResolvesCountWithOneRes = mRepository.getAllLocalResolvesCountWithOneRes();
         mDateAndCountFrom7dAgoWithNullRes = mRepository.getDateAndCountFrom7dAgoWithNullRes();
         mDateAndCountFrom7dAgoWithOneRes = mRepository.getDateAndCountFrom7dAgoWithOneRes();
     }
@@ -30,6 +34,14 @@ public class LocalResolveViewModel extends AndroidViewModel {
 
     public LiveData<List<LocalResolve>> getAllLocalResolvesFrom1dAgoWithNullRes() {
         return mAllLocalResolvesFrom1dAgoWithNullRes;
+    }
+
+    public LiveData<Count> getAllLocalResolvesCountWithNullRes() {
+        return mAllLocalResolvesCountWithNullRes;
+    }
+
+    public LiveData<Count> getAllLocalResolvesCountWithOneRes() {
+        return mAllLocalResolvesCountWithOneRes;
     }
 
     public LiveData<List<DateAndCount>> getDateAndCountFrom7dAgoWithNullRes() {

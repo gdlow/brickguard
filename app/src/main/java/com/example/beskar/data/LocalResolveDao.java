@@ -23,6 +23,9 @@ public interface LocalResolveDao {
     @Query("SELECT * FROM local_resolves WHERE resolution = :resolution")
     LiveData<List<LocalResolve>> getAllWithResolution(String resolution);
 
+    @Query("SELECT count(resolution) as count FROM local_resolves WHERE resolution = :resolution")
+    LiveData<Count> getAllCountWithResolution(String resolution);
+
     @Query("SELECT * FROM local_resolves WHERE resolution = :resolution AND timestamp >= strftime('%s', 'now', '-1 day')")
     LiveData<List<LocalResolve>> getAllWithResolutionFrom1dAgo(String resolution);
 
@@ -30,7 +33,7 @@ public interface LocalResolveDao {
     LiveData<List<LocalResolve>> getAllWithResolutionFrom7dAgo(String resolution);
 
     @Query("SELECT date(timestamp, 'unixepoch') as date, count(resolution) as count FROM local_resolves WHERE resolution = :resolution AND timestamp >= strftime('%s', 'now', '-7 day') GROUP BY date")
-    LiveData<List<DateAndCount>> getCountWithResolutionFrom7dAgo(String resolution);
+    LiveData<List<DateAndCount>> getDateAndCountWithResolutionFrom7dAgo(String resolution);
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insert(LocalResolve localResolve);

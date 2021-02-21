@@ -13,6 +13,8 @@ public class LocalResolveRepository {
     private LiveData<List<LocalResolve>> mLocalResolvesFrom1dAgo;
     private LiveData<List<LocalResolve>> mLocalResolvesFrom1dAgoWithNullRes;
     private LiveData<List<LocalResolve>> mLocalResolvesFrom7dAgoWithNullRes;
+    private LiveData<Count> mAllLocalResolvesCountWithNullRes;
+    private LiveData<Count> mAllLocalResolvesCountWithOneRes;
     private LiveData<List<DateAndCount>> mDateAndCountFrom7dAgoWithNullRes;
     private LiveData<List<DateAndCount>> mDateAndCountFrom7dAgoWithOneRes;
 
@@ -22,14 +24,16 @@ public class LocalResolveRepository {
         mAllLocalResolves = mLocalResolveDao.getAll();
         mAllLocalResolvesWithNullRes = mLocalResolveDao.getAllWithResolution("0.0.0.0");
         mLocalResolvesFrom1dAgo = mLocalResolveDao.getAllFrom1dAgo();
+        mAllLocalResolvesCountWithNullRes = mLocalResolveDao.getAllCountWithResolution("0.0.0.0");
+        mAllLocalResolvesCountWithOneRes = mLocalResolveDao.getAllCountWithResolution("0.0.0.1");
         mLocalResolvesFrom1dAgoWithNullRes = mLocalResolveDao
                 .getAllWithResolutionFrom1dAgo("0.0.0.0");
         mLocalResolvesFrom7dAgoWithNullRes = mLocalResolveDao
                 .getAllWithResolutionFrom7dAgo("0.0.0.0");
         mDateAndCountFrom7dAgoWithNullRes = mLocalResolveDao
-                .getCountWithResolutionFrom7dAgo("0.0.0.0");
+                .getDateAndCountWithResolutionFrom7dAgo("0.0.0.0");
         mDateAndCountFrom7dAgoWithOneRes = mLocalResolveDao
-                .getCountWithResolutionFrom7dAgo("0.0.0.1");
+                .getDateAndCountWithResolutionFrom7dAgo("0.0.0.1");
     }
 
     LiveData<List<LocalResolve>> getAll() {
@@ -42,6 +46,14 @@ public class LocalResolveRepository {
 
     LiveData<List<LocalResolve>> getAllFrom1dAgo() {
         return mLocalResolvesFrom1dAgo;
+    }
+
+    LiveData<Count> getAllLocalResolvesCountWithNullRes() {
+        return mAllLocalResolvesCountWithNullRes;
+    }
+
+    LiveData<Count> getAllLocalResolvesCountWithOneRes() {
+        return mAllLocalResolvesCountWithOneRes;
     }
 
     LiveData<List<LocalResolve>> getAllFrom1dAgoWithNullRes() {
