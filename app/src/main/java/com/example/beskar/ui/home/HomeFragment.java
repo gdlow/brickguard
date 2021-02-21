@@ -164,7 +164,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         slider.addOnChangeListener((s, value, fromUser) -> {
             int index = Math.round(value);
             tv.setText(sliderTexts.get(index));
-            Beskar.getPrefs().edit().putInt("home_slider_index", index).apply();
+            if (Beskar.getPrefs().getInt("home_slider_index", 3) != index) {
+                Beskar.getPrefs().edit().putInt("home_slider_index", index).apply();
+                insertInteraction("config_change");
+            }
 
             if (index > 0) {
                 Beskar.getPrefs().edit().putBoolean("settings_use_system_dns", false).apply();
@@ -174,8 +177,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 Beskar.getPrefs().edit().putBoolean("settings_use_system_dns", true).apply();
                 BeskarVpnService.updateUpstreamToSystemDNS(getContext());
             }
-
-            insertInteraction("config_change");
         });
         slider.setLabelFormatter((float value) -> {
             switch (Math.round(value)) {
@@ -199,8 +200,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         adultSwitch.setOnClickListener(v -> {});
         adultSwitch.setOnCheckedChangeListener((v, isChecked) -> {
             selectRule(Beskar.RULES.get(0), isChecked);
-            Beskar.getPrefs().edit().putBoolean("home_adult_switch_checked", isChecked).apply();
-            insertInteraction("config_change");
+            if (Beskar.getPrefs().getBoolean("home_adult_switch_checked",
+                    false) != isChecked) {
+                Beskar.getPrefs().edit().putBoolean("home_adult_switch_checked", isChecked).apply();
+                insertInteraction("config_change");
+            }
         });
         boolean isAdultSwitchChecked = Beskar.getPrefs().getBoolean("home_adult_switch_checked",
                 false);
@@ -210,8 +214,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         adsSwitch.setOnClickListener(v -> {});
         adsSwitch.setOnCheckedChangeListener((v, isChecked) -> {
             selectRule(Beskar.RULES.get(1), isChecked);
-            Beskar.getPrefs().edit().putBoolean("home_ads_switch_checked", isChecked).apply();
-            insertInteraction("config_change");
+            if (Beskar.getPrefs().getBoolean("home_ads_switch_checked",
+                    false) != isChecked) {
+                Beskar.getPrefs().edit().putBoolean("home_ads_switch_checked", isChecked).apply();
+                insertInteraction("config_change");
+            }
         });
         boolean isAdsSwitchChecked = Beskar.getPrefs().getBoolean("home_ads_switch_checked", false);
         adsSwitch.setChecked(isAdsSwitchChecked);
@@ -428,6 +435,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     }
 
     private void selectRule(Rule rule, boolean isUsing) {
+        if (rule.isUsing() == isUsing) return;
         if (isUsing && !rule.getDownloaded()) {
             Beskar.getInstance().ruleSync(rule);
             rule.setDownloaded(true);

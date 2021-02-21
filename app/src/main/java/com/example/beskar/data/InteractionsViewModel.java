@@ -5,28 +5,27 @@ import android.app.Application;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
-import java.util.List;
 
 public class InteractionsViewModel extends AndroidViewModel {
     private InteractionsRepository mRepository;
-    private final LiveData<List<DateAndCount>> mDateAndCountFrom7dAgoWithConfigChanges;
-    private final LiveData<List<DateAndCount>> mDateAndCountFrom7dAgoWithSwitchedOff;
+    private final LiveData<Count> mCountFrom7dAgoWithConfigChanges;
+    private final LiveData<Count> mCountFrom7dAgoWithSwitchedOff;
 
     public InteractionsViewModel(Application application) {
         super(application);
         mRepository = new InteractionsRepository(application);
-        mDateAndCountFrom7dAgoWithConfigChanges =
-                mRepository.getDateAndCountFrom7dAgoWithConfigChanges();
-        mDateAndCountFrom7dAgoWithSwitchedOff =
-                mRepository.getDateAndCountFrom7dAgoWithSwitchedOff();
+        mCountFrom7dAgoWithConfigChanges =
+                mRepository.getCountFrom7dAgoWithConfigChanges();
+        mCountFrom7dAgoWithSwitchedOff =
+                mRepository.getCountFrom7dAgoWithSwitchedOff();
     }
 
-    public LiveData<List<DateAndCount>> getDateAndCountFrom7dAgoWithConfigChanges() {
-        return mDateAndCountFrom7dAgoWithConfigChanges;
+    public LiveData<Count> getCountFrom7dAgoWithConfigChanges() {
+        return mCountFrom7dAgoWithConfigChanges;
     }
 
-    public LiveData<List<DateAndCount>> getDateAndCountFrom7dAgoSwitchedOff() {
-        return mDateAndCountFrom7dAgoWithSwitchedOff;
+    public LiveData<Count> getCountFrom7dAgoWithSwitchedOff() {
+        return mCountFrom7dAgoWithSwitchedOff;
     }
 
     public void insert(Interactions interaction) { mRepository.insert(interaction); }

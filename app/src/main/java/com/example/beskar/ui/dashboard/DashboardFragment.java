@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -11,7 +12,9 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.beskar.R;
+import com.example.beskar.data.Count;
 import com.example.beskar.data.DateAndCount;
+import com.example.beskar.data.InteractionsViewModel;
 import com.example.beskar.data.LocalResolveViewModel;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.Description;
@@ -28,12 +31,15 @@ import java.util.List;
 public class DashboardFragment extends Fragment {
 
     private LocalResolveViewModel localResolveViewModel;
+    private InteractionsViewModel interactionsViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
         localResolveViewModel =
                 new ViewModelProvider(this).get(LocalResolveViewModel.class);
+        interactionsViewModel =
+                new ViewModelProvider(this).get(InteractionsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_dashboard, container, false);
 
         BarChart adChart = root.findViewById(R.id.ad_sites_chart);
@@ -44,7 +50,17 @@ public class DashboardFragment extends Fragment {
         populateChart(adultChart, localResolveViewModel.getDateAndCountFrom7dAgoWithOneRes(),
                 "Blocked adult sites");
 
+        TextView configChangesText = root.findViewById(R.id.config_changes_text);
+        populateText(configChangesText, interactionsViewModel.getCountFrom7dAgoWithConfigChanges());
+
+        TextView switchedOffText = root.findViewById(R.id.switched_off_text);
+        populateText(switchedOffText, interactionsViewModel.getCountFrom7dAgoWithSwitchedOff());
+
         return root;
+    }
+
+    private void populateText(TextView text, LiveData<Count> data) {
+        data.observe(getViewLifecycleOwner(), res -> text.setText(res.getCount().toString()));
     }
 
     private void populateChart(BarChart chart, LiveData<List<DateAndCount>> data, String label) {

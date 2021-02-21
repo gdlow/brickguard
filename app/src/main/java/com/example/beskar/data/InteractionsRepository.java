@@ -8,24 +8,24 @@ import java.util.List;
 
 public class InteractionsRepository {
     private InteractionsDao interactionsDao;
-    private LiveData<List<DateAndCount>> mDateAndCountFrom7dAgoWithConfigChanges;
-    private LiveData<List<DateAndCount>> mDateAndCountFrom7dAgoWithSwitchedOff;
+    private LiveData<Count> mCountFrom7dAgoWithConfigChanges;
+    private LiveData<Count> mCountFrom7dAgoWithSwitchedOff;
 
     public InteractionsRepository(Application application) {
         AppDatabase db = AppDatabase.getDatabase(application);
         interactionsDao = db.interactionsDao();
-        mDateAndCountFrom7dAgoWithConfigChanges =
+        mCountFrom7dAgoWithConfigChanges =
                 interactionsDao.getCountWithInteractionFrom7dAgo("config_change");
-        mDateAndCountFrom7dAgoWithSwitchedOff = interactionsDao.getCountWithInteractionFrom7dAgo(
+        mCountFrom7dAgoWithSwitchedOff = interactionsDao.getCountWithInteractionFrom7dAgo(
                 "switched_off");
     }
 
-    LiveData<List<DateAndCount>> getDateAndCountFrom7dAgoWithConfigChanges() {
-        return mDateAndCountFrom7dAgoWithConfigChanges;
+    LiveData<Count> getCountFrom7dAgoWithConfigChanges() {
+        return mCountFrom7dAgoWithConfigChanges;
     }
 
-    LiveData<List<DateAndCount>> getDateAndCountFrom7dAgoWithSwitchedOff() {
-        return mDateAndCountFrom7dAgoWithSwitchedOff;
+    LiveData<Count> getCountFrom7dAgoWithSwitchedOff() {
+        return mCountFrom7dAgoWithSwitchedOff;
     }
 
     // You must call this on a non-UI thread or your app will throw an exception. Room ensures

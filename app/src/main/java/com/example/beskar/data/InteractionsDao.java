@@ -17,8 +17,8 @@ public interface InteractionsDao {
     @Query("SELECT * FROM interactions WHERE timestamp >= strftime('%s', 'now', '-7 day')")
     LiveData<List<Interactions>> getAllFrom7dAgo();
 
-    @Query("SELECT date(timestamp, 'unixepoch') as date, count(interaction) as count FROM interactions WHERE interaction = :interaction AND timestamp >= strftime('%s', 'now', '-7 day') GROUP BY date")
-    LiveData<List<DateAndCount>> getCountWithInteractionFrom7dAgo(String interaction);
+    @Query("SELECT count(interaction) as count FROM interactions WHERE interaction = :interaction AND timestamp >= strftime('%s', 'now', '-7 day')")
+    LiveData<Count> getCountWithInteractionFrom7dAgo(String interaction);
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insert(Interactions interaction);
