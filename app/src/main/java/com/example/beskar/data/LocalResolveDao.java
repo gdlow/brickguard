@@ -23,8 +23,8 @@ public interface LocalResolveDao {
     @Query("SELECT * FROM local_resolves WHERE resolution = :resolution")
     LiveData<List<LocalResolve>> getAllWithResolution(String resolution);
 
-    @Query("SELECT count(resolution) as count FROM local_resolves WHERE resolution = :resolution")
-    LiveData<Count> getAllCountWithResolution(String resolution);
+    @Query("SELECT count(resolution) as count FROM local_resolves WHERE resolution = :resolution AND timestamp >= strftime('%s', 'now', '-7 day')")
+    LiveData<Count> getAllCountWithResolutionFrom7dAgo(String resolution);
 
     @Query("SELECT * FROM local_resolves WHERE resolution = :resolution AND timestamp >= strftime('%s', 'now', '-1 day')")
     LiveData<List<LocalResolve>> getAllWithResolutionFrom1dAgo(String resolution);

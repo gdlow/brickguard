@@ -44,7 +44,7 @@
                             android:paddingBottom="@dimen/spacing_medium"
                             android:paddingLeft="@dimen/spacing_middle"
                             android:paddingRight="@dimen/spacing_middle"
-                            android:text="Total number of adult sites blocked"
+                            android:text="Blocked adult sites over the past week"
                             android:textAppearance="@style/CardTitleText"/>
 
                         <LinearLayout
@@ -58,7 +58,7 @@
                                 android:layout_height="wrap_content"
                                 android:padding="@dimen/spacing_middle"
                                 android:gravity="center"
-                                android:text="70"
+                                android:text="0"
                                 android:textAppearance="@style/CardValueText"/>
 
                         </LinearLayout>
@@ -88,7 +88,7 @@
                             android:paddingBottom="@dimen/spacing_medium"
                             android:paddingLeft="@dimen/spacing_middle"
                             android:paddingRight="@dimen/spacing_middle"
-                            android:text="Total number of ad sites blocked"
+                            android:text="Blocked ad sites over the past week"
                             android:textAppearance="@style/CardTitleText"/>
 
                         <LinearLayout
@@ -102,7 +102,7 @@
                                 android:layout_height="wrap_content"
                                 android:padding="@dimen/spacing_middle"
                                 android:gravity="center"
-                                android:text="90"
+                                android:text="0"
                                 android:textAppearance="@style/CardValueText"/>
 
                         </LinearLayout>
@@ -227,7 +227,7 @@
                                 android:layout_height="wrap_content"
                                 android:padding="@dimen/spacing_middle"
                                 android:gravity="center"
-                                android:text="81"
+                                android:text="0"
                                 android:textAppearance="@style/CardValueText"/>
 
                         </LinearLayout>
@@ -271,7 +271,7 @@
                                 android:layout_height="wrap_content"
                                 android:padding="@dimen/spacing_middle"
                                 android:gravity="center"
-                                android:text="57"
+                                android:text="0"
                                 android:textAppearance="@style/CardValueText"/>
 
                         </LinearLayout>

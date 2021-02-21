@@ -43,10 +43,12 @@ public class DashboardFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_dashboard, container, false);
 
         TextView adsBlockedText = root.findViewById(R.id.ad_sites_blocked_text);
-        populateText(adsBlockedText, localResolveViewModel.getAllLocalResolvesCountWithNullRes());
+        populateText(adsBlockedText,
+                localResolveViewModel.getAllLocalResolvesCountFrom7dAgoWithNullRes());
 
         TextView adultBlockedText = root.findViewById(R.id.adult_sites_blocked_text);
-        populateText(adultBlockedText, localResolveViewModel.getAllLocalResolvesCountWithOneRes());
+        populateText(adultBlockedText,
+                localResolveViewModel.getAllLocalResolvesCountFrom7dAgoWithOneRes());
 
         BarChart adChart = root.findViewById(R.id.ad_sites_chart);
         populateChart(adChart, localResolveViewModel.getDateAndCountFrom7dAgoWithNullRes(),
