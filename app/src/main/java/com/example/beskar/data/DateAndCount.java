@@ -4,17 +4,17 @@ import androidx.room.ColumnInfo;
 
 public class DateAndCount {
     @ColumnInfo(name = "date")
-    private Long date;
+    private String date;
 
     @ColumnInfo(name = "count")
     private Integer count;
 
-    public DateAndCount(Long date, Integer count) {
+    public DateAndCount(String date, Integer count) {
         this.date = date;
         this.count = count;
     }
 
-    public Long getDate() {
+    public String getDate() {
         return date;
     }
 

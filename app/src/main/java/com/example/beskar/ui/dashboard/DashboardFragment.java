@@ -37,22 +37,6 @@ public class DashboardFragment extends Fragment {
     private DashboardViewModel dashboardViewModel;
     private LocalResolveViewModel localResolveViewModel;
 
-    private class LineChartXAxisValueFormatter extends IndexAxisValueFormatter {
-
-        @Override
-        public String getFormattedValue(float value) {
-            // Convert float value to date string
-            // Convert from seconds back to milliseconds to format time  to show to the user
-            long emissionsMilliSince1970Time = ((long) value) * 1000;
-
-            // Show time in local version
-            Date timeMilliseconds = new Date(emissionsMilliSince1970Time);
-            DateFormat dateTimeFormat = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault());
-
-            return dateTimeFormat.format(timeMilliseconds);
-        }
-    }
-
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         dashboardViewModel =
@@ -70,8 +54,16 @@ public class DashboardFragment extends Fragment {
                 entries.add(new BarEntry(i++, item.getCount()));
             }
 
+            class InternalFormatter extends IndexAxisValueFormatter {
+
+                @Override
+                public String getFormattedValue(float value) {
+                    return res.get((int) value).getDate();
+                }
+            }
+
             BarDataSet dataSet = new BarDataSet(entries, "Blocked sites");
-            dataSet.setColor(R.color.black_a60);
+            dataSet.setColors(ColorTemplate.MATERIAL_COLORS);
             BarData barData = new BarData(dataSet);
             chart.setData(barData);
             chart.setDrawGridBackground(false);
@@ -82,7 +74,7 @@ public class DashboardFragment extends Fragment {
             XAxis xAxis = chart.getXAxis();
             xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
             xAxis.setDrawGridLines(false);
-            xAxis.setValueFormatter(new LineChartXAxisValueFormatter());
+            xAxis.setValueFormatter(new InternalFormatter());
             xAxis.setLabelCount(0);
 
             chart.getAxisRight().setEnabled(false);
@@ -102,7 +94,6 @@ public class DashboardFragment extends Fragment {
         chart.setDescription(desc);
         XAxis xAxis = chart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setValueFormatter(new LineChartXAxisValueFormatter());
         xAxis.setLabelCount(0);
         xAxis.setDrawGridLines(false);
         chart.getAxisRight().setEnabled(false);

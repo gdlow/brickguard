@@ -57,4 +57,12 @@
     <style name="OverflowButtonStyle" parent="Widget.AppCompat.ActionButton.Overflow">
         <item name="android:tint">@color/white</item>
     </style>
+    <style name="CardTitleText">
+        <item name="android:fontFamily">@font/roboto_light</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+    <style name="CardValueText">
+        <item name="android:fontFamily">@font/roboto_bold</item>
+        <item name="android:textSize">36sp</item>
+    </style>
 </resources>
