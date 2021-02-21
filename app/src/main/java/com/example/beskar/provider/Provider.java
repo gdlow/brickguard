@@ -48,7 +48,7 @@ public abstract class Provider {
         this.descriptor = descriptor;
         this.service = service;
         dnsQueryTimes = 0;
-         mLocalResolveViewModel =
+        mLocalResolveViewModel =
                  new ViewModelProvider(MainActivity.getInstance()).get(LocalResolveViewModel.class);
     }
 
