@@ -9,10 +9,11 @@ import androidx.room.RoomDatabase;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {LocalResolve.class}, version = 1, exportSchema = false)
+@Database(entities = {LocalResolve.class, Interactions.class}, version = 2, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 
     public abstract LocalResolveDao localResolveDao();
+    public abstract InteractionsDao interactionsDao();
 
     private static volatile AppDatabase INSTANCE;
     private static final int NUMBER_OF_THREADS = 4;

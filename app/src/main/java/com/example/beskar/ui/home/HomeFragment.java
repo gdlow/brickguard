@@ -15,10 +15,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.core.widget.TextViewCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.beskar.Beskar;
 import com.example.beskar.MainActivity;
 import com.example.beskar.R;
+import com.example.beskar.data.Interactions;
+import com.example.beskar.data.InteractionsViewModel;
+import com.example.beskar.data.LocalResolveViewModel;
 import com.example.beskar.service.BeskarVpnService;
 import com.example.beskar.util.Rule;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
@@ -63,6 +67,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    private InteractionsViewModel interactionsViewModel;
     private View root;
     private List<StepState> stepStates;
 
@@ -78,6 +83,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     }
 
     private void initComponent(View view) {
+        interactionsViewModel =
+                new ViewModelProvider(this).get(InteractionsViewModel.class);
         // Build list of stepStates
         stepStates = new ArrayList<>(Arrays.asList(
                 new StepState(
@@ -166,6 +173,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 Beskar.getPrefs().edit().putBoolean("settings_use_system_dns", true).apply();
                 BeskarVpnService.updateUpstreamToSystemDNS(getContext());
             }
+
+            insertInteraction("config_change");
         });
         slider.setLabelFormatter((float value) -> {
             switch (Math.round(value)) {
@@ -190,6 +199,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         adultSwitch.setOnCheckedChangeListener((v, isChecked) -> {
             selectRule(Beskar.RULES.get(0), isChecked);
             Beskar.getPrefs().edit().putBoolean("home_adult_switch_checked", isChecked).apply();
+            insertInteraction("config_change");
         });
         boolean isAdultSwitchChecked = Beskar.getPrefs().getBoolean("home_adult_switch_checked",
                 false);
@@ -200,6 +210,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         adsSwitch.setOnCheckedChangeListener((v, isChecked) -> {
             selectRule(Beskar.RULES.get(1), isChecked);
             Beskar.getPrefs().edit().putBoolean("home_ads_switch_checked", isChecked).apply();
+            insertInteraction("config_change");
         });
         boolean isAdsSwitchChecked = Beskar.getPrefs().getBoolean("home_ads_switch_checked", false);
         adsSwitch.setChecked(isAdsSwitchChecked);
@@ -269,6 +280,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             } else {
                 if (BeskarVpnService.isActivated()) {
                     Beskar.deactivateService(getActivity().getApplicationContext());
+                    insertInteraction("switched_off");
                 }
             }
         });
@@ -421,5 +433,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         }
         rule.setUsing(isUsing);
         Beskar.setRulesChanged();
+    }
+
+    private void insertInteraction(String interaction) {
+        long timestamp = System.currentTimeMillis() / 1000L;
+        interactionsViewModel.insert(new Interactions(timestamp, interaction));
     }
 }
