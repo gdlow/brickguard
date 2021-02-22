@@ -8,17 +8,12 @@ import java.util.List;
 
 public class LocalResolveRepository {
     private LocalResolveDao mLocalResolveDao;
-    private LiveData<List<LocalResolve>> mAllLocalResolves;
-    private LiveData<List<LocalResolve>> mAllLocalResolvesWithNullRes;
-    private LiveData<List<LocalResolve>> mLocalResolvesFrom1dAgo;
-    private LiveData<List<LocalResolve>> mLocalResolvesFrom1dAgoWithNullRes;
-    private LiveData<List<LocalResolve>> mLocalResolvesFrom7dAgoWithNullRes;
     private LiveData<Count> mAllLocalResolvesCountFrom7dAgoWithNullRes;
     private LiveData<Count> mAllLocalResolvesCountFrom7dAgoWithOneRes;
     private LiveData<List<DateAndCount>> mDateAndCountFrom7dAgoWithNullRes;
     private LiveData<List<DateAndCount>> mDateAndCountFrom7dAgoWithOneRes;
 
-    LocalResolveRepository(Application application) {
+    public LocalResolveRepository(Application application) {
         AppDatabase db = AppDatabase.getDatabase(application);
         mLocalResolveDao = db.localResolveDao();
         mAllLocalResolvesCountFrom7dAgoWithNullRes =
@@ -49,7 +44,7 @@ public class LocalResolveRepository {
 
     // You must call this on a non-UI thread or your app will throw an exception. Room ensures
     // that you're not doing any long running operations on the main thread, blocking the UI.
-    void insert(LocalResolve localResolve) {
+    public void insert(LocalResolve localResolve) {
         AppDatabase.databaseWriteExecutor.execute(() -> {
             mLocalResolveDao.insert(localResolve);
         });
