@@ -46,7 +46,7 @@ public class BeskarVpnService extends VpnService implements Runnable {
     public static final String ACTION_ACTIVATE = "com.example.beskar.service.BeskarVpnService.ACTION_ACTIVATE";
     public static final String ACTION_DEACTIVATE = "com.example.beskar.service.BeskarVpnService.ACTION_DEACTIVATE";
 
-    private static final int NOTIFICATION_ACTIVATED = 0;
+    private static final int NOTIFICATION_ACTIVATED = 1;
 
     private static final String TAG = "BeskarVpnService";
     private static final String CHANNEL_ID = "Beskar_channel_1";
@@ -191,20 +191,29 @@ public class BeskarVpnService extends VpnService implements Runnable {
                                         PendingIntent.getBroadcast(this, 0,
                                                 settingsIntent, PendingIntent.FLAG_UPDATE_CURRENT));
 
-                        Notification notification = builder.build();
+//                        Notification notification = builder.build();
 
-                        manager.notify(NOTIFICATION_ACTIVATED, notification);
+//                        manager.notify(NOTIFICATION_ACTIVATED, notification);
 
                         this.notification = builder;
                     }
 
-                    Beskar.initRuleResolver();
-                    startThread();
-                    Beskar.updateShortcut(getApplicationContext());
-                    if (MainActivity.getInstance() != null) {
-                        MainActivity.getInstance().startActivity(new Intent(getApplicationContext(), MainActivity.class)
-                                .putExtra(MainActivity.LAUNCH_ACTION, MainActivity.LAUNCH_ACTION_SERVICE_DONE));
+                    if (VpnService.prepare(Beskar.getInstance()) == null) {
+                        Logger.debug("VPN service prepared. Starting foreground and thread.");
+                        startForeground(NOTIFICATION_ACTIVATED, notification.build());
+                        Beskar.initRuleResolver();
+                        startThread();
+                        Beskar.updateShortcut(getApplicationContext());
+                        if (MainActivity.getInstance() != null) {
+                            MainActivity.getInstance().startActivity(new Intent(getApplicationContext(), MainActivity.class)
+                                    .putExtra(MainActivity.LAUNCH_ACTION, MainActivity.LAUNCH_ACTION_SERVICE_DONE));
+                        } else {
+                            Logger.debug("MainActivity not initialized in BeskarVpnService.");
+                        }
+                    } else {
+                        Logger.debug("VPN service is not prepared.");
                     }
+
                     return START_STICKY;
                 case ACTION_DEACTIVATE:
                     Beskar.getPrefs().edit().putLong("beskar_current_time_delta", 0).apply();

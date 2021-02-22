@@ -229,9 +229,19 @@ public class Beskar extends Application {
     }
 
     public static void activateService(Context context) {
+        activateService(context, true);
+    }
+
+    public static void activateService(Context context, boolean forceForeground) {
         updateUpstreamServers();
-        Logger.info("Starting VPN service in background.");
-        context.startService(Beskar.getServiceIntent(context).setAction(BeskarVpnService.ACTION_ACTIVATE));
+        if ((getInstance().prefs.getBoolean("settings_foreground", false) || forceForeground)
+                && Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
+            Logger.info("Starting foreground service");
+            context.startForegroundService(Beskar.getServiceIntent(context).setAction(BeskarVpnService.ACTION_ACTIVATE));
+        } else {
+            Logger.info("Starting background service");
+            context.startService(Beskar.getServiceIntent(context).setAction(BeskarVpnService.ACTION_ACTIVATE));
+        }
     }
 
     public static void updateUpstreamServers() {
