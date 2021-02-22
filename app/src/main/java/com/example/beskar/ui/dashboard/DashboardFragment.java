@@ -27,6 +27,8 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.stream.Collectors;
 
 public class DashboardFragment extends Fragment {
 
@@ -68,14 +70,16 @@ public class DashboardFragment extends Fragment {
     }
 
     private void populateText(TextView text, LiveData<Count> data) {
-        data.observe(getViewLifecycleOwner(), res -> text.setText(res.getCount().toString()));
+        data.observe(getViewLifecycleOwner(),
+                res -> text.setText(String.format(Locale.getDefault(), "%d", res.getCount())));
     }
 
     private void populateChart(BarChart chart, LiveData<List<DateAndCount>> data, String label) {
-        List<BarEntry> entries = new ArrayList<>();
-        populateChartTemplate(chart, entries, label);
+        populateChartTemplate(chart);
         refreshChart(chart);
-        data.observe(getViewLifecycleOwner(),res -> {
+        data.observe(getViewLifecycleOwner(), res -> {
+            // Transform List<DateAndCount> into List<BarEntry>
+            List<BarEntry> entries = new ArrayList<>();
             int i = 0;
             for (DateAndCount item : res) {
                 entries.add(new BarEntry(i++, item.getCount()));
@@ -89,17 +93,16 @@ public class DashboardFragment extends Fragment {
                 }
             }
 
-            populateChartTemplate(chart, entries, label);
+            BarDataSet dataSet = new BarDataSet(entries, label);
+            dataSet.setColors(ColorTemplate.MATERIAL_COLORS);
+            BarData barData = new BarData(dataSet);
+            chart.setData(barData);
             chart.getXAxis().setValueFormatter(new InternalFormatter());
             refreshChart(chart);
         });
     }
 
-    private void populateChartTemplate(BarChart chart, List<BarEntry> entries, String label) {
-        BarDataSet dataSet = new BarDataSet(entries, label);
-        dataSet.setColors(ColorTemplate.MATERIAL_COLORS);
-        BarData barData = new BarData(dataSet);
-        chart.setData(barData);
+    private void populateChartTemplate(BarChart chart) {
         chart.setDrawGridBackground(false);
         chart.setNoDataText("No data found");
         Description desc = new Description();

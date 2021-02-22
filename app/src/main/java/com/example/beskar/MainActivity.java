@@ -13,14 +13,12 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.beskar.service.BeskarVpnService;
-import com.example.beskar.ui.home.HomeViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
@@ -38,8 +36,6 @@ public class MainActivity extends AppCompatActivity {
     public static final int FRAGMENT_SETTINGS = 2;
 
     private static MainActivity instance = null;
-
-    private HomeViewModel homeViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,9 +61,6 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
-
-        // Initialise view models
-        homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
 
         // Update based on intent
         updateOnNewIntent(getIntent());

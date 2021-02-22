@@ -23,16 +23,25 @@ public interface LocalResolveDao {
     @Query("SELECT * FROM local_resolves WHERE resolution = :resolution")
     LiveData<List<LocalResolve>> getAllWithResolution(String resolution);
 
-    @Query("SELECT count(resolution) as count FROM local_resolves WHERE resolution = :resolution AND timestamp >= strftime('%s', 'now', '-7 day')")
+    // Deduplicate on timestamp, resolution on db read
+    @Query("SELECT count(resolution) as count FROM (SELECT DISTINCT timestamp, resolution FROM " +
+            "local_resolves WHERE resolution = :resolution " +
+            "AND timestamp >= strftime('%s', 'now', '-7 day'))")
     LiveData<Count> getAllCountWithResolutionFrom7dAgo(String resolution);
 
-    @Query("SELECT * FROM local_resolves WHERE resolution = :resolution AND timestamp >= strftime('%s', 'now', '-1 day')")
+    @Query("SELECT * FROM local_resolves WHERE resolution = :resolution AND timestamp >= strftime" +
+            "('%s', 'now', '-1 day')")
     LiveData<List<LocalResolve>> getAllWithResolutionFrom1dAgo(String resolution);
 
-    @Query("SELECT * FROM local_resolves WHERE resolution = :resolution AND timestamp >= strftime('%s', 'now', '-7 day')")
+    @Query("SELECT * FROM local_resolves WHERE resolution = :resolution AND timestamp >= strftime" +
+            "('%s', 'now', '-7 day')")
     LiveData<List<LocalResolve>> getAllWithResolutionFrom7dAgo(String resolution);
 
-    @Query("SELECT date(timestamp, 'unixepoch') as date, count(resolution) as count FROM local_resolves WHERE resolution = :resolution AND timestamp >= strftime('%s', 'now', '-7 day') GROUP BY date")
+    // Deduplicate on timestamp, resolution on db read
+    @Query("SELECT date(timestamp, 'unixepoch') as date, count(resolution) as count FROM " +
+            "(SELECT DISTINCT timestamp, resolution FROM local_resolves WHERE resolution = " +
+            ":resolution AND timestamp >= strftime('%s', 'now'," +
+            " '-7 day')) GROUP BY date")
     LiveData<List<DateAndCount>> getDateAndCountWithResolutionFrom7dAgo(String resolution);
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
