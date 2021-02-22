@@ -20,16 +20,10 @@ import com.example.beskar.server.AbstractDnsServer;
 import com.example.beskar.server.DnsServer;
 import com.example.beskar.server.DnsServerHelper;
 import com.example.beskar.service.BeskarVpnService;
-import com.example.beskar.ui.home.HomeFragment;
-import com.example.beskar.util.Configurations;
 import com.example.beskar.util.Logger;
 import com.example.beskar.util.Rule;
 import com.example.beskar.util.RuleResolver;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonParseException;
-import com.google.gson.stream.JsonReader;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -59,29 +53,19 @@ public class Beskar extends Application {
     }};
 
     public static final ArrayList<Rule> RULES = new ArrayList<Rule>() {{
-        add(new Rule("chadmayfield/porn-top1m", "chadmayfield.dnsmasq", Rule.TYPE_DNSMASQ,
-                "https://raw.githubusercontent.com/chadmayfield/my-pihole-blocklists/master/lists/pi_blocklist_porn_top1m.list",
-                false));
+        add(new Rule("chadmayfield/porn-top1m", "chadmayfield.dnsmasq",
+                "https://raw.githubusercontent.com/chadmayfield/my-pihole-blocklists/master/lists" +
+                        "/pi_blocklist_porn_top1m.list"));
 
-        add(new Rule("notracking/hosts-blacklists", "notracking.dnsmasq", Rule.TYPE_DNSMASQ,
-                "https://raw.githubusercontent.com/notracking/hosts-blocklists/master/dnsmasq/dnsmasq.blacklist.txt",
-                false));
+        add(new Rule("notracking/hosts-blacklists", "notracking.dnsmasq",
+                "https://raw.githubusercontent.com/notracking/hosts-blocklists/master/dnsmasq" +
+                        "/dnsmasq.blacklist.txt"));
     }};
-
-    public static final String[] DEFAULT_TEST_DOMAINS = {
-            "google.com",
-            "twitter.com",
-            "youtube.com",
-            "facebook.com",
-            "wikipedia.org"
-    };
 
     public static HashMap<String, String> customDomains = new HashMap<>();
 
-    public static Configurations configurations;
     public static String rulePath;
     public static String logPath;
-    private static String configPath;
 
     private static Beskar instance;
     private SharedPreferences prefs;
@@ -124,45 +108,37 @@ public class Beskar extends Application {
         if (getExternalFilesDir(null) != null) {
             rulePath = getExternalFilesDir(null).getPath() + "/rules/";
             logPath = getExternalFilesDir(null).getPath() + "/logs/";
-            configPath = getExternalFilesDir(null).getPath() + "/config.json";
 
             initDirectory(rulePath);
             initDirectory(logPath);
         }
 
-        if (configPath != null) {
-            configurations = Configurations.load(new File(configPath));
-        } else {
-            configurations = new Configurations();
-        }
-
         // Load preferences
-        selectRule(Beskar.RULES.get(0), Beskar.getPrefs().getBoolean("home_adult_switch_checked",
-                false));
-        selectRule(Beskar.RULES.get(1), Beskar.getPrefs().getBoolean("home_ads_switch_checked",
-                false));
+        selectRule(RULES.get(0), prefs.getBoolean("home_adult_switch_checked", false));
+        selectRule(RULES.get(1), prefs.getBoolean("home_ads_switch_checked", false));
 
-        int sliderIdx = Beskar.getPrefs().getInt("home_slider_index", 3);
+        int sliderIdx = prefs.getInt("home_slider_index", 3);
         if (sliderIdx > 0) {
-            Beskar.getPrefs().edit().putBoolean("settings_use_system_dns", false).apply();
-            Beskar.getPrefs().edit().putString("primary_server", String.valueOf(sliderIdx)).apply();
-            Beskar.updateUpstreamServers();
+            prefs.edit().putBoolean("settings_use_system_dns", false).apply();
+            prefs.edit().putString("primary_server", String.valueOf(sliderIdx)).apply();
+            updateUpstreamServers();
         } else {
-            Beskar.getPrefs().edit().putBoolean("settings_use_system_dns", true).apply();
+            prefs.edit().putBoolean("settings_use_system_dns", true).apply();
             BeskarVpnService.updateUpstreamToSystemDNS(getApplicationContext());
         }
         Logger.debug("Loaded preferences from file.");
     }
 
-    public static <T> T parseJson(Class<T> beanClass, JsonReader reader) throws JsonParseException {
-        GsonBuilder builder = new GsonBuilder();
-        Gson gson = builder.create();
-        return gson.fromJson(reader, beanClass);
-    }
-
     public static void initRuleResolver() {
         ArrayList<String> pendingLoad = new ArrayList<>();
-        ArrayList<Rule> usingRules = configurations.getUsingRules();
+        ArrayList<Rule> usingRules = new ArrayList<>();
+
+        for (Rule rule : Beskar.RULES) {
+            if (rule.isUsing()) {
+                usingRules.add(rule);
+            }
+        }
+
         if (usingRules != null && usingRules.size() > 0) {
             for (Rule rule : usingRules) {
                 if (rule.isUsing()) {
@@ -172,14 +148,7 @@ public class Beskar extends Application {
             if (pendingLoad.size() > 0) {
                 String[] arr = new String[pendingLoad.size()];
                 pendingLoad.toArray(arr);
-                switch (usingRules.get(0).getType()) {
-                    case Rule.TYPE_HOSTS:
-                        RuleResolver.startLoadHosts(arr);
-                        break;
-                    case Rule.TYPE_DNSMASQ:
-                        RuleResolver.startLoadDnsmasq(arr);
-                        break;
-                }
+                RuleResolver.startLoadDnsmasq(arr);
             } else {
                 RuleResolver.clear();
             }
@@ -260,18 +229,9 @@ public class Beskar extends Application {
     }
 
     public static void activateService(Context context) {
-        activateService(context, false);
-    }
-
-    public static void activateService(Context context, boolean forceForeground) {
         updateUpstreamServers();
-        if ((forceForeground) && Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
-            Logger.info("Starting foreground service");
-            context.startForegroundService(Beskar.getServiceIntent(context).setAction(BeskarVpnService.ACTION_ACTIVATE));
-        } else {
-            Logger.info("Starting background service");
-            context.startService(Beskar.getServiceIntent(context).setAction(BeskarVpnService.ACTION_ACTIVATE));
-        }
+        Logger.info("Starting VPN service in background.");
+        context.startService(Beskar.getServiceIntent(context).setAction(BeskarVpnService.ACTION_ACTIVATE));
     }
 
     public static void updateUpstreamServers() {

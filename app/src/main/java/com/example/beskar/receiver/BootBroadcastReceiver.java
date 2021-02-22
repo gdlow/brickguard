@@ -12,7 +12,7 @@ public class BootBroadcastReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         if (Beskar.getPrefs().getBoolean("settings_boot", false)) {
-            Beskar.activateService(context, false);
+            Beskar.activateService(context);
             Logger.info("Triggered boot receiver");
         }
     }
