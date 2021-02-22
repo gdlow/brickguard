@@ -21,33 +21,14 @@ public class LocalResolveRepository {
     LocalResolveRepository(Application application) {
         AppDatabase db = AppDatabase.getDatabase(application);
         mLocalResolveDao = db.localResolveDao();
-        mAllLocalResolves = mLocalResolveDao.getAll();
-        mAllLocalResolvesWithNullRes = mLocalResolveDao.getAllWithResolution("0.0.0.0");
-        mLocalResolvesFrom1dAgo = mLocalResolveDao.getAllFrom1dAgo();
         mAllLocalResolvesCountFrom7dAgoWithNullRes =
                 mLocalResolveDao.getAllCountWithResolutionFrom7dAgo("0.0.0.0");
         mAllLocalResolvesCountFrom7dAgoWithOneRes =
                 mLocalResolveDao.getAllCountWithResolutionFrom7dAgo("0.0.0.1");
-        mLocalResolvesFrom1dAgoWithNullRes = mLocalResolveDao
-                .getAllWithResolutionFrom1dAgo("0.0.0.0");
-        mLocalResolvesFrom7dAgoWithNullRes = mLocalResolveDao
-                .getAllWithResolutionFrom7dAgo("0.0.0.0");
         mDateAndCountFrom7dAgoWithNullRes = mLocalResolveDao
                 .getDateAndCountWithResolutionFrom7dAgo("0.0.0.0");
         mDateAndCountFrom7dAgoWithOneRes = mLocalResolveDao
                 .getDateAndCountWithResolutionFrom7dAgo("0.0.0.1");
-    }
-
-    LiveData<List<LocalResolve>> getAll() {
-        return mAllLocalResolves;
-    }
-
-    LiveData<List<LocalResolve>> getAllWithNullRes() {
-        return mAllLocalResolvesWithNullRes;
-    }
-
-    LiveData<List<LocalResolve>> getAllFrom1dAgo() {
-        return mLocalResolvesFrom1dAgo;
     }
 
     LiveData<Count> getAllLocalResolvesCountFrom7dAgoWithNullRes() {
@@ -56,14 +37,6 @@ public class LocalResolveRepository {
 
     LiveData<Count> getAllLocalResolvesCountFrom7dAgoWithOneRes() {
         return mAllLocalResolvesCountFrom7dAgoWithOneRes;
-    }
-
-    LiveData<List<LocalResolve>> getAllFrom1dAgoWithNullRes() {
-        return mLocalResolvesFrom1dAgoWithNullRes;
-    }
-
-    LiveData<List<LocalResolve>> getAllFrom7dAgoWithNullRes() {
-        return mLocalResolvesFrom7dAgoWithNullRes;
     }
 
     LiveData<List<DateAndCount>> getDateAndCountFrom7dAgoWithNullRes() {

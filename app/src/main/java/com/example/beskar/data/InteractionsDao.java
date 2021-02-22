@@ -11,12 +11,6 @@ import java.util.List;
 
 @Dao
 public interface InteractionsDao {
-    @Query("SELECT * FROM interactions")
-    LiveData<List<Interactions>> getAll();
-
-    @Query("SELECT * FROM interactions WHERE timestamp >= strftime('%s', 'now', '-7 day')")
-    LiveData<List<Interactions>> getAllFrom7dAgo();
-
     // Deduplicate on timestamp, interaction on db read
     @Query("SELECT count(interaction) as count FROM (SELECT DISTINCT timestamp, interaction FROM " +
             "interactions WHERE interaction = :interaction" +
