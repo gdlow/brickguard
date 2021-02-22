@@ -135,6 +135,23 @@ public class Beskar extends Application {
         } else {
             configurations = new Configurations();
         }
+
+        // Load preferences
+        selectRule(Beskar.RULES.get(0), Beskar.getPrefs().getBoolean("home_adult_switch_checked",
+                false));
+        selectRule(Beskar.RULES.get(1), Beskar.getPrefs().getBoolean("home_ads_switch_checked",
+                false));
+
+        int sliderIdx = Beskar.getPrefs().getInt("home_slider_index", 3);
+        if (sliderIdx > 0) {
+            Beskar.getPrefs().edit().putBoolean("settings_use_system_dns", false).apply();
+            Beskar.getPrefs().edit().putString("primary_server", String.valueOf(sliderIdx)).apply();
+            Beskar.updateUpstreamServers();
+        } else {
+            Beskar.getPrefs().edit().putBoolean("settings_use_system_dns", true).apply();
+            BeskarVpnService.updateUpstreamToSystemDNS(getApplicationContext());
+        }
+        Logger.debug("Loaded preferences from file.");
     }
 
     public static <T> T parseJson(Class<T> beanClass, JsonReader reader) throws JsonParseException {
@@ -195,6 +212,16 @@ public class Beskar extends Application {
         return getInstance().prefs;
     }
 
+    public static void selectRule(Rule rule, boolean isUsing) {
+        if (rule.isUsing() == isUsing) return;
+        if (isUsing && !rule.getDownloaded()) {
+            Beskar.getInstance().ruleSync(rule);
+            rule.setDownloaded(true);
+        }
+        rule.setUsing(isUsing);
+        Beskar.setRulesChanged();
+    }
+
     @Override
     public void onTerminate() {
         super.onTerminate();
@@ -238,8 +265,7 @@ public class Beskar extends Application {
 
     public static void activateService(Context context, boolean forceForeground) {
         updateUpstreamServers();
-        if ((getInstance().prefs.getBoolean("settings_foreground", false) || forceForeground)
-                && Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
+        if ((forceForeground) && Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
             Logger.info("Starting foreground service");
             context.startForegroundService(Beskar.getServiceIntent(context).setAction(BeskarVpnService.ACTION_ACTIVATE));
         } else {

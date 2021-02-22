@@ -199,7 +199,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         SwitchMaterial adultSwitch = view.findViewById(R.id.activity_bottom_sheet_step2_adult_switch);
         adultSwitch.setOnClickListener(v -> {});
         adultSwitch.setOnCheckedChangeListener((v, isChecked) -> {
-            selectRule(Beskar.RULES.get(0), isChecked);
+            Beskar.selectRule(Beskar.RULES.get(0), isChecked);
             if (Beskar.getPrefs().getBoolean("home_adult_switch_checked",
                     false) != isChecked) {
                 Beskar.getPrefs().edit().putBoolean("home_adult_switch_checked", isChecked).apply();
@@ -213,7 +213,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         SwitchMaterial adsSwitch = view.findViewById(R.id.activity_bottom_sheet_step2_ads_switch);
         adsSwitch.setOnClickListener(v -> {});
         adsSwitch.setOnCheckedChangeListener((v, isChecked) -> {
-            selectRule(Beskar.RULES.get(1), isChecked);
+            Beskar.selectRule(Beskar.RULES.get(1), isChecked);
             if (Beskar.getPrefs().getBoolean("home_ads_switch_checked",
                     false) != isChecked) {
                 Beskar.getPrefs().edit().putBoolean("home_ads_switch_checked", isChecked).apply();
@@ -434,16 +434,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     public void hideKeyboard() {
         getActivity().getWindow()
                 .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-    }
-
-    private void selectRule(Rule rule, boolean isUsing) {
-        if (rule.isUsing() == isUsing) return;
-        if (isUsing && !rule.getDownloaded()) {
-            Beskar.getInstance().ruleSync(rule);
-            rule.setDownloaded(true);
-        }
-        rule.setUsing(isUsing);
-        Beskar.setRulesChanged();
     }
 
     private void insertInteraction(String interaction) {

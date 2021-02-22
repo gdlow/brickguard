@@ -367,13 +367,6 @@ public class BeskarVpnService extends VpnService implements Runnable {
             provider.process();
 
         } catch (Exception e) {
-            MainActivity.getInstance().runOnUiThread(() ->
-                    new AlertDialog.Builder(MainActivity.getInstance())
-                            .setTitle(R.string.error_occurred)
-                            .setMessage(Logger.getExceptionMessage(e))
-                            .setPositiveButton(android.R.string.ok, (d, id) -> {
-                            })
-                            .show());
             Logger.logException(e);
         } finally {
             stopThread();
