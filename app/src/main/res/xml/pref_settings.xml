@@ -27,22 +27,10 @@
             android:key="settings_boot"
             android:title="Activate on Boot"
             android:defaultValue="false"/>
-        <SwitchPreference
-            android:key="settings_notification"
-            android:title="Show Notifications"
-            android:defaultValue="true"/>
-    </PreferenceCategory>
 
-    <PreferenceCategory
-        app:iconSpaceReserved="false"
-        android:key="debug"
-        android:title="Debug">
         <ListPreference
             android:key="settings_logs"
             android:title="View Logs"/>
-        <ListPreference
-            android:key="settings_test"
-            android:title="Test DNS and VPN Servers"/>
     </PreferenceCategory>
 
     <PreferenceCategory

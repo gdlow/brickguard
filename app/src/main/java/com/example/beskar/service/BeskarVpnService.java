@@ -1,6 +1,5 @@
 package com.example.beskar.service;
 
-import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -157,46 +156,48 @@ public class BeskarVpnService extends VpnService implements Runnable {
                 case ACTION_ACTIVATE:
                     activated = true;
                     startTime = System.currentTimeMillis();
-                    if (Beskar.getPrefs().getBoolean("settings_notification", true)) {
-                        NotificationManager manager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
 
-                        NotificationCompat.Builder builder;
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_LOW);
-                            manager.createNotificationChannel(channel);
-                            builder = new NotificationCompat.Builder(this, CHANNEL_ID);
-                        } else {
-                            builder = new NotificationCompat.Builder(this);
-                        }
-
-                        Intent deactivateIntent = new Intent(StatusBarBroadcastReceiver.STATUS_BAR_BTN_DEACTIVATE_CLICK_ACTION);
-                        deactivateIntent.setClass(this, StatusBarBroadcastReceiver.class);
-                        Intent settingsIntent = new Intent(StatusBarBroadcastReceiver.STATUS_BAR_BTN_SETTINGS_CLICK_ACTION);
-                        settingsIntent.setClass(this, StatusBarBroadcastReceiver.class);
-                        PendingIntent pIntent = PendingIntent.getActivity(this, 0,
-                                new Intent(this, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
-                        builder.setWhen(0)
-                                .setContentTitle(getResources().getString(R.string.notice_activated))
-                                .setDefaults(NotificationCompat.DEFAULT_LIGHTS)
-                                .setSmallIcon(R.drawable.ic_brick_toolbar)
-                                .setColor(getResources().getColor(R.color.black_a80)) //backward compatibility
-                                .setAutoCancel(false)
-                                .setOngoing(true)
-                                .setTicker(getResources().getString(R.string.notice_activated))
-                                .setContentIntent(pIntent)
-                                .addAction(R.drawable.ic_clear, getResources().getString(R.string.notification_text_deactivate),
-                                        PendingIntent.getBroadcast(this, 0,
-                                                deactivateIntent, PendingIntent.FLAG_UPDATE_CURRENT))
-                                .addAction(R.drawable.ic_settings, getResources().getString(R.string.action_settings),
-                                        PendingIntent.getBroadcast(this, 0,
-                                                settingsIntent, PendingIntent.FLAG_UPDATE_CURRENT));
-
-//                        Notification notification = builder.build();
-
-//                        manager.notify(NOTIFICATION_ACTIVATED, notification);
-
-                        this.notification = builder;
+                    // Build notification
+                    NotificationManager manager =
+                            (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+                    NotificationCompat.Builder builder;
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        NotificationChannel channel = new NotificationChannel(CHANNEL_ID,
+                                CHANNEL_NAME, NotificationManager.IMPORTANCE_LOW);
+                        manager.createNotificationChannel(channel);
+                        builder = new NotificationCompat.Builder(this, CHANNEL_ID);
+                    } else {
+                        builder = new NotificationCompat.Builder(this);
                     }
+
+                    Intent deactivateIntent =
+                            new Intent(StatusBarBroadcastReceiver.STATUS_BAR_BTN_DEACTIVATE_CLICK_ACTION);
+                    deactivateIntent.setClass(this, StatusBarBroadcastReceiver.class);
+                    Intent settingsIntent =
+                            new Intent(StatusBarBroadcastReceiver.STATUS_BAR_BTN_SETTINGS_CLICK_ACTION);
+                    settingsIntent.setClass(this, StatusBarBroadcastReceiver.class);
+                    PendingIntent pIntent = PendingIntent.getActivity(this, 0,
+                            new Intent(this, MainActivity.class),
+                            PendingIntent.FLAG_UPDATE_CURRENT);
+                    builder.setWhen(0)
+                            .setContentTitle(getResources().getString(R.string.notice_activated))
+                            .setDefaults(NotificationCompat.DEFAULT_LIGHTS)
+                            .setSmallIcon(R.drawable.ic_brick_toolbar)
+                            .setColor(getResources().getColor(R.color.black_a80)) //backward
+                            // compatibility
+                            .setAutoCancel(false)
+                            .setOngoing(true)
+                            .setTicker(getResources().getString(R.string.notice_activated))
+                            .setContentIntent(pIntent)
+                            .addAction(R.drawable.ic_clear,
+                                    getResources().getString(R.string.notification_text_deactivate),
+                                    PendingIntent.getBroadcast(this, 0,
+                                            deactivateIntent, PendingIntent.FLAG_UPDATE_CURRENT))
+                            .addAction(R.drawable.ic_settings,
+                                    getResources().getString(R.string.action_settings),
+                                    PendingIntent.getBroadcast(this, 0,
+                                            settingsIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+                    this.notification = builder;
 
                     if (VpnService.prepare(Beskar.getInstance()) == null) {
                         Logger.debug("VPN service prepared. Starting foreground and thread.");
@@ -205,10 +206,10 @@ public class BeskarVpnService extends VpnService implements Runnable {
                         startThread();
                         Beskar.updateShortcut(getApplicationContext());
                         if (MainActivity.getInstance() != null) {
-                            MainActivity.getInstance().startActivity(new Intent(getApplicationContext(), MainActivity.class)
-                                    .putExtra(MainActivity.LAUNCH_ACTION, MainActivity.LAUNCH_ACTION_SERVICE_DONE));
-                        } else {
-                            Logger.debug("MainActivity not initialized in BeskarVpnService.");
+                            MainActivity.getInstance().startActivity(
+                                    new Intent(getApplicationContext(), MainActivity.class)
+                                            .putExtra(MainActivity.LAUNCH_ACTION,
+                                                    MainActivity.LAUNCH_ACTION_SERVICE_DONE));
                         }
                     } else {
                         Logger.debug("VPN service is not prepared.");
