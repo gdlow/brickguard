@@ -292,7 +292,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             }
         });
 
-        // Update streaks
+        // Get and show streaks in UI
         TextView currentStreak = view.findViewById(R.id.activity_fragment_home_current_streak);
         long currentStreakDays = Beskar.getPrefs().getLong("beskar_current_time_delta", 0);
         setStreak(currentStreak, currentStreakDays);

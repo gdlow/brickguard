@@ -95,6 +95,9 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "Updating activity with launch action: " + launchAction);
         if (launchAction == LAUNCH_ACTION_ACTIVATE) {
             this.activateService();
+            // Restart time marker from manual activation
+            Beskar.getPrefs().edit().putLong("beskar_start_time_marker",
+                    System.currentTimeMillis()).apply();
         } else if (launchAction == LAUNCH_ACTION_DEACTIVATE) {
             Beskar.deactivateService(getApplicationContext());
         } else if (launchAction == LAUNCH_ACTION_SERVICE_DONE) {

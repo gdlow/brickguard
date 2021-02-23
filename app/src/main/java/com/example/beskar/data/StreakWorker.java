@@ -40,10 +40,11 @@ public class StreakWorker extends Worker {
     }
 
     private void updateStreak() {
-        if (!BeskarVpnService.isActivated()) {
+        long startTimeMarker = Beskar.getPrefs().getLong("beskar_start_time_marker", 0);
+        if (!BeskarVpnService.isActivated() || startTimeMarker == 0) {
             return;
         }
-        long timeDelta = System.currentTimeMillis() - BeskarVpnService.getStartTime();
+        long timeDelta = System.currentTimeMillis() - startTimeMarker;
         long timeDeltaInDays =  timeDelta / ONE_DAY_IN_MILLIS;
         long currentMaxTimeDelta = Beskar.getPrefs().getLong("beskar_longest_time_delta", 0);
         // Update current time

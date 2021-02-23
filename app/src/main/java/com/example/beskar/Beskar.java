@@ -234,7 +234,8 @@ public class Beskar extends Application {
         }
     }
 
-    // Global entrypoint for all activations (boot + manual)
+    // Global entrypoint for all activations (boot + manual).
+    // Client should call prepareAndActivateService over this method.
     public static void activateService(Context context) {
         updateUpstreamServers();
         // Start service in foreground if API >= 26
@@ -265,6 +266,7 @@ public class Beskar extends Application {
     public static void deactivateService(Context context) {
         context.startService(getServiceIntent(context).setAction(BeskarVpnService.ACTION_DEACTIVATE));
         context.stopService(getServiceIntent(context));
+        Beskar.getPrefs().edit().putLong("beskar_start_time_marker", 0).apply();
         insertInteraction("switched_off");
     }
 

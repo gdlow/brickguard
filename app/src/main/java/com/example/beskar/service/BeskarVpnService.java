@@ -63,14 +63,11 @@ public class BeskarVpnService extends VpnService implements Runnable {
     public HashMap<String, AbstractDnsServer> dnsServers;
     private WorkManager mWorkManager;
     private static boolean activated = false;
-    private static long startTime = 0;
     private static BroadcastReceiver receiver;
 
     public static boolean isActivated() {
         return activated;
     }
-
-    public static long getStartTime() { return startTime; }
 
     @Override
     public void onCreate() {
@@ -155,7 +152,6 @@ public class BeskarVpnService extends VpnService implements Runnable {
             switch (intent.getAction()) {
                 case ACTION_ACTIVATE:
                     activated = true;
-                    startTime = System.currentTimeMillis();
 
                     // Build notification
                     NotificationManager manager =
