@@ -1,18 +1,20 @@
 package com.example.beskar.util;
 
+import com.example.beskar.Beskar;
+
+import java.io.File;
+
 public class Rule {
     private String name;
     private String fileName;
     private String downloadUrl;
     private boolean using;
-    private boolean downloaded;
 
     public Rule(String name, String fileName, String downloadUrl) {
         this.name = name;
         this.fileName = fileName;
         this.downloadUrl = downloadUrl;
         this.using = false;
-        this.downloaded = false;
     }
 
     public boolean isUsing() {
@@ -31,7 +33,10 @@ public class Rule {
         return downloadUrl;
     }
 
-    public boolean getDownloaded() { return downloaded; }
+    public boolean getDownloaded() {
+        File f = new File(Beskar.rulePath + fileName);
+        return f.exists();
+    }
 
     public void setUsing(boolean using) { this.using = using; }
 
@@ -46,6 +51,4 @@ public class Rule {
     public void setDownloadUrl(String downloadUrl) {
         this.downloadUrl = downloadUrl;
     }
-
-    public void setDownloaded(boolean downloaded) { this.downloaded = downloaded; }
 }
