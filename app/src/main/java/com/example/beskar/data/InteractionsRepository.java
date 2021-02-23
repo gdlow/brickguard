@@ -30,7 +30,7 @@ public class InteractionsRepository {
 
     // You must call this on a non-UI thread or your app will throw an exception. Room ensures
     // that you're not doing any long running operations on the main thread, blocking the UI.
-    void insert(Interactions interaction) {
+    public void insert(Interactions interaction) {
         AppDatabase.databaseWriteExecutor.execute(() -> {
             interactionsDao.insert(interaction);
         });

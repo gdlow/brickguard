@@ -16,6 +16,8 @@ import android.view.View;
 
 import androidx.preference.PreferenceManager;
 
+import com.example.beskar.data.Interactions;
+import com.example.beskar.data.InteractionsRepository;
 import com.example.beskar.server.AbstractDnsServer;
 import com.example.beskar.server.DnsServer;
 import com.example.beskar.server.DnsServerHelper;
@@ -80,6 +82,9 @@ public class Beskar extends Application {
             .writeTimeout(30, TimeUnit.SECONDS)
             .build();
 
+    // Repository required for interactions database
+    private InteractionsRepository mRepository;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -89,6 +94,7 @@ public class Beskar extends Application {
         mResolver = new Thread(new RuleResolver());
         mResolver.start();
         initData();
+        mRepository = new InteractionsRepository(this);
     }
 
     private void initDirectory(String dir) {
@@ -249,10 +255,17 @@ public class Beskar extends Application {
         Logger.info("Upstream DNS set to: " + BeskarVpnService.primaryServer.getAddress() + " " + BeskarVpnService.secondaryServer.getAddress());
     }
 
+    private static void insertInteraction(String interaction) {
+        long timestamp = System.currentTimeMillis() / 1000L;
+        Beskar.getInstance().mRepository.insert(new Interactions(timestamp, interaction));
+        Logger.debug("Inserted: " + interaction + " interaction into database.");
+    }
+
     // Global entrypoint for all manual deactivations
     public static void deactivateService(Context context) {
         context.startService(getServiceIntent(context).setAction(BeskarVpnService.ACTION_DEACTIVATE));
         context.stopService(getServiceIntent(context));
+        insertInteraction("switched_off");
     }
 
     public static void updateShortcut(Context context) {
