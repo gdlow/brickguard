@@ -288,7 +288,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             } else {
                 if (BeskarVpnService.isActivated()) {
                     Beskar.deactivateService(getActivity().getApplicationContext());
-                    insertInteraction("switched_off");
                 }
             }
         });

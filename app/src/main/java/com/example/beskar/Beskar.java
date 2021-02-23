@@ -228,6 +228,7 @@ public class Beskar extends Application {
         }
     }
 
+    // Global entrypoint for all activations (boot + manual)
     public static void activateService(Context context) {
         updateUpstreamServers();
         // Start service in foreground if API >= 26
@@ -248,6 +249,7 @@ public class Beskar extends Application {
         Logger.info("Upstream DNS set to: " + BeskarVpnService.primaryServer.getAddress() + " " + BeskarVpnService.secondaryServer.getAddress());
     }
 
+    // Global entrypoint for all manual deactivations
     public static void deactivateService(Context context) {
         context.startService(getServiceIntent(context).setAction(BeskarVpnService.ACTION_DEACTIVATE));
         context.stopService(getServiceIntent(context));

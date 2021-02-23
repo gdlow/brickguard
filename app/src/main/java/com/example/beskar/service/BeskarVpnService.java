@@ -198,21 +198,17 @@ public class BeskarVpnService extends VpnService implements Runnable {
                                     PendingIntent.getBroadcast(this, 0,
                                             settingsIntent, PendingIntent.FLAG_UPDATE_CURRENT));
                     this.notification = builder;
+                    startForeground(NOTIFICATION_ACTIVATED, notification.build());
 
-                    if (VpnService.prepare(Beskar.getInstance()) == null) {
-                        Logger.debug("VPN service prepared. Starting foreground and thread.");
-                        startForeground(NOTIFICATION_ACTIVATED, notification.build());
-                        Beskar.initRuleResolver();
-                        startThread();
-                        Beskar.updateShortcut(getApplicationContext());
-                        if (MainActivity.getInstance() != null) {
-                            MainActivity.getInstance().startActivity(
-                                    new Intent(getApplicationContext(), MainActivity.class)
-                                            .putExtra(MainActivity.LAUNCH_ACTION,
-                                                    MainActivity.LAUNCH_ACTION_SERVICE_DONE));
-                        }
-                    } else {
-                        Logger.debug("VPN service is not prepared.");
+                    Beskar.initRuleResolver();
+                    startThread();
+                    Beskar.updateShortcut(getApplicationContext());
+
+                    if (MainActivity.getInstance() != null) {
+                        MainActivity.getInstance().startActivity(
+                                new Intent(getApplicationContext(), MainActivity.class)
+                                        .putExtra(MainActivity.LAUNCH_ACTION,
+                                                MainActivity.LAUNCH_ACTION_SERVICE_DONE));
                     }
 
                     return START_STICKY;
