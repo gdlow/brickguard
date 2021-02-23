@@ -28,7 +28,6 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.stream.Collectors;
 
 public class DashboardFragment extends Fragment {
 
@@ -76,7 +75,6 @@ public class DashboardFragment extends Fragment {
 
     private void populateChart(BarChart chart, LiveData<List<DateAndCount>> data, String label) {
         populateChartTemplate(chart);
-        refreshChart(chart);
         data.observe(getViewLifecycleOwner(), res -> {
             // Transform List<DateAndCount> into List<BarEntry>
             List<BarEntry> entries = new ArrayList<>();
@@ -89,7 +87,11 @@ public class DashboardFragment extends Fragment {
 
                 @Override
                 public String getFormattedValue(float value) {
-                    return res.get((int) value).getDate();
+                    if (Math.round(value) >= res.size()) {
+                        // Required to prevent null pointer exception
+                        return "01-01-1970";
+                    }
+                    return res.get(Math.round(value)).getDate();
                 }
             }
 
@@ -115,10 +117,11 @@ public class DashboardFragment extends Fragment {
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setLabelCount(0);
         xAxis.setDrawGridLines(false);
+        xAxis.setGranularity(1f);
+        xAxis.setDrawLabels(true);
     }
 
     private void refreshChart(BarChart chart) {
-        chart.notifyDataSetChanged();
         chart.invalidate();
     }
 }
