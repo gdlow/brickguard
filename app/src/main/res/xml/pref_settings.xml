@@ -11,11 +11,10 @@
         android:key="accountability"
         android:title="Accountability">
 
-        <SwitchPreference
-            android:key="settings_usage_reports"
+        <com.example.beskar.util.ClickPreference
+            android:key="settings_email"
             android:title="Send weekly usage reports"
-            android:summary="Set an accountability email"
-            android:defaultValue="false"/>
+            android:summary="Set an accountability email"/>
     </PreferenceCategory>
 
     <PreferenceCategory
