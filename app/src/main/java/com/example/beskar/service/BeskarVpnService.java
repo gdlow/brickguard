@@ -15,14 +15,10 @@ import android.system.OsConstants;
 import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
-import androidx.work.BackoffPolicy;
-import androidx.work.PeriodicWorkRequest;
-import androidx.work.WorkManager;
 
 import com.example.beskar.Beskar;
 import com.example.beskar.MainActivity;
 import com.example.beskar.R;
-import com.example.beskar.data.StreakWorker;
 import com.example.beskar.provider.Provider;
 import com.example.beskar.provider.ProviderPicker;
 import com.example.beskar.receiver.StatusBarBroadcastReceiver;
@@ -38,7 +34,6 @@ import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.HashMap;
-import java.util.concurrent.TimeUnit;
 
 
 public class BeskarVpnService extends VpnService implements Runnable {
@@ -61,7 +56,6 @@ public class BeskarVpnService extends VpnService implements Runnable {
     private ParcelFileDescriptor descriptor;
     private Thread mThread = null;
     public HashMap<String, AbstractDnsServer> dnsServers;
-    private WorkManager mWorkManager;
     private static boolean activated = false;
     private static BroadcastReceiver receiver;
 
@@ -80,7 +74,6 @@ public class BeskarVpnService extends VpnService implements Runnable {
                 }
             }, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
         }
-        mWorkManager = WorkManager.getInstance(getApplication());
     }
 
     public static void updateUpstreamToSystemDNS(Context context) {
@@ -125,30 +118,9 @@ public class BeskarVpnService extends VpnService implements Runnable {
                 (AbstractDnsServer) DnsServerHelper.getServerById(DnsServerHelper.getGoogle()).clone();
     }
 
-    private void schedulePeriodicUpdateStreak() {
-        if (mWorkManager == null) {
-            Logger.error("mWorkManager is not initialized. Streak worker will not run.");
-            return;
-        }
-
-        // Define periodic sync work
-        PeriodicWorkRequest periodicSyncDataWork =
-                new PeriodicWorkRequest.Builder(StreakWorker.class, 1, TimeUnit.DAYS)
-                        .addTag(StreakWorker.TAG_UPDATE_STREAK)
-                        .setBackoffCriteria(BackoffPolicy.LINEAR,
-                                PeriodicWorkRequest.DEFAULT_BACKOFF_DELAY_MILLIS,
-                                TimeUnit.MILLISECONDS)
-                        .build();
-
-        // Enqueue periodic work
-        mWorkManager.enqueue(periodicSyncDataWork);
-    }
-
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent != null) {
-            // Start periodic worker
-            schedulePeriodicUpdateStreak();
             switch (intent.getAction()) {
                 case ACTION_ACTIVATE:
                     activated = true;

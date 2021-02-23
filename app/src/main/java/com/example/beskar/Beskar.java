@@ -15,9 +15,17 @@ import android.os.Message;
 import android.view.View;
 
 import androidx.preference.PreferenceManager;
+import androidx.work.Constraints;
+import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.NetworkType;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkInfo;
+import androidx.work.WorkManager;
 
+import com.example.beskar.data.EmailReportWorker;
 import com.example.beskar.data.Interactions;
 import com.example.beskar.data.InteractionsRepository;
+import com.example.beskar.data.StreakWorker;
 import com.example.beskar.server.AbstractDnsServer;
 import com.example.beskar.server.DnsServer;
 import com.example.beskar.server.DnsServerHelper;
@@ -26,6 +34,7 @@ import com.example.beskar.util.Logger;
 import com.example.beskar.util.Rule;
 import com.example.beskar.util.RuleResolver;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.common.util.concurrent.ListenableFuture;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -35,6 +44,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
@@ -85,6 +95,9 @@ public class Beskar extends Application {
     // Repository required for interactions database
     private InteractionsRepository mRepository;
 
+    // Work manager required for scheduling periodic tasks
+    private WorkManager mWorkManager;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -95,6 +108,9 @@ public class Beskar extends Application {
         mResolver.start();
         initData();
         mRepository = new InteractionsRepository(this);
+        mWorkManager = WorkManager.getInstance(this);
+        scheduleSendEmailWork();
+        scheduleUpdateStreakWork();
     }
 
     private void initDirectory(String dir) {
@@ -191,7 +207,6 @@ public class Beskar extends Application {
         if (rule.isUsing() == isUsing) return;
         if (isUsing && !rule.getDownloaded()) {
             Beskar.getInstance().ruleSync(rule);
-            rule.setDownloaded(true);
         }
         rule.setUsing(isUsing);
         Beskar.setRulesChanged();
@@ -284,6 +299,66 @@ public class Beskar extends Application {
                     .build();
             ShortcutManager shortcutManager = (ShortcutManager) context.getSystemService(SHORTCUT_SERVICE);
             shortcutManager.addDynamicShortcuts(Collections.singletonList(info));
+        }
+    }
+
+    private void scheduleSendEmailWork() {
+        if (mWorkManager == null) {
+            Logger.error("mWorkManager is not initialized. Worker will not run.");
+            return;
+        }
+
+        Logger.debug("Enqueuing email work request...");
+        // Create network constraint
+        Constraints constraints = new Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build();
+
+        // Define periodic sync work
+        PeriodicWorkRequest workRequest =
+                new PeriodicWorkRequest.Builder(EmailReportWorker.class, 3, TimeUnit.HOURS)
+                        .setConstraints(constraints)
+                        .build();
+
+        // Enqueue periodic work
+        if (!isWorkScheduled(EmailReportWorker.TAG_EMAIL_REPORT)) {
+            mWorkManager.enqueueUniquePeriodicWork(EmailReportWorker.TAG_EMAIL_REPORT,
+                    ExistingPeriodicWorkPolicy.REPLACE, workRequest);
+        }
+    }
+
+    private void scheduleUpdateStreakWork() {
+        if (mWorkManager == null) {
+            Logger.error("mWorkManager is not initialized. Worker will not run.");
+            return;
+        }
+
+        Logger.debug("Enqueuing streak work request...");
+        // Define periodic sync work
+        PeriodicWorkRequest workRequest =
+                new PeriodicWorkRequest.Builder(StreakWorker.class, 1, TimeUnit.DAYS)
+                        .build();
+
+        // Enqueue periodic work
+        if (!isWorkScheduled(StreakWorker.TAG_UPDATE_STREAK)) {
+            mWorkManager.enqueueUniquePeriodicWork(StreakWorker.TAG_UPDATE_STREAK,
+                    ExistingPeriodicWorkPolicy.REPLACE, workRequest);
+        }
+    }
+
+    private boolean isWorkScheduled(String tag) {
+        ListenableFuture<List<WorkInfo>> statuses = mWorkManager.getWorkInfosByTag(tag);
+        try {
+            boolean running = false;
+            List<WorkInfo> workInfoList = statuses.get();
+            for (WorkInfo workInfo : workInfoList) {
+                WorkInfo.State state = workInfo.getState();
+                running = state == WorkInfo.State.RUNNING | state == WorkInfo.State.ENQUEUED;
+            }
+            return running;
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+            return false;
         }
     }
 
