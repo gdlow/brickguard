@@ -32,6 +32,7 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/email_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:singleLine="true"
@@ -43,6 +44,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
+            android:id="@+id/email_set_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/spacing_xxsmall"
@@ -66,13 +68,11 @@
                 android:textAppearance="@style/AlertDialogSwitchText"/>
 
             <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/activity_bottom_sheet_step2_adult_switch"
+                android:id="@+id/email_report_switch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center|end"
                 android:onClick="onClick"
-                android:scaleX="1.25"
-                android:scaleY="1.25"
                 android:layout_weight="1"/>
 
         </LinearLayout>
