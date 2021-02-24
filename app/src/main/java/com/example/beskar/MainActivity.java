@@ -101,11 +101,20 @@ public class MainActivity extends AppCompatActivity {
         boolean isMainSwitchOn = BeskarVpnService.isActivated();
         SwitchMaterial mainSwitch = findViewById(R.id.activity_fragment_home_main_switch);
         TextView mainSwitchText = findViewById(R.id.activity_fragment_home_main_switch_text);
-        mainSwitch.setChecked(isMainSwitchOn);
-        mainSwitchText.setText(isMainSwitchOn ? "DEACTIVATE" : "ACTIVATE");
+
+        // Protect from null pointer exceptions if not on HomeFragment
+        if (mainSwitch != null) mainSwitch.setChecked(isMainSwitchOn);
+        if (mainSwitchText != null) mainSwitchText.setText(isMainSwitchOn ? "DEACTIVATE" : "ACTIVATE");
     }
 
     private void updateOnNewIntent(Intent intent) {
+        // Update lock screen actions
+        if (!Beskar.getPrefs().contains("beskar_pin")) {
+            startActivity(new Intent(MainActivity.this, LockActivity.class)
+                    .putExtra(LockActivity.LOCK_SCREEN_ACTION, LockActivity.LOCK_SCREEN_ACTION_SET_UP));
+            finish();
+        }
+
         // Update launch actions
         int launchAction = intent.getIntExtra(LAUNCH_ACTION, LAUNCH_ACTION_NONE);
         Log.d(TAG, "Updating activity with launch action: " + launchAction);

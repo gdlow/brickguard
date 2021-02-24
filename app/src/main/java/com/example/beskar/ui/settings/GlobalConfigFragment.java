@@ -1,5 +1,6 @@
 package com.example.beskar.ui.settings;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.Toast;
 import androidx.preference.PreferenceFragmentCompat;
 
 import com.example.beskar.Beskar;
+import com.example.beskar.LockActivity;
 import com.example.beskar.R;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.switchmaterial.SwitchMaterial;
@@ -31,6 +33,11 @@ public class GlobalConfigFragment extends PreferenceFragmentCompat {
             emailDialog = LayoutInflater.from(getContext()).inflate(R.layout.email_dialog, null,
                     false);
             launchEmailDialog();
+            return true;
+        });
+        findPreference("settings_reset_pin").setOnPreferenceClickListener(preference -> {
+            startActivity(new Intent(getActivity(), LockActivity.class)
+                    .putExtra(LockActivity.LOCK_SCREEN_ACTION, LockActivity.LOCK_SCREEN_ACTION_RESET));
             return true;
         });
     }

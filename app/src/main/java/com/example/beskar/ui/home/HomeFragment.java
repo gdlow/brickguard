@@ -277,12 +277,16 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             if (isChecked) {
                 if (!BeskarVpnService.isActivated()) {
                     startActivity(new Intent(getActivity(), LockActivity.class)
+                            .putExtra(LockActivity.LOCK_SCREEN_ACTION,
+                                    LockActivity.LOCK_SCREEN_ACTION_AUTHENTICATE)
                             .putExtra(MainActivity.LAUNCH_ACTION,
                                     MainActivity.LAUNCH_ACTION_ACTIVATE));
                 }
             } else {
                 if (BeskarVpnService.isActivated()) {
                     startActivity(new Intent(getActivity(), LockActivity.class)
+                            .putExtra(LockActivity.LOCK_SCREEN_ACTION,
+                                    LockActivity.LOCK_SCREEN_ACTION_AUTHENTICATE)
                             .putExtra(MainActivity.LAUNCH_ACTION,
                                     MainActivity.LAUNCH_ACTION_DEACTIVATE));
                 }

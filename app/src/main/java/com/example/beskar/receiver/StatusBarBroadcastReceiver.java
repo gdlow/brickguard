@@ -20,6 +20,8 @@ public class StatusBarBroadcastReceiver extends BroadcastReceiver {
         if (intent.getAction().equals(STATUS_BAR_BTN_DEACTIVATE_CLICK_ACTION)) {
             context.startActivity(new Intent(context, LockActivity.class)
                     .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    .putExtra(LockActivity.LOCK_SCREEN_ACTION,
+                            LockActivity.LOCK_SCREEN_ACTION_AUTHENTICATE)
                     .putExtra(MainActivity.LAUNCH_ACTION,
                             MainActivity.LAUNCH_ACTION_DEACTIVATE));
         }
