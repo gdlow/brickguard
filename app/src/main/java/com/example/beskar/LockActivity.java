@@ -64,4 +64,9 @@ public class LockActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    public void onBackPressed() {
+        // Disable back press
+    }
 }
