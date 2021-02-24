@@ -74,7 +74,8 @@ public class SendEmailService {
                     InternetAddress.parse(toEmail)
             );
             message.setSubject("Your accountability partner's weekly report from Brick");
-            message.setText(generateMessage(allConfigChanges, allSwitchedOff, allBlockedSites));
+            message.setContent(generateMessage(allConfigChanges, allSwitchedOff, allBlockedSites)
+                    , "text/html");
             Transport.send(message);
         } catch (MessagingException e) {
             e.printStackTrace();
@@ -84,21 +85,24 @@ public class SendEmailService {
     private String generateMessage(List<DateTimeInteractions> allSwitchedOff,
                                    List<DateTimeInteractions> allConfigChanges,
                                    List<DateTimeLocalResolve> allBlockedSites) {
+        String emailHeader = "<h2>Your accountability partner's weekly usage statistics</h2>\n";
         String summary = String.format(Locale.getDefault(),
-                "Your accountability partner's weekly usage statistics:\n" +
-                "- Total number of times the VPN was switched off: %1$d\n" +
-                "- Total number of times a configuration change was made: %2$d\n" +
-                "- Total blocked adult sites: %3$d\n" +
-                "\n", allSwitchedOff.size(), allConfigChanges.size(), allBlockedSites.size());
+                "<h4>Summary:</h4>\n" +
+                "  <ul>\n" +
+                "    <li>Total number of times the VPN was switched off: %1$d</li>\n" +
+                "    <li>Total number of times a configuration change was made: %2$d</li>\n" +
+                "    <li>Total blocked adult sites: %3$d\n</li>" +
+                "  </ul>\n", allSwitchedOff.size(), allConfigChanges.size(), allBlockedSites.size());
 
-        String switchedOffHeader = "Here are all the times the VPN was switched off:\n";
+        String switchedOffHeader = "<h4>Here are all the times the VPN was switched off:</h4>\n";
 
-        String configChangeHeader = "Here are all the times a configuration change was made:\n";
+        String configChangeHeader = "<h4>Here are all the times a configuration change was made:</h4>\n";
 
-        String blockedSitesHeader = "Here are all the blocked adult sites with attempted " +
-                "access:\n";
+        String blockedSitesHeader = "<h4>Here are all the blocked adult sites with attempted " +
+                "access:</h4>\n";
 
         return new StringBuilder()
+                .append(emailHeader)
                 .append(summary)
                 .append(switchedOffHeader)
                 .append(generateInteractionsTable(allSwitchedOff))
@@ -111,27 +115,29 @@ public class SendEmailService {
 
     private String generateInteractionsTable(List<DateTimeInteractions> interactions) {
         StringBuilder sb = new StringBuilder();
+        sb.append("  <ul>\n");
         for (DateTimeInteractions item : interactions) {
             sb.append(generateRow(item.getDateTime(), item.getDescription()));
         }
-        return sb.append("\n").toString();
+        return sb.append("  </ul>\n").toString();
     }
 
     private String generateLocalResolvesTable(List<DateTimeLocalResolve> localResolves) {
         StringBuilder sb = new StringBuilder();
+        sb.append("  <ul>\n");
         for (DateTimeLocalResolve item : localResolves) {
             sb.append(generateRow(item.getDatetime(), item.getDomain()));
         }
-        return sb.append("\n").toString();
+        return sb.append("  </ul>\n").toString();
     }
 
     private String generateRow(String timestamp, String detail) {
         return new StringBuilder()
-                .append("- At ")
+                .append("    <li>At ")
                 .append(timestamp)
                 .append(": ")
                 .append(detail)
-                .append("\n")
+                .append("</li>\n")
                 .toString();
     }
 }
