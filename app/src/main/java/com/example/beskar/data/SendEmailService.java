@@ -46,8 +46,10 @@ public class SendEmailService {
 
     public void sendEmail() {
         String toEmail = Beskar.getPrefs().getString("beskar_email", "nil");
-        if (toEmail.equals("nil")) {
-            Logger.debug("No email set to call sendEmail in SendEmailService.");
+        boolean sendReport = Beskar.getPrefs().getBoolean("beskar_send_report", false);
+        if (toEmail.equals("nil") || !sendReport) {
+            Logger.debug("Email service not scheduled. toEmail: " +
+                    toEmail + ", sendReport: " + (sendReport ? "true" : "false"));
             return;
         }
         try {
