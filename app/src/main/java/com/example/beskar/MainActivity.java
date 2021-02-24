@@ -19,6 +19,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.beskar.service.BeskarVpnService;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -85,8 +86,23 @@ public class MainActivity extends AppCompatActivity {
         updateOnNewIntent(intent);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        updateMainButton();
+    }
+
     public static MainActivity getInstance() {
         return instance;
+    }
+
+    private void updateMainButton() {
+        boolean isMainSwitchOn = BeskarVpnService.isActivated();
+        SwitchMaterial mainSwitch = findViewById(R.id.activity_fragment_home_main_switch);
+        TextView mainSwitchText = findViewById(R.id.activity_fragment_home_main_switch_text);
+        mainSwitch.setChecked(isMainSwitchOn);
+        mainSwitchText.setText(isMainSwitchOn ? "DEACTIVATE" : "ACTIVATE");
     }
 
     private void updateOnNewIntent(Intent intent) {
