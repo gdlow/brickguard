@@ -19,7 +19,7 @@ public interface InteractionsDao {
 
     @Query("SELECT datetime(timestamp, 'unixepoch') as datetime, interaction, description FROM " +
             DISTINCT_7D_TABLE)
-    LiveData<List<DateTimeInteractions>> getAllDateTimeInteractionWithInteractionFrom7dAgo(String interaction);
+    List<DateTimeInteractions> getAllWithInteractionFrom7dAgoSynchronous(String interaction);
 
     @Query("SELECT count(interaction) as count FROM " + DISTINCT_7D_TABLE)
     LiveData<Count> getCountWithInteractionFrom7dAgo(String interaction);

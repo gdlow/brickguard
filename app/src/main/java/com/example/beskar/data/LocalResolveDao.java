@@ -18,7 +18,7 @@ public interface LocalResolveDao {
             "GROUP BY timestamp)";
 
     @Query("SELECT datetime(timestamp, 'unixepoch') as datetime, domain, resolution FROM " + DISTINCT_7D_TABLE)
-    LiveData<List<DateTimeLocalResolve>> getAllDateTimeLocalResolveWithResolutionFrom7dAgo(String resolution);
+    List<DateTimeLocalResolve> getAllWithResolutionFrom7dAgoSynchronous(String resolution);
 
     @Query("SELECT count(resolution) as count FROM " + DISTINCT_7D_TABLE)
     LiveData<Count> getAllCountWithResolutionFrom7dAgo(String resolution);

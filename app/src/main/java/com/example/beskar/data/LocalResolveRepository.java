@@ -8,7 +8,6 @@ import java.util.List;
 
 public class LocalResolveRepository {
     private LocalResolveDao mLocalResolveDao;
-    private LiveData<List<DateTimeLocalResolve>> mAllDateTimeLocalResolvesFrom7dAgoWithOneRes;
     private LiveData<Count> mAllLocalResolvesCountFrom7dAgoWithNullRes;
     private LiveData<Count> mAllLocalResolvesCountFrom7dAgoWithOneRes;
     private LiveData<List<DateAndCount>> mDateAndCountFrom7dAgoWithNullRes;
@@ -17,8 +16,6 @@ public class LocalResolveRepository {
     public LocalResolveRepository(Application application) {
         AppDatabase db = AppDatabase.getDatabase(application);
         mLocalResolveDao = db.localResolveDao();
-        mAllDateTimeLocalResolvesFrom7dAgoWithOneRes =
-                mLocalResolveDao.getAllDateTimeLocalResolveWithResolutionFrom7dAgo(LocalResolve.ONE_RES);
         mAllLocalResolvesCountFrom7dAgoWithNullRes =
                 mLocalResolveDao.getAllCountWithResolutionFrom7dAgo(LocalResolve.NULL_RES);
         mAllLocalResolvesCountFrom7dAgoWithOneRes =
@@ -27,10 +24,6 @@ public class LocalResolveRepository {
                 .getDateAndCountWithResolutionFrom7dAgo(LocalResolve.NULL_RES);
         mDateAndCountFrom7dAgoWithOneRes = mLocalResolveDao
                 .getDateAndCountWithResolutionFrom7dAgo(LocalResolve.ONE_RES);
-    }
-
-    LiveData<List<DateTimeLocalResolve>> getAllDateTimeLocalResolvesFrom7dAgoWithOneRes() {
-        return mAllDateTimeLocalResolvesFrom7dAgoWithOneRes;
     }
 
     LiveData<Count> getAllLocalResolvesCountFrom7dAgoWithNullRes() {
