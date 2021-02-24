@@ -101,7 +101,6 @@ public class MainActivity extends AppCompatActivity {
         } else if (launchAction == LAUNCH_ACTION_DEACTIVATE) {
             Beskar.deactivateService(getApplicationContext());
         } else if (launchAction == LAUNCH_ACTION_SERVICE_DONE) {
-            Beskar.updateShortcut(getApplicationContext());
             Toast.makeText(getApplicationContext(), "Service " + (BeskarVpnService.isActivated()
                     ? "activated" :
                     "deactivated"), Toast.LENGTH_SHORT).show();
