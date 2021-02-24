@@ -11,10 +11,17 @@ import java.util.List;
 
 @Dao
 public interface InteractionsDao {
-    // Deduplicate on timestamp, interaction on db read
-    @Query("SELECT count(interaction) as count FROM (SELECT DISTINCT timestamp, interaction FROM " +
-            "interactions WHERE interaction = :interaction" +
-            " AND timestamp >= strftime('%s', 'now', '-7 day'))")
+
+    String DISTINCT_7D_TABLE = "(SELECT * FROM " +
+            "interactions WHERE interaction = :interaction " +
+            "AND timestamp >= strftime('%s', 'now', '-6 day') " +
+            "GROUP BY timestamp)";
+
+    @Query("SELECT datetime(timestamp, 'unixepoch') as datetime, interaction, description FROM " +
+            DISTINCT_7D_TABLE)
+    LiveData<List<DateTimeInteractions>> getAllDateTimeInteractionWithInteractionFrom7dAgo(String interaction);
+
+    @Query("SELECT count(interaction) as count FROM " + DISTINCT_7D_TABLE)
     LiveData<Count> getCountWithInteractionFrom7dAgo(String interaction);
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)

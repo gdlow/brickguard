@@ -1,6 +1,7 @@
 package com.example.beskar.util;
 
 import com.example.beskar.Beskar;
+import com.example.beskar.data.LocalResolve;
 
 import org.minidns.record.Record;
 
@@ -56,7 +57,7 @@ public class RuleResolver implements Runnable {
 
     public static void addCustom(String key) {
         // Add key
-        rulesA.put(key, "0.0.0.0");
+        rulesA.put(key, LocalResolve.NULL_RES);
         Logger.info("Loaded " + rulesA.size() + " total rules");
     }
 
@@ -127,7 +128,7 @@ public class RuleResolver implements Runnable {
                                         rulesAAAA.put(data[1], data[2]);
                                     } else if (strLine.contains(".")) {//IPv4
                                         // ad blacklist goes down this code path
-                                        data[2] = data[2].equals("#") ? "0.0.0.0" : data[2];
+                                        data[2] = data[2].equals("#") ? LocalResolve.NULL_RES : data[2];
                                         rulesA.put(data[1], data[2]);
                                     }
                                     count++;
@@ -137,7 +138,7 @@ public class RuleResolver implements Runnable {
                                 // porn blacklist goes down this code path
                                 else if (data.length == 1) {
                                     if (strLine.contains(".")) {//IPv4
-                                        rulesA.put(data[0], "0.0.0.1");
+                                        rulesA.put(data[0], LocalResolve.ONE_RES);
                                     }
                                     count++;
                                 }

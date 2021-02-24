@@ -11,17 +11,20 @@ import java.util.List;
 
 @Dao
 public interface LocalResolveDao {
-    // Deduplicate on timestamp, resolution on db read
-    @Query("SELECT count(resolution) as count FROM (SELECT DISTINCT timestamp, resolution FROM " +
+
+    String DISTINCT_7D_TABLE = "(SELECT * FROM " +
             "local_resolves WHERE resolution = :resolution " +
-            "AND timestamp >= strftime('%s', 'now', '-7 day'))")
+            "AND timestamp >= strftime('%s', 'now', '-6 day') " +
+            "GROUP BY timestamp)";
+
+    @Query("SELECT datetime(timestamp, 'unixepoch') as datetime, domain, resolution FROM " + DISTINCT_7D_TABLE)
+    LiveData<List<DateTimeLocalResolve>> getAllDateTimeLocalResolveWithResolutionFrom7dAgo(String resolution);
+
+    @Query("SELECT count(resolution) as count FROM " + DISTINCT_7D_TABLE)
     LiveData<Count> getAllCountWithResolutionFrom7dAgo(String resolution);
 
-    // Deduplicate on timestamp, resolution on db read
     @Query("SELECT date(timestamp, 'unixepoch') as date, count(resolution) as count FROM " +
-            "(SELECT DISTINCT timestamp, resolution FROM local_resolves WHERE resolution = " +
-            ":resolution AND timestamp >= strftime('%s', 'now'," +
-            " '-7 day')) GROUP BY date")
+            DISTINCT_7D_TABLE + " GROUP BY date")
     LiveData<List<DateAndCount>> getDateAndCountWithResolutionFrom7dAgo(String resolution);
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)

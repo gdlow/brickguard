@@ -11,7 +11,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {LocalResolve.class, Interactions.class}, version = 2, exportSchema = false)
+@Database(entities = {LocalResolve.class, Interactions.class}, version = 3, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 
     public abstract LocalResolveDao localResolveDao();
@@ -30,13 +30,21 @@ public abstract class AppDatabase extends RoomDatabase {
         }
     };
 
+    static final Migration MIGRATION_2_3 = new Migration(2, 3) {
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE `interactions` ADD COLUMN `description` VARCHAR DEFAULT" +
+                    " 'Old change'");
+        }
+    };
+
     public static AppDatabase getDatabase(final Context context) {
         if (INSTANCE == null) {
             synchronized (AppDatabase.class) {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             AppDatabase.class, "beskar_database")
-                            .addMigrations(MIGRATION_1_2).build();
+                            .addMigrations(MIGRATION_1_2, MIGRATION_2_3).build();
                 }
             }
         }

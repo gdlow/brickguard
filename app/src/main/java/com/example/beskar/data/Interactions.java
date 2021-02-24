@@ -6,6 +6,10 @@ import androidx.room.PrimaryKey;
 
 @Entity(tableName = "interactions")
 public class Interactions {
+
+    public static final String CONFIG_CHANGE = "config_change";
+    public static final String SWITCHED_OFF = "switched_off";
+
     @PrimaryKey(autoGenerate = true)
     private Integer id;
 
@@ -15,9 +19,13 @@ public class Interactions {
     @ColumnInfo(name = "interaction")
     private String interaction;
 
-    public Interactions(Long timestamp, String interaction) {
+    @ColumnInfo(name = "description")
+    private String description;
+
+    public Interactions(Long timestamp, String interaction, String description) {
         this.timestamp = timestamp;
         this.interaction = interaction;
+        this.description = description;
     }
 
     public Integer getId() { return id; }
@@ -29,6 +37,8 @@ public class Interactions {
     public String getInteraction() {
         return interaction;
     }
+
+    public String getDescription() { return description; }
 
     public void setId(Integer id) { this.id = id; }
 }

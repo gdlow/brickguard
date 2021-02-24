@@ -6,6 +6,10 @@ import androidx.room.PrimaryKey;
 
 @Entity(tableName = "local_resolves")
 public class LocalResolve {
+
+    public static final String NULL_RES = "0.0.0.0";
+    public static final String ONE_RES = "0.0.0.1";
+
     @PrimaryKey(autoGenerate = true)
     private Integer id;
 

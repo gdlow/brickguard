@@ -164,7 +164,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             tv.setText(sliderTexts.get(index));
             if (Beskar.getPrefs().getInt("home_slider_index", 3) != index) {
                 Beskar.getPrefs().edit().putInt("home_slider_index", index).apply();
-                insertInteraction("config_change");
+                Beskar.insertInteraction(Interactions.CONFIG_CHANGE, "Filter level set to: " + index);
             }
 
             if (index > 0) {
@@ -201,7 +201,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             if (Beskar.getPrefs().getBoolean("home_adult_switch_checked",
                     false) != isChecked) {
                 Beskar.getPrefs().edit().putBoolean("home_adult_switch_checked", isChecked).apply();
-                insertInteraction("config_change");
+                Beskar.insertInteraction(Interactions.CONFIG_CHANGE,"Adult sites turned" + (isChecked ? "on" : "off"));
             }
         });
         boolean isAdultSwitchChecked = Beskar.getPrefs().getBoolean("home_adult_switch_checked",
@@ -215,7 +215,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             if (Beskar.getPrefs().getBoolean("home_ads_switch_checked",
                     false) != isChecked) {
                 Beskar.getPrefs().edit().putBoolean("home_ads_switch_checked", isChecked).apply();
-                insertInteraction("config_change");
+                Beskar.insertInteraction(Interactions.CONFIG_CHANGE, "Ads turned" + (isChecked ? "on" : "off"));
             }
         });
         boolean isAdsSwitchChecked = Beskar.getPrefs().getBoolean("home_ads_switch_checked", false);
@@ -431,11 +431,5 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     public void hideKeyboard() {
         getActivity().getWindow()
                 .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-    }
-
-    private void insertInteraction(String interaction) {
-        long timestamp = System.currentTimeMillis() / 1000L;
-        interactionsViewModel.insert(new Interactions(timestamp, interaction));
-        Logger.debug("Inserted: " + interaction + " interaction into database.");
     }
 }

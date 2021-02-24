@@ -25,6 +25,7 @@ import androidx.work.WorkManager;
 import com.example.beskar.data.EmailReportWorker;
 import com.example.beskar.data.Interactions;
 import com.example.beskar.data.InteractionsRepository;
+import com.example.beskar.data.LocalResolve;
 import com.example.beskar.data.StreakWorker;
 import com.example.beskar.server.AbstractDnsServer;
 import com.example.beskar.server.DnsServer;
@@ -184,7 +185,7 @@ public class Beskar extends Application {
     }
 
     public static void addCustomDomain(String key) {
-        customDomains.put(key, "0.0.0.0");
+        customDomains.put(key, LocalResolve.NULL_RES);
         RuleResolver.addCustom(key);
     }
 
@@ -271,9 +272,9 @@ public class Beskar extends Application {
         Logger.info("Upstream DNS set to: " + BeskarVpnService.primaryServer.getAddress() + " " + BeskarVpnService.secondaryServer.getAddress());
     }
 
-    private static void insertInteraction(String interaction) {
+    public static void insertInteraction(String interaction, String description) {
         long timestamp = System.currentTimeMillis() / 1000L;
-        Beskar.getInstance().mRepository.insert(new Interactions(timestamp, interaction));
+        Beskar.getInstance().mRepository.insert(new Interactions(timestamp, interaction, description));
         Logger.debug("Inserted: " + interaction + " interaction into database.");
     }
 
@@ -282,7 +283,7 @@ public class Beskar extends Application {
         context.startService(getServiceIntent(context).setAction(BeskarVpnService.ACTION_DEACTIVATE));
         context.stopService(getServiceIntent(context));
         Beskar.getPrefs().edit().putLong("beskar_start_time_marker", 0).apply();
-        insertInteraction("switched_off");
+        insertInteraction(Interactions.SWITCHED_OFF, "VPN service deactivated");
     }
 
     public static void updateShortcut(Context context) {
