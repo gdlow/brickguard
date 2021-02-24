@@ -151,8 +151,8 @@ public class BeskarVpnService extends VpnService implements Runnable {
                             .setContentTitle(getResources().getString(R.string.notice_activated))
                             .setDefaults(NotificationCompat.DEFAULT_LIGHTS)
                             .setSmallIcon(R.drawable.ic_brick_toolbar)
-                            .setColor(getResources().getColor(R.color.black_a80)) //backward
-                            // compatibility
+                            // backward compatibility
+                            .setColor(getResources().getColor(R.color.black_a80))
                             .setAutoCancel(false)
                             .setOngoing(true)
                             .setTicker(getResources().getString(R.string.notice_activated))

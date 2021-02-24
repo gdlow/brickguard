@@ -15,15 +15,13 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.core.widget.TextViewCompat;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.example.beskar.Beskar;
+import com.example.beskar.LockActivity;
 import com.example.beskar.MainActivity;
 import com.example.beskar.R;
 import com.example.beskar.data.Interactions;
-import com.example.beskar.data.InteractionsViewModel;
 import com.example.beskar.service.BeskarVpnService;
-import com.example.beskar.util.Logger;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
@@ -66,7 +64,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    private InteractionsViewModel interactionsViewModel;
     private View root;
     private List<StepState> stepStates;
 
@@ -82,8 +79,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     }
 
     private void initComponent(View view) {
-        interactionsViewModel =
-                new ViewModelProvider(this).get(InteractionsViewModel.class);
         // Build list of stepStates
         stepStates = new ArrayList<>(Arrays.asList(
                 new StepState(
@@ -281,13 +276,15 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         mainSwitch.setOnCheckedChangeListener((v, isChecked) -> {
             if (isChecked) {
                 if (!BeskarVpnService.isActivated()) {
-                    startActivity(new Intent(getActivity(), MainActivity.class)
+                    startActivity(new Intent(getActivity(), LockActivity.class)
                             .putExtra(MainActivity.LAUNCH_ACTION,
                                     MainActivity.LAUNCH_ACTION_ACTIVATE));
                 }
             } else {
                 if (BeskarVpnService.isActivated()) {
-                    Beskar.deactivateService(getActivity().getApplicationContext());
+                    startActivity(new Intent(getActivity(), LockActivity.class)
+                            .putExtra(MainActivity.LAUNCH_ACTION,
+                                    MainActivity.LAUNCH_ACTION_DEACTIVATE));
                 }
             }
         });

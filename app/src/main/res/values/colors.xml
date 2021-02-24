@@ -9,6 +9,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="grey_a100">#FF979797</color>
+    <color name="grey_a60">#99979797</color>
     <color name="grey_a007">#12979797</color>
     <color name="black_a60">#99000000</color>
     <color name="black_a80">#CC000000</color>

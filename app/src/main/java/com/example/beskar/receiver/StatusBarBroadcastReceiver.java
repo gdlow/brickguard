@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.example.beskar.Beskar;
+import com.example.beskar.LockActivity;
 import com.example.beskar.MainActivity;
 import com.example.beskar.util.Logger;
 
@@ -17,7 +18,10 @@ public class StatusBarBroadcastReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         if (intent.getAction().equals(STATUS_BAR_BTN_DEACTIVATE_CLICK_ACTION)) {
-            Beskar.deactivateService(context);
+            context.startActivity(new Intent(context, LockActivity.class)
+                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    .putExtra(MainActivity.LAUNCH_ACTION,
+                            MainActivity.LAUNCH_ACTION_DEACTIVATE));
         }
         if (intent.getAction().equals(STATUS_BAR_BTN_SETTINGS_CLICK_ACTION)) {
             Intent settingsIntent = new Intent(context, MainActivity.class).putExtra(MainActivity.LAUNCH_FRAGMENT, MainActivity.FRAGMENT_SETTINGS);

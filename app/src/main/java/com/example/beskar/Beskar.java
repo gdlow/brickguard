@@ -295,7 +295,7 @@ public class Beskar extends Application {
                     .setLongLabel(notice)
                     .setShortLabel(notice)
                     .setIcon(Icon.createWithResource(context, R.mipmap.ic_launcher))
-                    .setIntent(new Intent(context, MainActivity.class).setAction(Intent.ACTION_VIEW)
+                    .setIntent(new Intent(context, LockActivity.class).setAction(Intent.ACTION_VIEW)
                             .putExtra(MainActivity.LAUNCH_ACTION, activate ? MainActivity.LAUNCH_ACTION_DEACTIVATE : MainActivity.LAUNCH_ACTION_ACTIVATE))
                     .build();
             ShortcutManager shortcutManager = (ShortcutManager) context.getSystemService(SHORTCUT_SERVICE);

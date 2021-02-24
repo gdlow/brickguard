@@ -51,6 +51,9 @@
                 <action android:name="com.example.beskar.receiver.StatusBarBroadcastReceiver.STATUS_BAR_BTN_SETTINGS_CLICK_ACTION"/>
             </intent-filter>
         </receiver>
+        <activity android:name=".LockActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar">
+        </activity>
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
