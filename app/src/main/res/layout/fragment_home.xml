@@ -364,6 +364,14 @@
 
                     </LinearLayout>
 
+                    <TextView
+                        android:id="@+id/activity_fragment_home_update_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/spacing_middle"
+                        android:visibility="gone"
+                        android:text="Restart service for changes to take effect"/>
+
                     <com.google.android.material.switchmaterial.SwitchMaterial
                         android:id="@+id/activity_fragment_home_main_switch"
                         android:layout_width="wrap_content"

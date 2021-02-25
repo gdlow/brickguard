@@ -7,6 +7,7 @@ import android.net.VpnService;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,6 +19,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.beskar.service.BeskarVpnService;
+import com.example.beskar.util.PreferencesModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
@@ -91,10 +93,21 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
 
         updateMainButton();
+        setUpdateTextVisibility();
     }
 
     public static MainActivity getInstance() {
         return instance;
+    }
+
+    private void setUpdateTextVisibility() {
+        TextView updateText = findViewById(R.id.activity_fragment_home_update_text);
+        if (updateText == null) return;
+        if (PreferencesModel.hasChanged()) {
+            updateText.setVisibility(View.VISIBLE);
+        } else {
+            updateText.setVisibility(View.GONE);
+        }
     }
 
     private void updateMainButton() {
@@ -118,17 +131,23 @@ public class MainActivity extends AppCompatActivity {
         // Update launch actions
         int launchAction = intent.getIntExtra(LAUNCH_ACTION, LAUNCH_ACTION_NONE);
         Log.d(TAG, "Updating activity with launch action: " + launchAction);
-        if (launchAction == LAUNCH_ACTION_ACTIVATE) {
-            this.activateService();
-            // Restart time marker from manual activation
-            Beskar.getPrefs().edit().putLong("beskar_start_time_marker",
-                    System.currentTimeMillis()).apply();
-        } else if (launchAction == LAUNCH_ACTION_DEACTIVATE) {
-            Beskar.deactivateService(getApplicationContext());
-        } else if (launchAction == LAUNCH_ACTION_SERVICE_DONE) {
-            Toast.makeText(getApplicationContext(), "Service " + (BeskarVpnService.isActivated()
-                    ? "activated" :
-                    "deactivated"), Toast.LENGTH_SHORT).show();
+
+        switch (launchAction) {
+            case LAUNCH_ACTION_ACTIVATE:
+                PreferencesModel.applyChanges(getApplicationContext());
+                this.activateService();
+                // Restart time marker from manual activation
+                Beskar.getPrefs().edit().putLong("beskar_start_time_marker",
+                        System.currentTimeMillis()).apply();
+                break;
+            case LAUNCH_ACTION_DEACTIVATE:
+                Beskar.deactivateService(getApplicationContext());
+                break;
+            case LAUNCH_ACTION_SERVICE_DONE:
+                Toast.makeText(getApplicationContext(), "Service " + (BeskarVpnService.isActivated()
+                        ? "activated" :
+                        "deactivated"), Toast.LENGTH_SHORT).show();
+                break;
         }
 
         // Update fragments

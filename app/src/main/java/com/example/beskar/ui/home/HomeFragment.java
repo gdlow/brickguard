@@ -1,7 +1,6 @@
 package com.example.beskar.ui.home;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,52 +19,26 @@ import com.example.beskar.Beskar;
 import com.example.beskar.LockActivity;
 import com.example.beskar.MainActivity;
 import com.example.beskar.R;
-import com.example.beskar.data.Interactions;
 import com.example.beskar.service.BeskarVpnService;
+import com.example.beskar.util.PreferencesModel;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.slider.Slider;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 public class HomeFragment extends Fragment implements View.OnClickListener {
 
-    private class StepState {
-        public View container;
-        public TextView label;
-        public ImageView labelArrow;
-        public Button nextButton;
-        public BottomSheetBehavior bottomSheetBehavior;
-        public TextView showMoreText;
-        public Button showMoreButton;
-        public boolean on;
-        public StepState(View container, TextView label, ImageView labelArrow, Button nextButton,
-                         BottomSheetBehavior bottomSheetBehavior, TextView showMoreText,
-                         Button showMoreButton) {
-            this.container = container;
-            this.label = label;
-            this.labelArrow = labelArrow;
-            this.nextButton = nextButton;
-            this.bottomSheetBehavior = bottomSheetBehavior;
-            this.showMoreText = showMoreText;
-            this.showMoreButton = showMoreButton;
-            this.on = false;
-        }
-    }
-
     private View root;
     private List<StepState> stepStates;
+    private TextView updateText;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -143,6 +116,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         }
 
         // Set individual bottom sheet components
+        updateText = view.findViewById(R.id.activity_fragment_home_update_text);
+        PreferencesModel.refreshModelCache();
 
         // Set slider state in step 1
         List<String> sliderTexts = new ArrayList<>(Arrays.asList(
@@ -157,19 +132,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         slider.addOnChangeListener((s, value, fromUser) -> {
             int index = Math.round(value);
             tv.setText(sliderTexts.get(index));
-            if (Beskar.getPrefs().getInt("home_slider_index", 3) != index) {
-                Beskar.getPrefs().edit().putInt("home_slider_index", index).apply();
-                Beskar.insertInteraction(Interactions.CONFIG_CHANGE, "Filter level set to: " + index);
-            }
-
-            if (index > 0) {
-                Beskar.getPrefs().edit().putBoolean("settings_use_system_dns", false).apply();
-                Beskar.getPrefs().edit().putString("primary_server", String.valueOf(index)).apply();
-                Beskar.updateUpstreamServers();
-            } else {
-                Beskar.getPrefs().edit().putBoolean("settings_use_system_dns", true).apply();
-                BeskarVpnService.updateUpstreamToSystemDNS(getContext());
-            }
+            PreferencesModel.setCurrSliderIndex(index);
+            setUpdateTextVisibility(updateText);
         });
         slider.setLabelFormatter((float value) -> {
             switch (Math.round(value)) {
@@ -185,36 +149,24 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     return "Value: " + value;
             }
         });
-        int sliderIdx = Beskar.getPrefs().getInt("home_slider_index", 3);
-        slider.setValue((float) sliderIdx);
+        slider.setValue((float) PreferencesModel.getCurrSliderIndex());
 
         // Set switches in step 2
         SwitchMaterial adultSwitch = view.findViewById(R.id.activity_bottom_sheet_step2_adult_switch);
         adultSwitch.setOnClickListener(v -> {});
         adultSwitch.setOnCheckedChangeListener((v, isChecked) -> {
-            Beskar.selectRule(Beskar.RULES.get(0), isChecked);
-            if (Beskar.getPrefs().getBoolean("home_adult_switch_checked",
-                    false) != isChecked) {
-                Beskar.getPrefs().edit().putBoolean("home_adult_switch_checked", isChecked).apply();
-                Beskar.insertInteraction(Interactions.CONFIG_CHANGE,"Adult sites turned" + (isChecked ? "on" : "off"));
-            }
+            PreferencesModel.setCurrAdultSwitchChecked(isChecked);
+            setUpdateTextVisibility(updateText);
         });
-        boolean isAdultSwitchChecked = Beskar.getPrefs().getBoolean("home_adult_switch_checked",
-                false);
-        adultSwitch.setChecked(isAdultSwitchChecked);
+        adultSwitch.setChecked(PreferencesModel.getCurrAdultSwitchChecked());
 
         SwitchMaterial adsSwitch = view.findViewById(R.id.activity_bottom_sheet_step2_ads_switch);
         adsSwitch.setOnClickListener(v -> {});
         adsSwitch.setOnCheckedChangeListener((v, isChecked) -> {
-            Beskar.selectRule(Beskar.RULES.get(1), isChecked);
-            if (Beskar.getPrefs().getBoolean("home_ads_switch_checked",
-                    false) != isChecked) {
-                Beskar.getPrefs().edit().putBoolean("home_ads_switch_checked", isChecked).apply();
-                Beskar.insertInteraction(Interactions.CONFIG_CHANGE, "Ads turned" + (isChecked ? "on" : "off"));
-            }
+            PreferencesModel.setCurrAdsSwitchChecked(isChecked);
+            setUpdateTextVisibility(updateText);
         });
-        boolean isAdsSwitchChecked = Beskar.getPrefs().getBoolean("home_ads_switch_checked", false);
-        adsSwitch.setChecked(isAdsSwitchChecked);
+        adsSwitch.setChecked(PreferencesModel.getCurrAdsSwitchChecked());
 
         // Set text input in step 3
         TextView editText = view.findViewById(R.id.activity_bottom_sheet_step3_edit_text);
@@ -235,15 +187,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
                 // Add new chip to chip group
                 ChipGroup cg = view.findViewById(R.id.activity_bottom_sheet_step3_chip_group);
-                Chip chip = addChip(cg, text);
+                addChip(cg, text);
 
-                // Load and save into SharedPreferences
-                Map<String, Boolean> chipMap = loadChipMapFromSharedPreferences();
-                chipMap.put(textStr, true);
-                saveChipMapInSharedPreferences(chipMap);
+                // Update preferences model
+                PreferencesModel.addToCurrChipMap(textStr);
 
-                // Add domain to blacklist
-                Beskar.addCustomDomain(chip.getText().toString());
+                // Update updateText visibility
+                setUpdateTextVisibility(updateText);
 
                 // Clear text
                 editText.setText("");
@@ -252,8 +202,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             return false;
         });
 
-        // Set chip group state from SharedPreferences
-        Map<String, Boolean> chipMap = loadChipMapFromSharedPreferences();
+        // Set chip group state from preferences model
+        Map<String, Boolean> chipMap = PreferencesModel.getCurrChipMap();
         ChipGroup cg = view.findViewById(R.id.activity_bottom_sheet_step3_chip_group);
         Set<String> chips = new HashSet<>();
         for (int i = 0; i < cg.getChildCount(); i++) {
@@ -306,33 +256,17 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         hideKeyboard();
     }
 
+    private void setUpdateTextVisibility(TextView updateText) {
+        if (PreferencesModel.hasChanged()) {
+            updateText.setVisibility(View.VISIBLE);
+        } else {
+            updateText.setVisibility(View.GONE);
+        }
+    }
+
     private void setStreak(TextView streak, long days) {
         String text = days + "D";
         streak.setText(text);
-    }
-
-    private void saveChipMapInSharedPreferences(Map<String,Boolean> inputMap){
-        JSONObject jsonObject = new JSONObject(inputMap);
-        String jsonString = jsonObject.toString();
-        SharedPreferences.Editor editor = Beskar.getPrefs().edit();
-        editor.remove("home_chip_map").putString("home_chip_map", jsonString).apply();
-    }
-
-    private Map<String,Boolean> loadChipMapFromSharedPreferences(){
-        Map<String,Boolean> outputMap = new HashMap<String,Boolean>();
-        try{
-            String jsonString = Beskar.getPrefs().getString("home_chip_map", (new JSONObject()).toString());
-            JSONObject jsonObject = new JSONObject(jsonString);
-            Iterator<String> keysItr = jsonObject.keys();
-            while(keysItr.hasNext()) {
-                String key = keysItr.next();
-                Boolean value = (Boolean) jsonObject.get(key);
-                outputMap.put(key, value);
-            }
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-        return outputMap;
     }
 
     private Chip addChip(ChipGroup cg, CharSequence text) {
@@ -343,12 +277,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         chip.setOnCloseIconClickListener(chipView -> {
             cg.removeView(chip);
             String textStr = chip.getText().toString();
-            // Remove domain from blacklist
-            Beskar.removeCustomDomain(textStr);
-            // Remove from SharedPreferences
-            Map<String, Boolean> chipMap = loadChipMapFromSharedPreferences();
-            chipMap.remove(textStr);
-            saveChipMapInSharedPreferences(chipMap);
+            PreferencesModel.removeFromCurrChipMap(textStr);
+            setUpdateTextVisibility(updateText);
         });
         cg.addView(chip);
         return chip;
