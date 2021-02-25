@@ -1,6 +1,9 @@
 package com.example.beskar.data;
 
+import android.content.Context;
+
 import com.example.beskar.Beskar;
+import com.example.beskar.R;
 import com.example.beskar.util.Logger;
 
 import java.util.List;
@@ -18,13 +21,16 @@ import javax.mail.internet.MimeMessage;
 public class SendEmailService {
     private static SendEmailService instance = null;
 
-    private final String username = "INSERT_USERNAME";
-    private final String password = "INSERT_PASSWORD";
+    private String EMAIL_U;
+    private String EMAIL_P;
 
     Properties prop;
     Session session;
 
-    private SendEmailService() {
+    private SendEmailService(Context context) {
+        EMAIL_U = context.getString(R.string.email_u);
+        EMAIL_P = context.getString(R.string.email_p);
+
         prop = new Properties();
         prop.put("mail.smtp.host", "smtp.office365.com");
         prop.put("mail.smtp.port", "587");
@@ -34,14 +40,14 @@ public class SendEmailService {
         session = Session.getInstance(prop,
                 new javax.mail.Authenticator() {
                     protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication(username, password);
+                        return new PasswordAuthentication(EMAIL_U, EMAIL_P);
                     }
                 });
     }
 
-    public static synchronized SendEmailService getInstance() {
+    public static synchronized SendEmailService getInstance(Context context) {
         if (instance == null) {
-            instance = new SendEmailService();
+            instance = new SendEmailService(context);
         }
         return instance;
     }
@@ -70,7 +76,7 @@ public class SendEmailService {
             long longestStreakDays = Beskar.getPrefs().getLong("beskar_longest_time_delta", 0);
 
             Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(username));
+            message.setFrom(new InternetAddress(EMAIL_U));
             message.setRecipients(
                     Message.RecipientType.TO,
                     InternetAddress.parse(toEmail)

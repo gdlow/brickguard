@@ -133,14 +133,14 @@ public class PreferencesModel {
         Beskar.getPrefs().edit().putBoolean("home_adult_switch_checked", currAdultSwitchChecked).apply();
         Beskar.selectRule(Beskar.RULES.get(0), currAdultSwitchChecked);
         Beskar.insertInteraction(Interactions.CONFIG_CHANGE,
-                "Adult sites turned" + (currAdultSwitchChecked ? "on" : "off"));
+                "Adult sites turned " + (currAdultSwitchChecked ? "on" : "off"));
     }
 
     private void applyChangesToAdsSwitch() {
         Beskar.getPrefs().edit().putBoolean("home_ads_switch_checked", currAdsSwitchChecked).apply();
         Beskar.selectRule(Beskar.RULES.get(1), currAdsSwitchChecked);
         Beskar.insertInteraction(Interactions.CONFIG_CHANGE,
-                "Ads turned" + (currAdsSwitchChecked ? "on" : "off"));
+                "Ads turned " + (currAdsSwitchChecked ? "on" : "off"));
     }
 
     private void applyChangesToChipMap() {
