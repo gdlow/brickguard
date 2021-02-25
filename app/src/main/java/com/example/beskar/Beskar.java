@@ -283,6 +283,7 @@ public class Beskar extends Application {
         context.startService(getServiceIntent(context).setAction(BeskarVpnService.ACTION_DEACTIVATE));
         context.stopService(getServiceIntent(context));
         Beskar.getPrefs().edit().putLong("beskar_start_time_marker", 0).apply();
+        Beskar.getPrefs().edit().putLong("beskar_current_time_delta", 0).apply();
         insertInteraction(Interactions.SWITCHED_OFF, "VPN service deactivated");
     }
 

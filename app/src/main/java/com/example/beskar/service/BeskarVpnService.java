@@ -181,7 +181,6 @@ public class BeskarVpnService extends VpnService implements Runnable {
 
                     return START_STICKY;
                 case ACTION_DEACTIVATE:
-                    Beskar.getPrefs().edit().putLong("beskar_current_time_delta", 0).apply();
                     stopThread();
                     Beskar.updateShortcut(getApplicationContext());
                     return START_NOT_STICKY;
