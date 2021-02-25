@@ -48,11 +48,6 @@ public class LockActivity extends AppCompatActivity {
         updateOnNewIntent(getIntent());
     }
 
-    @Override
-    public void onBackPressed() {
-        // Disable back press
-    }
-
     private void updateOnNewIntent(Intent intent) {
         if (!Beskar.getPrefs().contains("beskar_pin")) {
             handleSetUpIntent();
