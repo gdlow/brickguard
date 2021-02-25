@@ -150,7 +150,7 @@ public class BeskarVpnService extends VpnService implements Runnable {
                     builder.setWhen(0)
                             .setContentTitle(getResources().getString(R.string.notice_activated))
                             .setDefaults(NotificationCompat.DEFAULT_LIGHTS)
-                            .setSmallIcon(R.drawable.ic_brick_toolbar)
+                            .setSmallIcon(R.drawable.brick_notification)
                             // backward compatibility
                             .setColor(getResources().getColor(R.color.black_a80))
                             .setAutoCancel(false)

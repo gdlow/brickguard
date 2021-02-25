@@ -14,9 +14,9 @@
         android:name=".Beskar"
         android:allowBackup="true"
         android:fullBackupContent="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_brick_launcher_light"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_brick_launcher_light_circle"
         android:supportsRtl="true"
         android:theme="@style/Theme.Beskar">
         <service
@@ -29,7 +29,7 @@
         <service
             android:name=".service.BeskarTileService"
             android:label="@string/app_name"
-            android:icon="@drawable/ic_security"
+            android:icon="@drawable/brick_notification"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
             <intent-filter>
                 <action android:name="android.service.quicksettings.action.QS_TILE"/>

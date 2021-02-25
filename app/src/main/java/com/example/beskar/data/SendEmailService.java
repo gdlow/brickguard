@@ -81,7 +81,7 @@ public class SendEmailService {
                     Message.RecipientType.TO,
                     InternetAddress.parse(toEmail)
             );
-            message.setSubject("Your accountability partner's weekly report from Brick");
+            message.setSubject("Your accountability partner's weekly report from BrickGuard");
             message.setContent(generateMessage(currentStreakDays, longestStreakDays,
                     allBlockedSites, allSwitchedOff, allConfigChanges)
                     , "text/html");

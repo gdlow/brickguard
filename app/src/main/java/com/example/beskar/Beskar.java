@@ -294,7 +294,7 @@ public class Beskar extends Application {
             ShortcutInfo info = new ShortcutInfo.Builder(context, Beskar.SHORTCUT_ID_ACTIVATE)
                     .setLongLabel(notice)
                     .setShortLabel(notice)
-                    .setIcon(Icon.createWithResource(context, R.mipmap.ic_launcher))
+                    .setIcon(Icon.createWithResource(context, R.drawable.ic_shortcut_vpn_key))
                     .setIntent(new Intent(context, LockActivity.class).setAction(Intent.ACTION_VIEW)
                             .putExtra(LockActivity.LOCK_SCREEN_ACTION, LockActivity.LOCK_SCREEN_ACTION_AUTHENTICATE)
                             .putExtra(MainActivity.LAUNCH_ACTION, activate ? MainActivity.LAUNCH_ACTION_DEACTIVATE : MainActivity.LAUNCH_ACTION_ACTIVATE))
