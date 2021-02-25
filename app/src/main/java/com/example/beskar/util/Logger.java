@@ -79,7 +79,7 @@ public class Logger {
                 String fileDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss ").format(new Date());
                 buffer.insert(0, "\n").insert(0, message).insert(0, fileDateFormat);
             }
-            Log.d("Daedalus", message);
+            Log.d("Beskar", message);
         } catch (Exception e) {
             e.printStackTrace();
         }

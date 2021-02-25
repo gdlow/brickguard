@@ -8,8 +8,8 @@
 
     <PreferenceCategory
         app:iconSpaceReserved="false"
-        android:key="accountability"
-        android:title="Accountability">
+        android:key="settings_profile"
+        android:title="Profile">
 
         <com.example.beskar.util.ClickPreference
             android:key="settings_email"
@@ -19,21 +19,11 @@
         <com.example.beskar.util.ClickPreference
             android:key="settings_reset_pin"
             android:title="Reset PIN Code" />
-    </PreferenceCategory>
-
-    <PreferenceCategory
-        app:iconSpaceReserved="false"
-        android:key="system"
-        android:title="System">
 
         <SwitchPreference
             android:key="settings_boot"
             android:title="Activate on Boot"
             android:defaultValue="false"/>
-
-        <ListPreference
-            android:key="settings_logs"
-            android:title="View Logs"/>
     </PreferenceCategory>
 
     <PreferenceCategory
