@@ -318,8 +318,9 @@ public class Beskar extends Application {
 
         // Define periodic sync work
         PeriodicWorkRequest workRequest =
-                new PeriodicWorkRequest.Builder(EmailReportWorker.class, 3, TimeUnit.HOURS)
+                new PeriodicWorkRequest.Builder(EmailReportWorker.class, 7, TimeUnit.DAYS)
                         .setConstraints(constraints)
+                        .setInitialDelay(4, TimeUnit.HOURS)
                         .build();
 
         // Enqueue periodic work
