@@ -66,6 +66,8 @@ public class SendEmailService {
                     db.interactionsDao().getAllWithInteractionFrom7dAgoSynchronous(Interactions.SWITCHED_OFF);
             List<DateTimeLocalResolve> allBlockedSites =
                     db.localResolveDao().getAllWithResolutionFrom7dAgoSynchronous(LocalResolve.ONE_RES);
+            long currentStreakDays = Beskar.getPrefs().getLong("beskar_current_time_delta", 0);
+            long longestStreakDays = Beskar.getPrefs().getLong("beskar_longest_time_delta", 0);
 
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(username));
@@ -74,7 +76,8 @@ public class SendEmailService {
                     InternetAddress.parse(toEmail)
             );
             message.setSubject("Your accountability partner's weekly report from Brick");
-            message.setContent(generateMessage(allConfigChanges, allSwitchedOff, allBlockedSites)
+            message.setContent(generateMessage(currentStreakDays, longestStreakDays,
+                    allBlockedSites, allSwitchedOff, allConfigChanges)
                     , "text/html");
             Transport.send(message);
         } catch (MessagingException e) {
@@ -82,34 +85,39 @@ public class SendEmailService {
         }
     }
 
-    private String generateMessage(List<DateTimeInteractions> allSwitchedOff,
-                                   List<DateTimeInteractions> allConfigChanges,
-                                   List<DateTimeLocalResolve> allBlockedSites) {
+    private String generateMessage(long currentStreakDays, long longestStreakDays,
+                                   List<DateTimeLocalResolve> allBlockedSites,
+                                   List<DateTimeInteractions> allSwitchedOff,
+                                   List<DateTimeInteractions> allConfigChanges) {
         String emailHeader = "<h2>Your accountability partner's weekly usage statistics</h2>\n";
         String summary = String.format(Locale.getDefault(),
                 "<h4>Summary:</h4>\n" +
                 "  <ul>\n" +
-                "    <li>Total number of times the VPN was switched off: %1$d</li>\n" +
-                "    <li>Total number of times a configuration change was made: %2$d</li>\n" +
+                "    <li>Current streak: %1$d days\n</li>" +
+                "    <li>Longest streak: %2$d days\n</li>" +
                 "    <li>Total blocked adult sites: %3$d\n</li>" +
-                "  </ul>\n", allSwitchedOff.size(), allConfigChanges.size(), allBlockedSites.size());
+                "    <li>Total number of times the VPN was switched off: %4$d</li>\n" +
+                "    <li>Total number of times a configuration change was made: %5$d</li>\n" +
+                "  </ul>\n",
+                currentStreakDays, longestStreakDays, allBlockedSites.size(), allSwitchedOff.size(),
+                allConfigChanges.size());
+
+        String blockedSitesHeader = "<h4>Here are all the blocked adult sites with attempted " +
+                "access:</h4>\n";
 
         String switchedOffHeader = "<h4>Here are all the times the VPN was switched off:</h4>\n";
 
         String configChangeHeader = "<h4>Here are all the times a configuration change was made:</h4>\n";
 
-        String blockedSitesHeader = "<h4>Here are all the blocked adult sites with attempted " +
-                "access:</h4>\n";
-
         return new StringBuilder()
                 .append(emailHeader)
                 .append(summary)
+                .append(blockedSitesHeader)
+                .append(generateLocalResolvesTable(allBlockedSites))
                 .append(switchedOffHeader)
                 .append(generateInteractionsTable(allSwitchedOff))
                 .append(configChangeHeader)
                 .append(generateInteractionsTable(allConfigChanges))
-                .append(blockedSitesHeader)
-                .append(generateLocalResolvesTable(allBlockedSites))
                 .toString();
     }
 
