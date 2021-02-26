@@ -7,6 +7,7 @@ import android.net.VpnService;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -73,6 +74,21 @@ public class MainActivity extends AppCompatActivity {
         // Inflate the menu, this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.toolbar_menu, menu);
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.privacy_policy:
+                BrickGuard.openUri("https://gdlow.github.io/brickguard/about/privacy_policy.html");
+                return true;
+            case R.id.donate:
+                BrickGuard.openUri("https://gdlow.github.io/brickguard/about/privacy_policy.html");
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override

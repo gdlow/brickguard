@@ -30,10 +30,10 @@
         app:iconSpaceReserved="false"
         android:key="settings_about"
         android:title="About">
-        <ListPreference
+        <com.gdlow.brickguard.util.ClickPreference
             android:key="settings_privacy_policy"
             android:title="Privacy Policy"/>
-        <ListPreference
+        <com.gdlow.brickguard.util.ClickPreference
             android:key="settings_donate"
             android:title="Donate"/>
     </PreferenceCategory>
