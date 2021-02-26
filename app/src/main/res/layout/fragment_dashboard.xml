@@ -11,26 +11,119 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:orientation="horizontal"
-                android:weightSum="2">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginTop="@dimen/spacing_middle"
+                        android:layout_marginBottom="@dimen/spacing_medium"
+                        android:layout_marginLeft="@dimen/spacing_middle"
+                        android:layout_marginRight="@dimen/spacing_medium">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:paddingTop="@dimen/spacing_middle"
+                                android:paddingBottom="@dimen/spacing_medium"
+                                android:paddingLeft="@dimen/spacing_middle"
+                                android:paddingRight="@dimen/spacing_middle"
+                                android:text="Blocked adult sites over the past week"
+                                android:textAppearance="@style/CardTitleText"/>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/spacing_card"
+                                android:padding="@dimen/spacing_small">
+
+                                <TextView
+                                    android:id="@+id/adult_sites_blocked_text"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:padding="@dimen/spacing_middle"
+                                    android:gravity="center"
+                                    android:text="0"
+                                    android:textAppearance="@style/CardValueText"/>
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginTop="@dimen/spacing_middle"
+                        android:layout_marginBottom="@dimen/spacing_medium"
+                        android:layout_marginLeft="@dimen/spacing_medium"
+                        android:layout_marginRight="@dimen/spacing_middle">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:paddingTop="@dimen/spacing_middle"
+                                android:paddingBottom="@dimen/spacing_medium"
+                                android:paddingLeft="@dimen/spacing_middle"
+                                android:paddingRight="@dimen/spacing_middle"
+                                android:text="Blocked ad sites over the past week"
+                                android:textAppearance="@style/CardTitleText"/>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/spacing_card"
+                                android:padding="@dimen/spacing_small">
+
+                                <TextView
+                                    android:id="@+id/ad_sites_blocked_text"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:padding="@dimen/spacing_middle"
+                                    android:gravity="center"
+                                    android:text="0"
+                                    android:textAppearance="@style/CardValueText"/>
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                </LinearLayout>
 
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginTop="@dimen/spacing_middle"
+                    android:layout_marginTop="@dimen/spacing_medium"
                     android:layout_marginBottom="@dimen/spacing_medium"
                     android:layout_marginLeft="@dimen/spacing_middle"
-                    android:layout_marginRight="@dimen/spacing_medium">
+                    android:layout_marginRight="@dimen/spacing_middle">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -40,26 +133,19 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:paddingTop="@dimen/spacing_middle"
-                            android:paddingBottom="@dimen/spacing_medium"
-                            android:paddingLeft="@dimen/spacing_middle"
-                            android:paddingRight="@dimen/spacing_middle"
+                            android:padding="@dimen/spacing_middle"
                             android:text="Blocked adult sites over the past week"
-                            android:textAppearance="@style/CardTitleText"/>
+                            android:textAppearance="@style/BottomSheetBody"/>
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="@dimen/spacing_card"
+                            android:layout_height="@dimen/spacing_chart"
                             android:padding="@dimen/spacing_small">
 
-                            <TextView
-                                android:id="@+id/adult_sites_blocked_text"
+                            <com.github.mikephil.charting.charts.BarChart
+                                android:id="@+id/adult_sites_chart"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:padding="@dimen/spacing_middle"
-                                android:gravity="center"
-                                android:text="0"
-                                android:textAppearance="@style/CardValueText"/>
+                                android:layout_height="match_parent" />
 
                         </LinearLayout>
 
@@ -70,179 +156,9 @@
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginTop="@dimen/spacing_middle"
-                    android:layout_marginBottom="@dimen/spacing_medium"
-                    android:layout_marginLeft="@dimen/spacing_medium"
-                    android:layout_marginRight="@dimen/spacing_middle">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:paddingTop="@dimen/spacing_middle"
-                            android:paddingBottom="@dimen/spacing_medium"
-                            android:paddingLeft="@dimen/spacing_middle"
-                            android:paddingRight="@dimen/spacing_middle"
-                            android:text="Blocked ad sites over the past week"
-                            android:textAppearance="@style/CardTitleText"/>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/spacing_card"
-                            android:padding="@dimen/spacing_small">
-
-                            <TextView
-                                android:id="@+id/ad_sites_blocked_text"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:padding="@dimen/spacing_middle"
-                                android:gravity="center"
-                                android:text="0"
-                                android:textAppearance="@style/CardValueText"/>
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                </com.google.android.material.card.MaterialCardView>
-
-            </LinearLayout>
-
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_medium"
-                android:layout_marginBottom="@dimen/spacing_medium"
-                android:layout_marginLeft="@dimen/spacing_middle"
-                android:layout_marginRight="@dimen/spacing_middle">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:padding="@dimen/spacing_middle"
-                        android:text="Blocked adult sites over the past week"
-                        android:textAppearance="@style/BottomSheetBody"/>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/spacing_chart"
-                        android:padding="@dimen/spacing_small">
-
-                        <com.github.mikephil.charting.charts.BarChart
-                            android:id="@+id/adult_sites_chart"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent" />
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_medium"
-                android:layout_marginBottom="@dimen/spacing_medium"
-                android:layout_marginLeft="@dimen/spacing_middle"
-                android:layout_marginRight="@dimen/spacing_middle">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:padding="@dimen/spacing_middle"
-                        android:text="Blocked ad sites over the past week"
-                        android:textAppearance="@style/BottomSheetBody"/>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/spacing_chart"
-                        android:padding="@dimen/spacing_small">
-
-                        <com.github.mikephil.charting.charts.BarChart
-                            android:id="@+id/ad_sites_chart"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent" />
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-            </com.google.android.material.card.MaterialCardView>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:orientation="horizontal"
-                android:weightSum="2">
-
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_marginTop="@dimen/spacing_medium"
                     android:layout_marginBottom="@dimen/spacing_medium"
                     android:layout_marginLeft="@dimen/spacing_middle"
-                    android:layout_marginRight="@dimen/spacing_medium">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:paddingTop="@dimen/spacing_middle"
-                            android:paddingBottom="@dimen/spacing_medium"
-                            android:paddingLeft="@dimen/spacing_middle"
-                            android:paddingRight="@dimen/spacing_middle"
-                            android:text="Config changes over the past week"
-                            android:textAppearance="@style/CardTitleText"/>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/spacing_card"
-                            android:padding="@dimen/spacing_small">
-
-                            <TextView
-                                android:id="@+id/config_changes_text"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:padding="@dimen/spacing_middle"
-                                android:gravity="center"
-                                android:text="0"
-                                android:textAppearance="@style/CardValueText"/>
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                </com.google.android.material.card.MaterialCardView>
-
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginTop="@dimen/spacing_medium"
-                    android:layout_marginBottom="@dimen/spacing_medium"
-                    android:layout_marginLeft="@dimen/spacing_medium"
                     android:layout_marginRight="@dimen/spacing_middle">
 
                     <LinearLayout
@@ -253,26 +169,19 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:paddingTop="@dimen/spacing_middle"
-                            android:paddingBottom="@dimen/spacing_medium"
-                            android:paddingLeft="@dimen/spacing_middle"
-                            android:paddingRight="@dimen/spacing_middle"
-                            android:text="Switched off over the past week"
-                            android:textAppearance="@style/CardTitleText"/>
+                            android:padding="@dimen/spacing_middle"
+                            android:text="Blocked ad sites over the past week"
+                            android:textAppearance="@style/BottomSheetBody"/>
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="@dimen/spacing_card"
+                            android:layout_height="@dimen/spacing_chart"
                             android:padding="@dimen/spacing_small">
 
-                            <TextView
-                                android:id="@+id/switched_off_text"
+                            <com.github.mikephil.charting.charts.BarChart
+                                android:id="@+id/ad_sites_chart"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:padding="@dimen/spacing_middle"
-                                android:gravity="center"
-                                android:text="0"
-                                android:textAppearance="@style/CardValueText"/>
+                                android:layout_height="match_parent" />
 
                         </LinearLayout>
 
@@ -280,9 +189,106 @@
 
                 </com.google.android.material.card.MaterialCardView>
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginTop="@dimen/spacing_medium"
+                        android:layout_marginBottom="@dimen/spacing_medium"
+                        android:layout_marginLeft="@dimen/spacing_middle"
+                        android:layout_marginRight="@dimen/spacing_medium">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:paddingTop="@dimen/spacing_middle"
+                                android:paddingBottom="@dimen/spacing_medium"
+                                android:paddingLeft="@dimen/spacing_middle"
+                                android:paddingRight="@dimen/spacing_middle"
+                                android:text="Config changes over the past week"
+                                android:textAppearance="@style/CardTitleText"/>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/spacing_card"
+                                android:padding="@dimen/spacing_small">
+
+                                <TextView
+                                    android:id="@+id/config_changes_text"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:padding="@dimen/spacing_middle"
+                                    android:gravity="center"
+                                    android:text="0"
+                                    android:textAppearance="@style/CardValueText"/>
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginTop="@dimen/spacing_medium"
+                        android:layout_marginBottom="@dimen/spacing_medium"
+                        android:layout_marginLeft="@dimen/spacing_medium"
+                        android:layout_marginRight="@dimen/spacing_middle">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:paddingTop="@dimen/spacing_middle"
+                                android:paddingBottom="@dimen/spacing_medium"
+                                android:paddingLeft="@dimen/spacing_middle"
+                                android:paddingRight="@dimen/spacing_middle"
+                                android:text="Switched off over the past week"
+                                android:textAppearance="@style/CardTitleText"/>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/spacing_card"
+                                android:padding="@dimen/spacing_small">
+
+                                <TextView
+                                    android:id="@+id/switched_off_text"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:padding="@dimen/spacing_middle"
+                                    android:gravity="center"
+                                    android:text="0"
+                                    android:textAppearance="@style/CardValueText"/>
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                </LinearLayout>
+
             </LinearLayout>
 
-        </LinearLayout>
+        </ScrollView>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
