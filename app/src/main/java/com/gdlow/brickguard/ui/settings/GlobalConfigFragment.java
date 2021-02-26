@@ -45,7 +45,8 @@ public class GlobalConfigFragment extends PreferenceFragmentCompat {
             return true;
         });
         findPreference("settings_donate").setOnPreferenceClickListener(preference -> {
-            BrickGuard.openUri("https://gdlow.github.io/brickguard/about/privacy_policy.html");
+            BrickGuard.openUri("https://www.paypal.com/donate/?business=FRC6AV3WFYN34&item_name" +
+                    "=Support+for+BrickGuard+project&currency_code=GBP");
             return true;
         });
     }

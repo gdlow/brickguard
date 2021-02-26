@@ -365,11 +365,7 @@ public class BrickGuard extends Application {
             return false;
         }
     }
-
-    public static void donate() {
-        openUri("https://qr.alipay.com/FKX04751EZDP0SQ0BOT137");
-    }
-
+    
     public static void openUri(String uri) {
         try {
             instance.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(uri))

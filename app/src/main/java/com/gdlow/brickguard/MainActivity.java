@@ -84,7 +84,8 @@ public class MainActivity extends AppCompatActivity {
                 BrickGuard.openUri("https://gdlow.github.io/brickguard/about/privacy_policy.html");
                 return true;
             case R.id.donate:
-                BrickGuard.openUri("https://gdlow.github.io/brickguard/about/privacy_policy.html");
+                BrickGuard.openUri("https://www.paypal.com/donate/?business=FRC6AV3WFYN34" +
+                        "&item_name=Support+for+BrickGuard+project&currency_code=GBP");
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
