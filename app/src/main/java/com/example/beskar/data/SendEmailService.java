@@ -1,58 +1,39 @@
 package com.example.beskar.data;
 
-import android.content.Context;
-
 import com.example.beskar.Beskar;
-import com.example.beskar.R;
 import com.example.beskar.util.Logger;
+import com.mailjet.client.ClientOptions;
+import com.mailjet.client.MailjetClient;
+import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.transactional.SendContact;
+import com.mailjet.client.transactional.SendEmailsRequest;
+import com.mailjet.client.transactional.TrackOpens;
+import com.mailjet.client.transactional.TransactionalEmail;
+import com.mailjet.client.transactional.response.MessageResult;
+import com.mailjet.client.transactional.response.SendEmailsResponse;
 
 import java.util.List;
 import java.util.Locale;
-import java.util.Properties;
-
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 
 public class SendEmailService {
+
     private static SendEmailService instance = null;
 
-    private String EMAIL_U;
-    private String EMAIL_P;
+    // Metadata
+    private static final String FROM_NAME = "BrickGuard Admin";
+    private static final String TO_NAME = "Accountability Partner";
+    private static final String CUSTOM_ID = "weekly_report";
 
-    Properties prop;
-    Session session;
+    private SendEmailService() {}
 
-    private SendEmailService(Context context) {
-        EMAIL_U = context.getString(R.string.email_u);
-        EMAIL_P = context.getString(R.string.email_p);
-
-        prop = new Properties();
-        prop.put("mail.smtp.host", "smtp.office365.com");
-        prop.put("mail.smtp.port", "587");
-        prop.put("mail.smtp.auth", "true");
-        prop.put("mail.smtp.starttls.enable", "true");
-
-        session = Session.getInstance(prop,
-                new javax.mail.Authenticator() {
-                    protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication(EMAIL_U, EMAIL_P);
-                    }
-                });
-    }
-
-    public static synchronized SendEmailService getInstance(Context context) {
+    public static synchronized SendEmailService getInstance() {
         if (instance == null) {
-            instance = new SendEmailService(context);
+            instance = new SendEmailService();
         }
         return instance;
     }
 
-    public void sendEmail() {
+    public void sendEmail(String apiKey, String apiSecret, String senderEmail) {
         // Check that email report is scheduled
         String toEmail = Beskar.getPrefs().getString("beskar_email", "nil");
         boolean sendReport = Beskar.getPrefs().getBoolean("beskar_send_report", false);
@@ -63,31 +44,53 @@ public class SendEmailService {
             return;
         }
 
-        try {
-            // Get data synchronously from database
-            AppDatabase db = AppDatabase.getDatabase(Beskar.getInstance());
-            List<DateTimeInteractions> allConfigChanges =
-                    db.interactionsDao().getAllWithInteractionFrom7dAgoSynchronous(Interactions.CONFIG_CHANGE);
-            List<DateTimeInteractions> allSwitchedOff =
-                    db.interactionsDao().getAllWithInteractionFrom7dAgoSynchronous(Interactions.SWITCHED_OFF);
-            List<DateTimeLocalResolve> allBlockedSites =
-                    db.localResolveDao().getAllWithResolutionFrom7dAgoSynchronous(LocalResolve.ONE_RES);
-            long currentStreakDays = Beskar.getPrefs().getLong("beskar_current_time_delta", 0);
-            long longestStreakDays = Beskar.getPrefs().getLong("beskar_longest_time_delta", 0);
+        // Get data synchronously from database
+        AppDatabase db = AppDatabase.getDatabase(Beskar.getInstance());
+        List<DateTimeInteractions> allConfigChanges =
+                db.interactionsDao().getAllWithInteractionFrom7dAgoSynchronous(Interactions.CONFIG_CHANGE);
+        List<DateTimeInteractions> allSwitchedOff =
+                db.interactionsDao().getAllWithInteractionFrom7dAgoSynchronous(Interactions.SWITCHED_OFF);
+        List<DateTimeLocalResolve> allBlockedSites =
+                db.localResolveDao().getAllWithResolutionFrom7dAgoSynchronous(LocalResolve.ONE_RES);
+        long currentStreakDays = Beskar.getPrefs().getLong("beskar_current_time_delta", 0);
+        long longestStreakDays = Beskar.getPrefs().getLong("beskar_longest_time_delta", 0);
 
-            Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(EMAIL_U));
-            message.setRecipients(
-                    Message.RecipientType.TO,
-                    InternetAddress.parse(toEmail)
-            );
-            message.setSubject("Your accountability partner's weekly report from BrickGuard");
-            message.setContent(generateMessage(currentStreakDays, longestStreakDays,
-                    allBlockedSites, allSwitchedOff, allConfigChanges)
-                    , "text/html");
-            Transport.send(message);
-        } catch (MessagingException e) {
-            e.printStackTrace();
+        // Send email via API
+        String htmlContent = generateMessage(currentStreakDays, longestStreakDays,
+                allBlockedSites, allSwitchedOff, allConfigChanges);
+        String subject = "Your accountability partner's weekly report from BrickGuard";
+        sendEmailHelperApi(apiKey, apiSecret, senderEmail, toEmail, subject, htmlContent);
+    }
+
+    private void sendEmailHelperApi(String apiKey, String apiSecret, String senderEmail,
+                                    String toEmail, String subject, String htmlContent) {
+        ClientOptions options = ClientOptions.builder()
+                .apiKey(apiKey)
+                .apiSecretKey(apiSecret)
+                .build();
+
+        MailjetClient client = new MailjetClient(options);
+        TransactionalEmail message = TransactionalEmail
+                .builder()
+                .from(new SendContact(senderEmail, FROM_NAME))
+                .to(new SendContact(toEmail, TO_NAME))
+                .htmlPart(htmlContent)
+                .subject(subject)
+                .trackOpens(TrackOpens.ENABLED)
+                .customID(CUSTOM_ID)
+                .build();
+
+        SendEmailsRequest request = SendEmailsRequest
+                .builder()
+                .message(message)
+                .build();
+
+        try {
+            SendEmailsResponse response = request.sendWith(client);
+            MessageResult messageResult = response.getMessages()[0];
+            Logger.debug("Mailjet response status: " + messageResult.getStatus());
+        } catch (MailjetException e) {
+            Logger.error("Mailjet exception error: " + e.getMessage());
         }
     }
 

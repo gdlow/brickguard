@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
+import com.example.beskar.R;
 import com.example.beskar.util.Logger;
 
 public class EmailReportWorker extends Worker {
@@ -23,7 +24,12 @@ public class EmailReportWorker extends Worker {
     public Result doWork() {
         try {
             Logger.debug("Running email report worker task...");
-            SendEmailService.getInstance(context).sendEmail();
+
+            String apiKey = context.getString(R.string.api_key);
+            String apiSecret = context.getString(R.string.api_secret);
+            String senderEmail = context.getString(R.string.sender_email);
+
+            SendEmailService.getInstance().sendEmail(apiKey, apiSecret, senderEmail);
             return Result.success();
         } catch (Exception e) {
             e.printStackTrace();
