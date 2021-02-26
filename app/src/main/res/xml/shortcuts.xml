@@ -9,10 +9,10 @@
             android:shortcutShortLabel="@string/action_settings">
         <intent
                 android:action="android.intent.action.VIEW"
-                android:targetClass="com.example.beskar.MainActivity"
-                android:targetPackage="com.example.beskar">
+                android:targetClass="com.gdlow.brickguard.MainActivity"
+                android:targetPackage="com.gdlow.brickguard">
             <extra
-                    android:name="com.example.beskar.MainActivity.LAUNCH_FRAGMENT"
+                    android:name="com.gdlow.brickguard.MainActivity.LAUNCH_FRAGMENT"
                     android:value="2"/>
         </intent>
     </shortcut>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.beskar">
+    package="com.gdlow.brickguard">
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
@@ -11,23 +11,23 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
-        android:name=".Beskar"
+        android:name=".BrickGuard"
         android:allowBackup="true"
         android:fullBackupContent="true"
         android:icon="@mipmap/ic_brick_launcher_light"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_brick_launcher_light_circle"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Beskar">
+        android:theme="@style/Theme.BrickGuard">
         <service
-            android:name=".service.BeskarVpnService"
+            android:name=".service.BrickGuardVpnService"
             android:permission="android.permission.BIND_VPN_SERVICE">
             <intent-filter>
                 <action android:name="android.net.VpnService"/>
             </intent-filter>
         </service>
         <service
-            android:name=".service.BeskarTileService"
+            android:name=".service.BrickGuardTileService"
             android:label="@string/app_name"
             android:icon="@drawable/brick_notification"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
@@ -47,8 +47,8 @@
             android:name=".receiver.StatusBarBroadcastReceiver"
             android:exported="false">
             <intent-filter>
-                <action android:name="com.example.beskar.receiver.StatusBarBroadcastReceiver.STATUS_BAR_BTN_DEACTIVATE_CLICK_ACTION"/>
-                <action android:name="com.example.beskar.receiver.StatusBarBroadcastReceiver.STATUS_BAR_BTN_SETTINGS_CLICK_ACTION"/>
+                <action android:name="com.gdlow.brickguard.receiver.StatusBarBroadcastReceiver.STATUS_BAR_BTN_DEACTIVATE_CLICK_ACTION"/>
+                <action android:name="com.gdlow.brickguard.receiver.StatusBarBroadcastReceiver.STATUS_BAR_BTN_SETTINGS_CLICK_ACTION"/>
             </intent-filter>
         </receiver>
         <activity android:name=".LockActivity"

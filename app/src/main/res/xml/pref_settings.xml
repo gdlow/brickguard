@@ -11,12 +11,12 @@
         android:key="settings_profile"
         android:title="Profile">
 
-        <com.example.beskar.util.ClickPreference
+        <com.gdlow.brickguard.util.ClickPreference
             android:key="settings_email"
             android:title="Send weekly usage reports"
             android:summary="Set an accountability email"/>
 
-        <com.example.beskar.util.ClickPreference
+        <com.gdlow.brickguard.util.ClickPreference
             android:key="settings_reset_pin"
             android:title="Reset PIN Code" />
 
