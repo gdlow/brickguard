@@ -29,7 +29,7 @@ BrickGuard sets up a VPN tunnel with an internal dnsmasq resolver targetted at b
 
 **Blacklist custom domains** - You get to choose which domains you don't want to see 🙈
 
-**Accountability partner emails** - ✨✨✨ Here's where it gets cool! If you specify an accountability partner email, BrickGuard sends weekly reports about the malicious sites you've tried to visit, as well as any attempts to change the service configuration 💂
+**Accountability partner emails** - 🌟🌟🌟 Here's where it gets cool! If you specify an accountability partner email, BrickGuard sends weekly reports about the malicious sites you've tried to visit, as well as any attempts to change the service configuration 💂
 
 
 ## Behind the scenes
