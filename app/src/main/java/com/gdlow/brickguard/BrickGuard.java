@@ -12,7 +12,6 @@ import android.net.VpnService;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
-import android.view.View;
 
 import androidx.preference.PreferenceManager;
 import androidx.work.Constraints;
@@ -26,21 +25,20 @@ import com.gdlow.brickguard.data.EmailReportWorker;
 import com.gdlow.brickguard.data.Interactions;
 import com.gdlow.brickguard.data.InteractionsRepository;
 import com.gdlow.brickguard.data.LocalResolve;
+import com.gdlow.brickguard.data.LocalResolveRepository;
 import com.gdlow.brickguard.data.StreakWorker;
 import com.gdlow.brickguard.server.AbstractDnsServer;
 import com.gdlow.brickguard.server.DnsServer;
 import com.gdlow.brickguard.server.DnsServerHelper;
 import com.gdlow.brickguard.service.BrickGuardVpnService;
 import com.gdlow.brickguard.util.Logger;
+import com.gdlow.brickguard.util.PreferencesModel;
 import com.gdlow.brickguard.util.Rule;
 import com.gdlow.brickguard.util.RuleResolver;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.common.util.concurrent.ListenableFuture;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -65,7 +63,7 @@ public class BrickGuard extends Application {
         add(new DnsServer("208.67.220.123", R.string.filter_backup_secondary));
     }};
 
-    public static final ArrayList<Rule> RULES = new ArrayList<Rule>() {{
+    public static List<Rule> dnsmasqRules = new ArrayList<Rule>() {{
         add(new Rule("chadmayfield/porn-top1m", "chadmayfield.dnsmasq",
                 "https://raw.githubusercontent.com/chadmayfield/my-pihole-blocklists/master/lists" +
                         "/pi_blocklist_porn_top1m.list"));
@@ -75,7 +73,7 @@ public class BrickGuard extends Application {
                         "/dnsmasq.blacklist.txt"));
     }};
 
-    public static HashMap<String, String> customDomains = new HashMap<>();
+    public static HashMap<String, Boolean> customDomains = new HashMap<>();
 
     public static String rulePath;
     public static String logPath;
@@ -85,16 +83,15 @@ public class BrickGuard extends Application {
     private Thread mResolver;
 
     // Stuff required for rule syncing
-    private Thread mThread = null;
-    private RuleConfigHandler mHandler = null;
     private static final OkHttpClient HTTP_CLIENT = new OkHttpClient.Builder()
             .connectTimeout(30, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)
             .writeTimeout(30, TimeUnit.SECONDS)
             .build();
 
-    // Repository required for interactions database
-    private InteractionsRepository mRepository;
+    // Repository required for interacting with db
+    private InteractionsRepository mInteractionsRepository;
+    private LocalResolveRepository mLocalResolveRepository;
 
     // Work manager required for scheduling periodic tasks
     private WorkManager mWorkManager;
@@ -105,23 +102,42 @@ public class BrickGuard extends Application {
 
         instance = this;
         Logger.init();
+
+        // Start resolver thread server
         mResolver = new Thread(new RuleResolver());
         mResolver.start();
+
+        // Initalize repositories
+        mInteractionsRepository = new InteractionsRepository(this);
+        mLocalResolveRepository = new LocalResolveRepository(this);
+
+        // Initialize all required data and preferences
         initData();
-        mRepository = new InteractionsRepository(this);
+
+        // Schedule work
         mWorkManager = WorkManager.getInstance(this);
         scheduleSendEmailWork();
         scheduleUpdateStreakWork();
     }
 
-    private void initDirectory(String dir) {
-        File directory = new File(dir);
-        if (!directory.isDirectory()) {
-            Logger.warning(dir + " is not a directory. Delete result: " + directory.delete());
-        }
-        if (!directory.exists()) {
-            Logger.debug(dir + " does not exist. Create result: " + directory.mkdirs());
-        }
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+
+        dnsmasqRules.clear();
+        dnsmasqRules = null;
+        customDomains.clear();
+        customDomains = null;
+
+        instance = null;
+        prefs = null;
+
+        RuleResolver.shutdown();
+        mResolver.interrupt();
+        RuleResolver.clear();
+        mResolver = null;
+
+        Logger.shutdown();
     }
 
     private void initData() {
@@ -137,9 +153,28 @@ public class BrickGuard extends Application {
         }
 
         // Load preferences
-        selectRule(RULES.get(0), prefs.getBoolean("home_adult_switch_checked", false));
-        selectRule(RULES.get(1), prefs.getBoolean("home_ads_switch_checked", false));
+        initPreferences();
+    }
 
+    private void initDirectory(String dir) {
+        File directory = new File(dir);
+        if (!directory.isDirectory()) {
+            Logger.warning(dir + " is not a directory. Delete result: " + directory.delete());
+        }
+        if (!directory.exists()) {
+            Logger.debug(dir + " does not exist. Create result: " + directory.mkdirs());
+        }
+    }
+
+    private void initPreferences() {
+        initUpstreamServers();
+        initDnsmasqRules();
+        initCustomDomains();
+        commitChanges();
+        Logger.debug("Loaded preferences from file.");
+    }
+
+    private void initUpstreamServers() {
         int sliderIdx = prefs.getInt("home_slider_index", 2);
         if (sliderIdx > 0) {
             prefs.edit().putBoolean("settings_use_system_dns", false).apply();
@@ -149,81 +184,34 @@ public class BrickGuard extends Application {
             prefs.edit().putBoolean("settings_use_system_dns", true).apply();
             BrickGuardVpnService.updateUpstreamToSystemDNS(getApplicationContext());
         }
-        Logger.debug("Loaded preferences from file.");
     }
 
-    public static void initRuleResolver() {
-        ArrayList<String> pendingLoad = new ArrayList<>();
-        ArrayList<Rule> usingRules = new ArrayList<>();
+    private void initDnsmasqRules() {
+        selectRule(dnsmasqRules.get(0), prefs.getBoolean("home_adult_switch_checked", true));
+        selectRule(dnsmasqRules.get(1), prefs.getBoolean("home_ads_switch_checked", true));
+    }
 
-        for (Rule rule : BrickGuard.RULES) {
-            if (rule.isUsing()) {
-                usingRules.add(rule);
-            }
+    private void initCustomDomains() {
+        for (String domain : PreferencesModel.getCurrChipMap().keySet()) {
+            selectCustomDomain(domain, true);
         }
-
-        if (usingRules != null && usingRules.size() > 0) {
-            for (Rule rule : usingRules) {
-                if (rule.isUsing()) {
-                    pendingLoad.add(rulePath + rule.getFileName());
-                }
-            }
-            if (pendingLoad.size() > 0) {
-                String[] arr = new String[pendingLoad.size()];
-                pendingLoad.toArray(arr);
-                RuleResolver.startLoadDnsmasq(arr);
-            } else {
-                RuleResolver.clear();
-            }
-        } else {
-            RuleResolver.clear();
-        }
-
-        if (!customDomains.isEmpty()) {
-            RuleResolver.startLoadCustom();
-        }
-    }
-
-    public static void addCustomDomain(String key) {
-        customDomains.put(key, LocalResolve.NULL_RES);
-        RuleResolver.addCustom(key);
-    }
-
-    public static void removeCustomDomain(String key) {
-        customDomains.remove(key);
-        RuleResolver.removeCustom(key);
-    }
-
-    public static void setRulesChanged() {
-        if (BrickGuardVpnService.isActivated()) {
-            initRuleResolver();
-        }
-    }
-
-    public static SharedPreferences getPrefs() {
-        return getInstance().prefs;
     }
 
     public static void selectRule(Rule rule, boolean isUsing) {
-        if (rule.isUsing() == isUsing) return;
-        if (isUsing && !rule.getDownloaded()) {
-            BrickGuard.getInstance().ruleSync(rule);
+        // Always download rules by default. Disable downloading rules in-flight.
+        if (!rule.getDownloaded()) {
+            instance.ruleSync(rule);
         }
         rule.setUsing(isUsing);
-        BrickGuard.setRulesChanged();
     }
 
-    @Override
-    public void onTerminate() {
-        super.onTerminate();
+    public static void selectCustomDomain(String domain, boolean isUsing) {
+        customDomains.put(domain, isUsing);
+    }
 
-        instance = null;
-        prefs = null;
-        RuleResolver.shutdown();
-        mResolver.interrupt();
-        RuleResolver.clear();
-        mResolver = null;
-        Logger.shutdown();
+    // This should only be called once all changes are applied.
+    public static void commitChanges() {
+        RuleResolver.setPending();
     }
 
     public static Intent getServiceIntent(Context context) {
@@ -253,7 +241,6 @@ public class BrickGuard extends Application {
     // Global entrypoint for all activations (boot + manual).
     // Client should call prepareAndActivateService over this method.
     public static void activateService(Context context) {
-        updateUpstreamServers();
         // Start service in foreground if API >= 26
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
             Logger.info("Starting VPN service in foreground.");
@@ -272,9 +259,18 @@ public class BrickGuard extends Application {
         Logger.info("Upstream DNS set to: " + BrickGuardVpnService.primaryServer.getAddress() + " " + BrickGuardVpnService.secondaryServer.getAddress());
     }
 
-    public static void insertInteraction(String interaction, String description) {
+    public static void insertLocalResolve(String dnsQueryName, String response) {
+        if (instance == null || instance.mLocalResolveRepository == null) return;
         long timestamp = System.currentTimeMillis() / 1000L;
-        BrickGuard.getInstance().mRepository.insert(new Interactions(timestamp, interaction, description));
+        instance.mLocalResolveRepository.insert(new LocalResolve(timestamp, dnsQueryName, response));
+        Logger.debug("Inserted local resolve { " + dnsQueryName + ": " + response + " } " +
+                "into database.");
+    }
+
+    public static void insertInteraction(String interaction, String description) {
+        if (instance == null || instance.mInteractionsRepository == null) return;
+        long timestamp = System.currentTimeMillis() / 1000L;
+        instance.mInteractionsRepository.insert(new Interactions(timestamp, interaction, description));
         Logger.debug("Inserted: " + interaction + " interaction into database.");
     }
 
@@ -365,7 +361,7 @@ public class BrickGuard extends Application {
             return false;
         }
     }
-    
+
     public static void openUri(String uri) {
         try {
             instance.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(uri))
@@ -375,125 +371,34 @@ public class BrickGuard extends Application {
         }
     }
 
-    public boolean ruleSync(Rule rule) {
+    private void ruleSync(Rule rule) {
         String ruleFilename = rule.getFileName();
         String ruleDownloadUrl = rule.getDownloadUrl();
 
-        if (mThread == null) {
-            if (ruleDownloadUrl.startsWith("content://")) {
-                mThread = new Thread(() -> {
-                    try {
-                        InputStream inputStream = getContentResolver().openInputStream(Uri.parse(ruleDownloadUrl));
-                        int readLen;
-                        byte[] data = new byte[1024];
-                        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-                        while ((readLen = inputStream.read(data)) != -1) {
-                            buffer.write(data, 0, readLen);
-                        }
-                        inputStream.close();
-                        buffer.flush();
-                        mHandler.obtainMessage(RuleConfigHandler.MSG_RULE_DOWNLOADED,
-                                new RuleData(ruleFilename, buffer.toByteArray())).sendToTarget();
-                    } catch (Exception e) {
-                        Logger.logException(e);
-                    } finally {
-                        stopThread();
-                    }
-                });
-            } else {
-                mThread = new Thread(() -> {
-                    try {
-                        Request request = new Request.Builder()
-                                .url(ruleDownloadUrl).get().build();
-                        Response response = HTTP_CLIENT.newCall(request).execute();
-                        Logger.info("Downloaded " + ruleDownloadUrl);
-                        if (response.isSuccessful() && mHandler != null) {
-                            mHandler.obtainMessage(RuleConfigHandler.MSG_RULE_DOWNLOADED,
-                                    new RuleData(ruleFilename, response.body().bytes())).sendToTarget();
-                        }
-                    } catch (Exception e) {
-                        Logger.logException(e);
-                        if (mHandler != null) {
-                            mHandler.obtainMessage(RuleConfigHandler.MSG_RULE_DOWNLOADED,
-                                    new RuleData(ruleFilename, new byte[0])).sendToTarget();
-                        }
-                    } finally {
-                        stopThread();
-                    }
-                });
+        Thread ruleSyncThread = new Thread(() -> {
+            try {
+                Request request = new Request.Builder()
+                        .url(ruleDownloadUrl).get().build();
+                Response response = HTTP_CLIENT.newCall(request).execute();
+                Logger.info("Downloaded " + ruleDownloadUrl);
+                if (response.isSuccessful()) {
+                    File file = new File(BrickGuard.rulePath + ruleFilename);
+                    FileOutputStream stream = new FileOutputStream(file);
+                    stream.write(response.body().bytes());
+                    stream.close();
+                    Logger.info("DNSMasq rule: " + ruleFilename + " has been downloaded successfully.");
+                }
+            } catch (Exception e) {
+                Logger.logException(e);
+            } finally {
+                Thread.currentThread().interrupt();
             }
-            mThread.start();
-        }
-        return false;
+        });
+        ruleSyncThread.start();
     }
 
-    private void stopThread() {
-        if (mThread != null) {
-            mThread.interrupt();
-            mThread = null;
-        }
-    }
-
-    private class RuleData {
-        private byte[] data;
-        private String filename;
-
-        RuleData(String filename, byte[] data) {
-            this.data = data;
-            this.filename = filename;
-        }
-
-        byte[] getData() {
-            return data;
-        }
-
-        String getFilename() {
-            return filename;
-        }
-    }
-
-    private static class RuleConfigHandler extends Handler {
-        static final int MSG_RULE_DOWNLOADED = 0;
-
-        private View view = null;
-
-        RuleConfigHandler setView(View view) {
-            this.view = view;
-            return this;
-        }
-
-        void shutdown() {
-            view = null;
-        }
-
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-
-            switch (msg.what) {
-                case MSG_RULE_DOWNLOADED:
-                    RuleData ruleData = (RuleData) msg.obj;
-                    if (ruleData.data.length == 0) {
-                        if (view != null) {
-                            Snackbar.make(view, R.string.notice_download_failed, Snackbar.LENGTH_SHORT).show();
-                        }
-                        break;
-                    }
-                    try {
-                        File file = new File(BrickGuard.rulePath + ruleData.getFilename());
-                        FileOutputStream stream = new FileOutputStream(file);
-                        stream.write(ruleData.getData());
-                        stream.close();
-                    } catch (Exception e) {
-                        Logger.logException(e);
-                    }
-
-                    if (view != null) {
-                        Snackbar.make(view, R.string.notice_downloaded, Snackbar.LENGTH_SHORT).show();
-                    }
-                    break;
-            }
-        }
+    public static SharedPreferences getPrefs() {
+        return getInstance().prefs;
     }
 
     public static BrickGuard getInstance() {

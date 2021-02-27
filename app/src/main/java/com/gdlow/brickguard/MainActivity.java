@@ -152,6 +152,7 @@ public class MainActivity extends AppCompatActivity {
         switch (launchAction) {
             case LAUNCH_ACTION_ACTIVATE:
                 PreferencesModel.applyChanges(getApplicationContext());
+                BrickGuard.commitChanges();
                 this.activateService();
                 // Restart time marker from manual activation
                 BrickGuard.getPrefs().edit().putLong("brickguard_start_time_marker",

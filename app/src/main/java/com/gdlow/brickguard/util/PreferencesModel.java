@@ -51,14 +51,23 @@ public class PreferencesModel {
     }
 
     public static boolean getCurrAdultSwitchChecked() {
+        if (instance == null) {
+            refreshModelCache();
+        }
         return instance.currAdultSwitchChecked;
     }
 
     public static boolean getCurrAdsSwitchChecked() {
+        if (instance == null) {
+            refreshModelCache();
+        }
         return instance.currAdsSwitchChecked;
     }
 
     public static Map<String, Boolean> getCurrChipMap() {
+        if (instance == null) {
+            refreshModelCache();
+        }
         return instance.currChipMap;
     }
 
@@ -131,14 +140,14 @@ public class PreferencesModel {
 
     private void applyChangesToAdultSwitch() {
         BrickGuard.getPrefs().edit().putBoolean("home_adult_switch_checked", currAdultSwitchChecked).apply();
-        BrickGuard.selectRule(BrickGuard.RULES.get(0), currAdultSwitchChecked);
+        BrickGuard.selectRule(BrickGuard.dnsmasqRules.get(0), currAdultSwitchChecked);
         BrickGuard.insertInteraction(Interactions.CONFIG_CHANGE,
                 "Adult sites turned " + (currAdultSwitchChecked ? "on" : "off"));
     }
 
     private void applyChangesToAdsSwitch() {
         BrickGuard.getPrefs().edit().putBoolean("home_ads_switch_checked", currAdsSwitchChecked).apply();
-        BrickGuard.selectRule(BrickGuard.RULES.get(1), currAdsSwitchChecked);
+        BrickGuard.selectRule(BrickGuard.dnsmasqRules.get(1), currAdsSwitchChecked);
         BrickGuard.insertInteraction(Interactions.CONFIG_CHANGE,
                 "Ads turned " + (currAdsSwitchChecked ? "on" : "off"));
     }
@@ -147,7 +156,7 @@ public class PreferencesModel {
         // Add new custom domains
         for (String customDomain : currChipMap.keySet()) {
             if (!initChipMap.containsKey(customDomain)) {
-                BrickGuard.addCustomDomain(customDomain);
+                BrickGuard.selectCustomDomain(customDomain, true);
                 BrickGuard.insertInteraction(Interactions.CONFIG_CHANGE,
                         "Added custom domain: " + customDomain);
             }
@@ -156,7 +165,7 @@ public class PreferencesModel {
         // Remove old custom domains
         for (String customDomain : initChipMap.keySet()) {
             if (!currChipMap.containsKey(customDomain)) {
-                BrickGuard.removeCustomDomain(customDomain);
+                BrickGuard.selectCustomDomain(customDomain, false);
                 BrickGuard.insertInteraction(Interactions.CONFIG_CHANGE,
                         "Removed custom domain: " + customDomain);
             }

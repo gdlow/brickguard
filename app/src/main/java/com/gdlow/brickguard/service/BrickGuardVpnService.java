@@ -167,7 +167,7 @@ public class BrickGuardVpnService extends VpnService implements Runnable {
                     this.notification = builder;
                     startForeground(NOTIFICATION_ACTIVATED, notification.build());
 
-                    BrickGuard.initRuleResolver();
+                    // Starts service
                     startThread();
                     BrickGuard.updateShortcut(getApplicationContext());
 
