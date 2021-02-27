@@ -25,11 +25,11 @@ BrickGuard sets up a VPN tunnel with an internal dnsmasq resolver targetted at b
 
 **Toggle filter level** - toggle your desired internet filter level. Behind the scenes, BrickGuard automatically routes your internet traffic to cleanbrowsing.org or OpenDNS servers that do a pre-filtering on malicious websites ⚡
 
-**Block and track your internet traffic** BrickGuard uses an internal dnsmasq resolver that captures and tracks the malicious sites you attempt to visit 👀
+**Block and track your internet traffic** - BrickGuard uses an internal dnsmasq resolver that captures and tracks the malicious sites you attempt to visit 👀
 
-**Blacklist custom domains** You get to choose which domains you don't want to see 🙈
+**Blacklist custom domains** - You get to choose which domains you don't want to see 🙈
 
-**Accountability partner emails** ✨✨✨ Here's where it gets cool! If you specify an accountability partner email, BrickGuard sends weekly reports about the malicious sites you've tried to visit, as well as any attempts to change the service configuration 💂
+**Accountability partner emails** - ✨✨✨ Here's where it gets cool! If you specify an accountability partner email, BrickGuard sends weekly reports about the malicious sites you've tried to visit, as well as any attempts to change the service configuration 💂
 
 
 ## Behind the scenes
