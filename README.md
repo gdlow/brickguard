@@ -47,6 +47,11 @@ This application creates a VPN tunnel to handle all DNS requests. An internal dn
 
 This project needs you! If you would like to support this project's further development, the creator of this project or the continuous maintenance of this project, feel free to donate. Your donation is highly appreciated (and I love food, coffee and beer). Thank you!
 
+**PayPal**
+
+* [Choose how much you want to donate](https://www.paypal.com/donate/?business=FRC6AV3WFYN34&item_name=Support+for+BrickGuard+project&currency_code=GBP), all donations are welcome!
+
+
 **My Bitcoin Wallet (Bitcoin only)**
 
 	1392FJmmy3ZyB5TrJLCwjduTBxh11vnFj5
@@ -54,10 +59,6 @@ This project needs you! If you would like to support this project's further deve
 **My Ethereum Wallet (Ethereum only)**
 
 	0x35bd1553bb3d137c96f969bb414f2fde9bc5c83e
-
-**PayPal**
-
-* [Choose how much you want to donate](https://www.paypal.com/donate/?business=FRC6AV3WFYN34&item_name=Support+for+BrickGuard+project&currency_code=GBP), all donations are welcome!
 
 
 ## Open Source Licenses
