@@ -49,8 +49,7 @@ This project needs you! If you would like to support this project's further deve
 
 **PayPal**
 
-* [Choose how much you want to donate](https://www.paypal.com/donate/?business=FRC6AV3WFYN34&item_name=Support+for+BrickGuard+project&currency_code=GBP), all donations are welcome!
-
+[Choose how much you want to donate](https://www.paypal.com/donate/?business=FRC6AV3WFYN34&item_name=Support+for+BrickGuard+project&currency_code=GBP), all donations are welcome!
 
 **My Bitcoin Wallet (Bitcoin only)**
 
