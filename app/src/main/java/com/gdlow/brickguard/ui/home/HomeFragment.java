@@ -187,10 +187,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
                 // Add new chip to chip group
                 ChipGroup cg = view.findViewById(R.id.activity_bottom_sheet_step3_chip_group);
-                addChip(cg, text);
-
-                // Update preferences model
-                PreferencesModel.addToCurrChipMap(textStr);
+                if (!getChips(cg).contains(textStr)) {
+                    addChip(cg, text);
+                    PreferencesModel.addToCurrChipMap(textStr);
+                }
 
                 // Update updateText visibility
                 setUpdateTextVisibility(updateText);
@@ -205,12 +205,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         // Set chip group state from preferences model
         Map<String, Boolean> chipMap = PreferencesModel.getCurrChipMap();
         ChipGroup cg = view.findViewById(R.id.activity_bottom_sheet_step3_chip_group);
-        Set<String> chips = new HashSet<>();
-        for (int i = 0; i < cg.getChildCount(); i++) {
-            chips.add(((Chip) cg.getChildAt(i)).getText().toString());
-        }
         for (String key : chipMap.keySet()) {
-            if (!chips.contains(key)) {
+            if (!getChips(cg).contains(key)) {
                 addChip(cg, key);
             }
         }
@@ -282,6 +278,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         });
         cg.addView(chip);
         return chip;
+    }
+
+    private Set<String> getChips(ChipGroup cg) {
+        Set<String> chips = new HashSet<>();
+        for (int i = 0; i < cg.getChildCount(); i++) {
+            chips.add(((Chip) cg.getChildAt(i)).getText().toString());
+        }
+        return chips;
     }
 
     @Override
