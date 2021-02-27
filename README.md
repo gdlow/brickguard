@@ -10,8 +10,11 @@
 
 ## Demo
 
-<img src="graphics/demo.gif" width="350"/>
+### App workflow
+<img src="graphics/demo_app.gif" width="350"/>
 
+### Website blocking and tracking
+<img src="graphics/demo_websites.gif" width="350"/>
 
 ## Description
 
