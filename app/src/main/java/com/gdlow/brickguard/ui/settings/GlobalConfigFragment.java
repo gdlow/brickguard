@@ -56,9 +56,14 @@ public class GlobalConfigFragment extends PreferenceFragmentCompat {
         email = BrickGuard.getPrefs().getString("brickguard_email", "nil");
         sendReport = BrickGuard.getPrefs().getBoolean("brickguard_send_report", false);
 
+        // Email state to update
+        TextView editText = emailDialog.findViewById(R.id.email_edit_text);
+        TextView emailSetText = emailDialog.findViewById(R.id.email_set_text);
+
         // Build the alert dialog
         materialAlertDialogBuilder.setView(emailDialog)
                 .setPositiveButton("Save", (dialog, which) -> {
+                    updateEmailState(editText, emailSetText);
                     // Save email in shared preferences
                     BrickGuard.getPrefs().edit().putString("brickguard_email", email).apply();
                     // Save report state in shared preferences
@@ -72,35 +77,13 @@ public class GlobalConfigFragment extends PreferenceFragmentCompat {
                 .show();
 
         // Handle actions
-        TextView editText = emailDialog.findViewById(R.id.email_edit_text);
         editText.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                // Validate text
-                CharSequence text = editText.getText();
-                String textStr = text.toString();
-
-                // Invalid email address
-                if (!textStr.contains("@") || !textStr.contains(".") || textStr.startsWith(".") ||
-                        textStr.endsWith(".") || textStr.contains(" ") || textStr.length() < 4) {
-                    editText.setError("Invalid email address");
-                    return false;
-                }
-
-                // Save email in state
-                email = textStr;
-
-                // Clear text
-                editText.setText("");
-
-                // Change emailSetText
-                TextView emailSetText = emailDialog.findViewById(R.id.email_set_text);
-                emailSetText.setText("Setting email to: " + textStr);
-                return true;
+                return updateEmailState(editText, emailSetText);
             }
             return false;
         });
 
-        TextView emailSetText = emailDialog.findViewById(R.id.email_set_text);
         emailSetText.setText(email.equals("nil") ? "No email set" : "Email set to: " + email);
 
         SwitchMaterial emailReportSwitch = emailDialog.findViewById(R.id.email_report_switch);
@@ -109,5 +92,35 @@ public class GlobalConfigFragment extends PreferenceFragmentCompat {
             sendReport = isChecked;
         });
         emailReportSwitch.setChecked(sendReport);
+    }
+
+    private boolean updateEmailState(TextView editText, TextView emailSetText) {
+        // Validate text
+        CharSequence text = editText.getText();
+        String textStr = text.toString();
+
+        // Parse email with space behind
+        if (textStr.endsWith(" ")) textStr = textStr.substring(0, textStr.length() - 1);
+
+        // Invalid email address
+        if (invalidEmail(textStr)) {
+            editText.setError("Invalid email address");
+            return false;
+        }
+
+        // Save email in state
+        email = textStr;
+
+        // Clear text
+        editText.setText("");
+
+        // Change emailSetText
+        emailSetText.setText("Setting email to: " + textStr);
+        return true;
+    }
+
+    private boolean invalidEmail(String textStr) {
+        return (!textStr.contains("@") || !textStr.contains(".") || textStr.startsWith(".") ||
+                textStr.endsWith(".") || textStr.contains(" ") || textStr.length() < 4);
     }
 }
