@@ -18,7 +18,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_brick_launcher_light_circle"
         android:supportsRtl="true"
-        android:theme="@style/Theme.BrickGuard">
+        android:theme="@style/AppTheme">
         <service
             android:name=".service.BrickGuardVpnService"
             android:permission="android.permission.BIND_VPN_SERVICE">
@@ -52,13 +52,14 @@
             </intent-filter>
         </receiver>
         <activity android:name=".LockActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
             android:configChanges="keyboard|keyboardHidden|screenLayout|uiMode|orientation|screenSize|smallestScreenSize"
-            android:launchMode="singleTask">
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

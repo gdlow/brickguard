@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.BrickGuard" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/black_a80</item>
         <item name="colorPrimaryVariant">@color/black_a60</item>
@@ -9,9 +9,9 @@
         <item name="colorSecondary">@color/black_a80</item>
         <item name="colorSecondaryVariant">@color/black_a60</item>
         <item name="colorOnSecondary">@color/white</item>
-        <!-- Status bar color. -->
+    </style>
+    <style name="AppTheme.NoActionBar">
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimary</item>
-        <!-- Customize your theme here. -->
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="actionOverflowButtonStyle">@style/OverflowButtonStyle</item>
