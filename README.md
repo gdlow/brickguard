@@ -49,7 +49,7 @@ Less crappy internet. Less crappy habits. BrickGuard is an accountability based 
 ✓ **Accountability partner emails** - If you specify an accountability partner email, BrickGuard sends weekly reports about your streak, the malicious sites you've tried to visit, as well as any attempts to change the service configuration 💂
 
 
-## How accountability works
+## How accountability works {#accountability}
 
 BrickGuard allows you to opt-in to emailing weekly usage reports to a trusted accountability partner 🤝. What this email contains:
 
@@ -77,10 +77,13 @@ Q. Is my internet traffic monitored?
 
 A. No. The app only logs the ads and malicious sites the device tries to connect to, and this information is stored in a local database in your device. We do not have access to any of that information, even when you opt in to accountability emails.
 
-
 Q. Does this app slow down my internet?
 
 A. No. The VPN service is run locally in your device and the service does not route your internet through any proxies. This means that your internet connection speeds are unaffected by this app.
+
+Q. How does the accountability feature work?
+
+A. See [How Accountability Works](#accountability)
 
 
 ## Requirements
