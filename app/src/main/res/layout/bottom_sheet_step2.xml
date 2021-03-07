@@ -88,7 +88,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="@style/BottomSheetBody"
-                android:text="Block and track ads &amp; malware"
+                android:text="Block and track advertisements"
                 android:layout_weight="2"/>
 
             <com.google.android.material.switchmaterial.SwitchMaterial
@@ -107,7 +107,7 @@
             android:layout_marginTop="@dimen/spacing_large"
             android:textSize="14sp"
             android:visibility="gone"
-            android:text="The app looks up DNSMasq configuration lists that alias malicious websites (adult domains, ads &amp; malware) to 0.0.0.0. Whenever a connection to any of these websites is attempted, the app blocks the request and logs the requested domain in a local database." />
+            android:text="The app looks up DNSMasq configuration lists that alias malicious websites (adult domains, ads, and other malware) to 0.0.0.0. Whenever a connection to any of these websites is attempted, the app blocks the request and logs the requested domain in a local database." />
 
     </LinearLayout>
 

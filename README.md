@@ -29,9 +29,9 @@ Less crappy internet. Less crappy habits. BrickGuard is an accountability based 
 
 🆘 **BrickGuard will help you in 2 ways:** 🆘
 
-1. BrickGuard runs an internal DNS resolver that blocks malicious sites and adult content so you can enjoy safer, less crappy internet right off the bat. 🏏
+1. BrickGuard runs an internal DNS resolver that allows you to block ads, adult content and other malicious sites (phishing, tracking, malware) so you can enjoy safer, less crappy internet right off the bat. 🏏
 
-2. Fighting an addiction to adult content or other vices? We believe that the best way to quit is by blocking bad sites altogether and giving a trusted friend accountability over your online presence. You can opt-in for BrickGuard to send weekly reports about your streak, the bad sites you've tried to visit, as well as any attempts to change the service configuration. 💂
+2. Fighting an addiction to adult content or other online vices? We believe that the best way to quit is by blocking bad sites altogether and giving a trusted friend accountability over your online presence. You can opt-in for BrickGuard to send weekly reports about your streak, the bad sites you've tried to visit, as well as any attempts to change the service configuration. 💂
 
 
 🌟 **Features!** 🌟
@@ -40,7 +40,7 @@ Less crappy internet. Less crappy habits. BrickGuard is an accountability based 
 
 ✓ **Toggle filter level** - Toggle your desired internet filter level. Behind the scenes, BrickGuard automatically routes your internet traffic to cleanbrowsing.org or OpenDNS to do a pre-filtering on malicious websites ⚡
 
-✓ **Block and track your malicious sites** - BrickGuard uses an internal dnsmasq resolver that captures and tracks the malicious sites you attempt to visit 👀
+✓ **Block and track ads & other malicious sites** - BrickGuard uses an internal dnsmasq resolver that captures and tracks the ads & malicious sites your device attempts to visit 👀
 
 ✓ **Blacklist additional custom domains** - You get to choose which additional domains you don't want to see 🙈
 
