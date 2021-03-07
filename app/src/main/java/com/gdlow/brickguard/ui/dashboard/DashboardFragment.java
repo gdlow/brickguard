@@ -53,11 +53,11 @@ public class DashboardFragment extends Fragment {
 
         BarChart adChart = root.findViewById(R.id.ad_sites_chart);
         populateChart(adChart, localResolveViewModel.getDateAndCountFrom7dAgoWithNullRes(),
-                "Blocked ad sites");
+                "Blocked ads & malware");
 
         BarChart adultChart = root.findViewById(R.id.adult_sites_chart);
         populateChart(adultChart, localResolveViewModel.getDateAndCountFrom7dAgoWithOneRes(),
-                "Blocked adult sites");
+                "Blocked adult & custom sites");
 
         TextView configChangesText = root.findViewById(R.id.config_changes_text);
         populateText(configChangesText, interactionsViewModel.getCountFrom7dAgoWithConfigChanges());
