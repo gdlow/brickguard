@@ -18,26 +18,66 @@
 
 ## Description
 
-An accountability based ads + adult filter to help meet your productivity goals 💪
+Less crappy internet. Less crappy habits. BrickGuard is an accountability based web filter to protect your internet usage and fight online addiction 💪
 
-😩 Tired of ads and adult content? Want a no-fuss way to get rid of them completely?
+😩 Annoyed by ads and want a no-fuss way to get rid of them completely?
 
-🏃 Want to hold yourself accountable to your internet history?
+🛡️ Want to protect yourself from phishing, tracking, malware, and other malicious domains?
 
-BrickGuard sets up a VPN tunnel with an internal dnsmasq resolver targetted at blocking adult and ad domains.
+🙈 Battling an online addiction (adult content, social media) and want to hold yourself accountable to your internet history?
 
-**Toggle filter level** - toggle your desired internet filter level. Behind the scenes, BrickGuard automatically routes your internet traffic to cleanbrowsing.org or OpenDNS servers that do a pre-filtering on malicious websites ⚡
 
-**Block and track your internet traffic** - BrickGuard uses an internal dnsmasq resolver that captures and tracks the malicious sites you attempt to visit 👀
+🆘 **BrickGuard will help you in 2 ways:** 🆘
 
-**Blacklist custom domains** - You get to choose which domains you don't want to see 🙈
+1. BrickGuard runs an internal DNS resolver that blocks malicious sites and adult content so you can enjoy safer, less crappy internet right off the bat. 🏏
 
-**Accountability partner emails** - 🌟🌟🌟 Here's where it gets cool! If you specify an accountability partner email, BrickGuard sends weekly reports about the malicious sites you've tried to visit, as well as any attempts to change the service configuration 💂
+2. Fighting an addiction to adult content or other vices? We believe that the best way to quit is by blocking bad sites altogether and giving a trusted friend accountability over your online presence. You can opt-in for BrickGuard to send weekly reports about your streak, the bad sites you've tried to visit, as well as any attempts to change the service configuration. 💂
+
+
+🌟 **Features!** 🌟
+
+✓ **Security PIN** - So that nobody else messes around with your service configuration! 🔒
+
+✓ **Toggle filter level** - Toggle your desired internet filter level. Behind the scenes, BrickGuard automatically routes your internet traffic to cleanbrowsing.org or OpenDNS to do a pre-filtering on malicious websites ⚡
+
+✓ **Block and track your malicious sites** - BrickGuard uses an internal dnsmasq resolver that captures and tracks the malicious sites you attempt to visit 👀
+
+✓ **Blacklist additional custom domains** - You get to choose which additional domains you don't want to see 🙈
+
+✓ **Streak** - BrickGuard counts the number of days you've been on it. If you deliberately deactivated the service, it resets to 0. 🏃
+
+✓ **Accountability partner emails** - If you specify an accountability partner email, BrickGuard sends weekly reports about your streak, the malicious sites you've tried to visit, as well as any attempts to change the service configuration 💂
+
+
+## How accountability works
+
+BrickGuard allows you to opt-in to emailing weekly usage reports to a trusted accountability partner 🤝. What this email contains:
+
+1. All attempts in the past week to visit blocked adult domains or other custom domains.
+
+2. All attempts to deactivate the service or change the service configuration.
+
+3. Your current streak - i.e. how long you have the service activated and running.
 
 
 ## Behind the scenes
 
-This application creates a VPN tunnel to handle all DNS requests. An internal dnsmasq resolver parses dnsmasq configuration files to block attempts to malicious domains, and selects upstream DNS servers from cleanbrowsing.org and OpenDNS Family Shield to safely protect the user from accessing blocked domains. A worker thread sends a usage report every week to a specified accountability partner email address.
+This app creates a VPN tunnel to handle all DNS requests. An internal dnsmasq resolver parses dnsmasq configuration files to block attempts to malicious domains. Whenever a blocked domain is visited, the dnsmasq resolver nullifies the domain to 0.0.0.0, and the app logs an entry into a local database on your device. The app also sets the device's upstream DNS servers to cleanbrowsing.org or OpenDNS Family Shield for further protection.
+
+If opted in to accountability emails, a worker thread sends a usage report every week to the specified email address.
+
+
+## Frequently asked questions
+
+Q. What's with the VPN?
+A. A VPN tunnel is required for the app to run an internal DNS resolver in your device. The VPN is set up locally and does not connect your phone through a location proxy.
+
+Q. Is my internet traffic monitored?
+A. No. The app only logs the ads and malicious sites the device tries to connect to, and this information is stored in a local database in your device. We do not have access to any of that information, even when you opt in to accountability emails.
+
+
+Q. Does this app slow down my internet?
+A. No. The VPN service is run locally in your device and the service does not route your internet through any proxies. This means that your internet connection speeds are unaffected by this app.
 
 
 ## Requirements
@@ -48,7 +88,7 @@ This application creates a VPN tunnel to handle all DNS requests. An internal dn
 
 ## Donate ❤️
 
-This project needs you! If you would like to support this project's further development, the creator of this project or the continuous maintenance of this project, feel free to donate. Your donation is highly appreciated (and I love food, coffee and beer). Thank you!
+This project needs you! There are a number of things to improve which requires $$$, including getting a registered domain for the project. All donations are welcome. Thank you!
 
 **PayPal**
 
@@ -61,6 +101,11 @@ This project needs you! If you would like to support this project's further deve
 **My Ethereum Wallet (Ethereum only)**
 
 	0x35bd1553bb3d137c96f969bb414f2fde9bc5c83e
+
+
+## Contributions
+
+We ❤️ contributions! If you have a feature request or would like to be a part of this project, send an email to brickguard.developer@outlook.com
 
 
 ## Open Source Licenses
@@ -95,6 +140,6 @@ This project needs you! If you would like to support this project's further deve
 
 ## Privacy Policy
 
-**TLDR:** We do not collect any user information or in-app activity (logged internet domains, app interactions). We do not have access to the contents of the weekly usage reports sent to a user's accountability email and do not use the user's accountability email for any marketing or commercial purposes. 
+**TLDR:** We do not knowingly collect any user information or in-app activity (logged internet domains, app interactions). The logged user interactions and internet domains are saved to the device's local storage and not shared with us. We do not have access to the message body of the weekly usage reports sent to a user's accountability email and do not knowingly use the user's accountability email for any marketing or commercial purposes. 
 
 View the full privacy policy [here](https://gdlow.github.io/brickguard/about/privacy_policy.html).
