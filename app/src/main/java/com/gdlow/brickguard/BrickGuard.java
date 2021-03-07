@@ -336,7 +336,7 @@ public class BrickGuard extends Application {
         Logger.debug("Enqueuing streak work request...");
         // Define periodic sync work
         PeriodicWorkRequest workRequest =
-                new PeriodicWorkRequest.Builder(StreakWorker.class, 4, TimeUnit.HOURS)
+                new PeriodicWorkRequest.Builder(StreakWorker.class, 1, TimeUnit.HOURS)
                         .build();
 
         // Enqueue periodic work
