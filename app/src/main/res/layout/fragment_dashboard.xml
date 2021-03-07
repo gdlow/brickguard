@@ -48,7 +48,7 @@
                                 android:paddingBottom="@dimen/spacing_medium"
                                 android:paddingLeft="@dimen/spacing_middle"
                                 android:paddingRight="@dimen/spacing_middle"
-                                android:text="Blocked adult sites over the past week"
+                                android:text="Blocked adult &amp; custom sites over past week"
                                 android:textAppearance="@style/CardTitleText"/>
 
                             <LinearLayout
@@ -92,7 +92,7 @@
                                 android:paddingBottom="@dimen/spacing_medium"
                                 android:paddingLeft="@dimen/spacing_middle"
                                 android:paddingRight="@dimen/spacing_middle"
-                                android:text="Blocked ad sites over the past week"
+                                android:text="Blocked ads &amp; malware over past week"
                                 android:textAppearance="@style/CardTitleText"/>
 
                             <LinearLayout
@@ -134,7 +134,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:padding="@dimen/spacing_middle"
-                            android:text="Blocked adult sites over the past week"
+                            android:text="Blocked adult &amp; custom sites over past week"
                             android:textAppearance="@style/BottomSheetBody"/>
 
                         <LinearLayout
@@ -170,7 +170,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:padding="@dimen/spacing_middle"
-                            android:text="Blocked ad sites over the past week"
+                            android:text="Blocked ads &amp; malware over past week"
                             android:textAppearance="@style/BottomSheetBody"/>
 
                         <LinearLayout
@@ -217,7 +217,7 @@
                                 android:paddingBottom="@dimen/spacing_medium"
                                 android:paddingLeft="@dimen/spacing_middle"
                                 android:paddingRight="@dimen/spacing_middle"
-                                android:text="Config changes over the past week"
+                                android:text="Configuration changes over past week"
                                 android:textAppearance="@style/CardTitleText"/>
 
                             <LinearLayout
@@ -261,7 +261,7 @@
                                 android:paddingBottom="@dimen/spacing_medium"
                                 android:paddingLeft="@dimen/spacing_middle"
                                 android:paddingRight="@dimen/spacing_middle"
-                                android:text="Switched off over the past week"
+                                android:text="Service deactivated over past week"
                                 android:textAppearance="@style/CardTitleText"/>
 
                             <LinearLayout

@@ -27,7 +27,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:text="Blacklist additional domains"
+            android:text="Blacklist custom domains"
             android:textAppearance="@style/BottomSheetTitle"/>
 
         <LinearLayout
