@@ -70,13 +70,16 @@ If opted in to accountability emails, a worker thread sends a usage report every
 ## Frequently asked questions
 
 Q. What's with the VPN?
+
 A. A VPN tunnel is required for the app to run an internal DNS resolver in your device. The VPN is set up locally and does not connect your phone through a location proxy.
 
 Q. Is my internet traffic monitored?
+
 A. No. The app only logs the ads and malicious sites the device tries to connect to, and this information is stored in a local database in your device. We do not have access to any of that information, even when you opt in to accountability emails.
 
 
 Q. Does this app slow down my internet?
+
 A. No. The VPN service is run locally in your device and the service does not route your internet through any proxies. This means that your internet connection speeds are unaffected by this app.
 
 
