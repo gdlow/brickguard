@@ -152,7 +152,8 @@ public class RuleResolver implements Runnable {
                 } else {
                     removeCount++;
                 }
-                putOrRemove(rulesA, domain, LocalResolve.NULL_RES, toAdd);
+                // custom domains go down this code path
+                putOrRemove(rulesA, domain, LocalResolve.ONE_RES, toAdd);
             }
 
             Logger.info("Added " + addCount + " and removed " + removeCount + " custom domains");

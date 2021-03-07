@@ -104,17 +104,17 @@ public class SendEmailService {
                 "  <ul>\n" +
                 "    <li>Current streak: %1$d days\n</li>" +
                 "    <li>Longest streak: %2$d days\n</li>" +
-                "    <li>Total blocked adult sites: %3$d\n</li>" +
-                "    <li>Total number of times the VPN was switched off: %4$d</li>\n" +
+                "    <li>Total blocked adult and custom sites: %3$d\n</li>" +
+                "    <li>Total number of times the VPN service was deactivated: %4$d</li>\n" +
                 "    <li>Total number of times a configuration change was made: %5$d</li>\n" +
                 "  </ul>\n",
                 currentStreakDays, longestStreakDays, allBlockedSites.size(), allSwitchedOff.size(),
                 allConfigChanges.size());
 
-        String blockedSitesHeader = "<h4>Here are all the blocked adult sites with attempted " +
-                "access:</h4>\n";
+        String blockedSitesHeader = "<h4>Here are all the blocked adult and custom sites with " +
+                "attempted access:</h4>\n";
 
-        String switchedOffHeader = "<h4>Here are all the times the VPN was switched off:</h4>\n";
+        String switchedOffHeader = "<h4>Here are all the times the VPN service was deactivated:</h4>\n";
 
         String configChangeHeader = "<h4>Here are all the times a configuration change was made:</h4>\n";
 
