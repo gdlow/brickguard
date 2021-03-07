@@ -18,11 +18,11 @@
 
         <com.gdlow.brickguard.util.ClickPreference
             android:key="settings_reset_pin"
-            android:title="Reset PIN Code" />
+            android:title="Reset PIN code" />
 
         <SwitchPreference
             android:key="settings_boot"
-            android:title="Activate on Boot"
+            android:title="Activate on boot"
             android:defaultValue="false"/>
     </PreferenceCategory>
 
@@ -31,8 +31,16 @@
         android:key="settings_about"
         android:title="About">
         <com.gdlow.brickguard.util.ClickPreference
+            android:key="settings_faq"
+            android:title="Frequently asked questions"
+            android:summary="What's with the VPN?"/>
+        <com.gdlow.brickguard.util.ClickPreference
+            android:key="settings_contributions"
+            android:title="Contributions"
+            android:summary="We'd love help with this project!"/>
+        <com.gdlow.brickguard.util.ClickPreference
             android:key="settings_privacy_policy"
-            android:title="Privacy Policy"/>
+            android:title="Privacy policy"/>
         <com.gdlow.brickguard.util.ClickPreference
             android:key="settings_donate"
             android:title="Donate"/>

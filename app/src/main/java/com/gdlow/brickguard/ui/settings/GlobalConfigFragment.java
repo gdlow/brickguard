@@ -40,6 +40,14 @@ public class GlobalConfigFragment extends PreferenceFragmentCompat {
                     .putExtra(LockActivity.LOCK_SCREEN_ACTION, LockActivity.LOCK_SCREEN_ACTION_RESET));
             return true;
         });
+        findPreference("settings_faq").setOnPreferenceClickListener(preference -> {
+            BrickGuard.openUri("https://github.com/gdlow/brickguard#frequently-asked-questions");
+            return true;
+        });
+        findPreference("settings_contributions").setOnPreferenceClickListener(preference -> {
+            BrickGuard.openUri("https://github.com/gdlow/brickguard#contributions");
+            return true;
+        });
         findPreference("settings_privacy_policy").setOnPreferenceClickListener(preference -> {
             BrickGuard.openUri("https://gdlow.github.io/brickguard/about/privacy_policy.html");
             return true;
