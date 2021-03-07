@@ -49,7 +49,7 @@ Less crappy internet. Less crappy habits. BrickGuard is an accountability based 
 ✓ **Accountability partner emails** - If you specify an accountability partner email, BrickGuard sends weekly reports about your streak, the malicious sites you've tried to visit, as well as any attempts to change the service configuration 💂
 
 
-## How accountability works {#accountability}
+## How accountability works
 
 BrickGuard allows you to opt-in to emailing weekly usage reports to a trusted accountability partner 🤝. What this email contains:
 
@@ -83,7 +83,7 @@ A. No. The VPN service is run locally in your device and the service does not ro
 
 Q. How does the accountability feature work?
 
-A. See [How Accountability Works](#accountability)
+A. See [How Accountability Works](#how-accountability-works)
 
 
 ## Requirements
