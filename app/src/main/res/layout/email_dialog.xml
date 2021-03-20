@@ -28,7 +28,7 @@
             app:startIconDrawable="@drawable/baseline_mail_outline_24"
             android:hint="Enter Email"
             android:inputType="textEmailAddress"
-            android:textColorHint="@color/black_a80"
+            android:textColorHint="?attr/colorPrimary"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -68,6 +68,7 @@
                 android:textAppearance="@style/AlertDialogSwitchText"/>
 
             <com.google.android.material.switchmaterial.SwitchMaterial
+                style="@style/SwitchCompatStyle"
                 android:id="@+id/email_report_switch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

@@ -2,16 +2,16 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/black_a80</item>
-        <item name="colorPrimaryVariant">@color/black_a60</item>
-        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimaryVariant">@color/grey_a100</item>
+        <item name="colorOnPrimary">@color/black_a60</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/black_a80</item>
-        <item name="colorSecondaryVariant">@color/black_a60</item>
-        <item name="colorOnSecondary">@color/white</item>
+        <item name="colorSecondary">@color/white</item>
+        <item name="colorSecondaryVariant">@color/grey_a100</item>
+        <item name="colorOnSecondary">@color/black_a60</item>
     </style>
     <style name="AppTheme.NoActionBar">
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimary</item>
+        <item name="android:statusBarColor" tools:targetApi="l">@color/black_a80</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="actionOverflowButtonStyle">@style/OverflowButtonStyle</item>
@@ -25,9 +25,13 @@
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">36sp</item>
     </style>
+    <style name="AppBackground">
+        <item name="android:background">@color/grey_dark_theme</item>
+    </style>
     <style name="StepTextUnselectedAppearance">
         <item name="android:fontFamily">@font/roboto_light</item>
         <item name="android:textSize">16sp</item>
+        <item name="android:textColor">?attr/colorPrimary</item>
     </style>
     <style name="StepTextSelectedAppearance">
         <item name="android:fontFamily">@font/roboto_black</item>
@@ -36,31 +40,46 @@
     <style name="StepTextNumber">
         <item name="android:fontFamily">@font/roboto_light</item>
         <item name="android:textSize">14sp</item>
+        <item name="android:textColor">?attr/colorPrimary</item>
+    </style>
+    <style name="BottomSheetBackground">
+        <item name="android:background">@color/grey_bottom_sheet_dark</item>
     </style>
     <style name="BottomSheetTitle">
         <item name="android:fontFamily">@font/roboto_bold</item>
         <item name="android:textSize">16sp</item>
+        <item name="android:textColor">?attr/colorPrimary</item>
     </style>
     <style name="BottomSheetBody">
         <item name="android:fontFamily">@font/roboto_light</item>
         <item name="android:textSize">15sp</item>
+        <item name="android:textColor">?attr/colorPrimary</item>
+    </style>
+    <style name="BottomSheetInfoButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:textColor">?attr/colorPrimary</item>
+    </style>
+    <style name="BottomSheetNextButton" parent="Widget.MaterialComponents.Button.UnelevatedButton">
+        <item name="android:backgroundTint">@color/off_white</item>
+        <item name="android:textColor">@color/black</item>
     </style>
     <style name="HomeStreakText">
         <item name="android:fontFamily">@font/roboto_italic</item>
         <item name="android:textSize">10sp</item>
+        <item name="android:textColor">?attr/colorPrimary</item>
     </style>
     <style name="HomeStreakNumberText">
         <item name="android:fontFamily">@font/roboto_black_italic</item>
         <item name="android:textSize">10sp</item>
+        <item name="android:textColor">?attr/colorPrimary</item>
     </style>
     <style name="HomeUpdateText">
         <item name="android:fontFamily">@font/roboto_regular</item>
-        <item name="android:textColor">@color/black_a60</item>
+        <item name="android:textColor">@color/off_white</item>
         <item name="android:textSize">12sp</item>
     </style>
     <style name="MainSwitchText">
         <item name="android:fontFamily">@font/roboto_regular</item>
-        <item name="android:textColor">@color/black_a60</item>
+        <item name="android:textColor">@color/off_white</item>
         <item name="android:textSize">10sp</item>
         <item name="android:letterSpacing">.2</item>
     </style>
@@ -70,13 +89,19 @@
     <style name="CardTitleText">
         <item name="android:fontFamily">@font/roboto_light</item>
         <item name="android:textSize">15sp</item>
+        <item name="android:textColor">?attr/colorPrimary</item>
     </style>
     <style name="CardValueText">
         <item name="android:fontFamily">@font/roboto_bold</item>
         <item name="android:textSize">36sp</item>
+        <item name="android:textColor">?attr/colorPrimary</item>
     </style>
     <style name="AlertDialogSwitchText">
         <item name="android:fontFamily">@font/roboto_light</item>
         <item name="android:textSize">15sp</item>
+        <item name="android:textColor">?attr/colorPrimary</item>
+    </style>
+    <style name="SwitchCompatStyle" >
+        <item name="thumbTint">@color/switch_color_dark</item>
     </style>
 </resources>
