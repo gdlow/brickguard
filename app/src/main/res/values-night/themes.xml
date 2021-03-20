@@ -1,16 +1,82 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.BrickGuard" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_200</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
-        <item name="colorOnPrimary">@color/black</item>
+        <item name="colorPrimary">@color/black_a80</item>
+        <item name="colorPrimaryVariant">@color/black_a60</item>
+        <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/teal_200</item>
-        <item name="colorOnSecondary">@color/black</item>
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
+        <item name="colorSecondary">@color/black_a80</item>
+        <item name="colorSecondaryVariant">@color/black_a60</item>
+        <item name="colorOnSecondary">@color/white</item>
+    </style>
+    <style name="AppTheme.NoActionBar">
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimary</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="actionOverflowButtonStyle">@style/OverflowButtonStyle</item>
+    </style>
+    <style name="ToolbarTextAppearance" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:fontFamily" >@font/rabbid_highway</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+    <style name="LockScreenTextAppearance">
+        <item name="android:fontFamily" >@font/rabbid_highway</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">36sp</item>
+    </style>
+    <style name="StepTextUnselectedAppearance">
+        <item name="android:fontFamily">@font/roboto_light</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+    <style name="StepTextSelectedAppearance">
+        <item name="android:fontFamily">@font/roboto_black</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+    <style name="StepTextNumber">
+        <item name="android:fontFamily">@font/roboto_light</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+    <style name="BottomSheetTitle">
+        <item name="android:fontFamily">@font/roboto_bold</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+    <style name="BottomSheetBody">
+        <item name="android:fontFamily">@font/roboto_light</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+    <style name="HomeStreakText">
+        <item name="android:fontFamily">@font/roboto_italic</item>
+        <item name="android:textSize">10sp</item>
+    </style>
+    <style name="HomeStreakNumberText">
+        <item name="android:fontFamily">@font/roboto_black_italic</item>
+        <item name="android:textSize">10sp</item>
+    </style>
+    <style name="HomeUpdateText">
+        <item name="android:fontFamily">@font/roboto_regular</item>
+        <item name="android:textColor">@color/black_a60</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+    <style name="MainSwitchText">
+        <item name="android:fontFamily">@font/roboto_regular</item>
+        <item name="android:textColor">@color/black_a60</item>
+        <item name="android:textSize">10sp</item>
+        <item name="android:letterSpacing">.2</item>
+    </style>
+    <style name="OverflowButtonStyle" parent="Widget.AppCompat.ActionButton.Overflow">
+        <item name="android:tint">@color/white</item>
+    </style>
+    <style name="CardTitleText">
+        <item name="android:fontFamily">@font/roboto_light</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+    <style name="CardValueText">
+        <item name="android:fontFamily">@font/roboto_bold</item>
+        <item name="android:textSize">36sp</item>
+    </style>
+    <style name="AlertDialogSwitchText">
+        <item name="android:fontFamily">@font/roboto_light</item>
+        <item name="android:textSize">15sp</item>
     </style>
 </resources>
