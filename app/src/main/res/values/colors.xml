@@ -11,8 +11,8 @@
     <color name="grey_a100">#FF979797</color>
     <color name="grey_a60">#99979797</color>
     <color name="grey_light_theme">#12979797</color>
-    <color name="grey_dark_theme">#424242</color>
-    <color name="grey_bottom_sheet_dark">#212121</color>
+    <color name="grey_dark_theme">#212121</color>
+    <color name="grey_bottom_sheet_dark">#121212</color>
     <color name="grey_bottom_sheet_light">#ffffff</color>
     <color name="off_white">#eeeeee</color>
     <color name="black_a60">#99000000</color>
