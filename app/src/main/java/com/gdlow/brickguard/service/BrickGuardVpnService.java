@@ -146,12 +146,13 @@ public class BrickGuardVpnService extends VpnService implements Runnable {
                     PendingIntent pIntent = PendingIntent.getActivity(this, 0,
                             new Intent(this, MainActivity.class),
                             PendingIntent.FLAG_UPDATE_CURRENT);
+
                     builder.setWhen(0)
                             .setContentTitle(getResources().getString(R.string.notice_activated))
                             .setDefaults(NotificationCompat.DEFAULT_LIGHTS)
                             .setSmallIcon(R.drawable.brick_notification)
                             // backward compatibility
-                            .setColor(getResources().getColor(R.color.black_a80))
+                            .setColor(BrickGuard.getColor(getApplicationContext(), R.attr.colorPrimary))
                             .setAutoCancel(false)
                             .setOngoing(true)
                             .setTicker(getResources().getString(R.string.notice_activated))
