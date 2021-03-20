@@ -28,7 +28,6 @@
             app:startIconDrawable="@drawable/baseline_mail_outline_24"
             android:hint="Enter Email"
             android:inputType="textEmailAddress"
-            android:textColorHint="?attr/colorPrimary"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
             <com.google.android.material.textfield.TextInputEditText
