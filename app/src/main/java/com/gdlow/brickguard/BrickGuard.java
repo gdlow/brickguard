@@ -6,12 +6,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
+import android.content.res.TypedArray;
 import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.net.VpnService;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
+import android.util.TypedValue;
 
 import androidx.preference.PreferenceManager;
 import androidx.work.Constraints;
@@ -395,6 +397,14 @@ public class BrickGuard extends Application {
             }
         });
         ruleSyncThread.start();
+    }
+
+    public static int getColor(Context context, int colorResId) {
+        TypedValue typedValue = new TypedValue();
+        TypedArray typedArray = context.obtainStyledAttributes(typedValue.data, new int[] {colorResId});
+        int color = typedArray.getColor(0, 0);
+        typedArray.recycle();
+        return color;
     }
 
     public static SharedPreferences getPrefs() {

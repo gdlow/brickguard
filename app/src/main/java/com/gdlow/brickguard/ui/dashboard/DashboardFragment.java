@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.gdlow.brickguard.BrickGuard;
 import com.gdlow.brickguard.R;
 import com.gdlow.brickguard.data.Count;
 import com.gdlow.brickguard.data.DateAndCount;
@@ -112,6 +113,13 @@ public class DashboardFragment extends Fragment {
         chart.setDescription(desc);
         chart.getAxisRight().setEnabled(false);
         chart.getAxisLeft().setEnabled(false);
+
+        int colorPrimary = BrickGuard.getColor(getContext(), R.attr.colorPrimary);
+
+        chart.getAxisLeft().setTextColor(colorPrimary);
+        chart.getXAxis().setTextColor(colorPrimary);
+        chart.getLegend().setTextColor(colorPrimary);
+        chart.getDescription().setTextColor(colorPrimary);
 
         XAxis xAxis = chart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
